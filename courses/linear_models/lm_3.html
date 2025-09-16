@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Действительное преобразование Фурье</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="chapter-content">
+        <p><b>Действительное разложение в ряд Фурье</b> (тригонометрический ряд Фурье) на отрезке [-π, π] — представление произвольной периодической 
+            функции f(t) с периодом 2π в виде ряда вида:
+                $$f(t) = \frac{a_0}{2} + \sum_{k=1}^\infty (a_k cos(kt) + b_k sin(kt))$$
+                , где
+                $$ a_k =  \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) cos(kt) dt$$
+                $$ b_k =  \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) sin(kt) dt$$
+                $$ k = 0, 1, 2, ... $$
+        </p>
+
+        <p>
+            Разложим в ряд Фурье пилообразную функцию: 
+            $$f(t) = t, t \in [-\pi, \pi]$$
+        </p>
+        <p>
+            $$ a_k = \frac {1}{\pi} \int_{-\pi}^{\pi} t cos(kt) dt = \frac {1}{\pi} [\frac{tsin(kt)}{k} + \frac {cos(kt)}{k^2}] \vert_{-\pi}^{\pi} = 0$$
+            $$ b_k = \frac {1}{\pi} \int_{-\pi}^{\pi} t sin(kt) dt = \frac {1}{\pi} [-\frac{tcos(kt)}{k} + \frac {cos(kt)}{k^2}] \vert_{-\pi}^{\pi} 
+            = - \frac{2}{k} cosk\pi = (-1)^{k+1} \frac{2}{k}$$
+        </p>
+
+        <p>Тогда,
+            $$ f(t) = \sum_{k=1}^\infty (-1)^{k+1} \frac {2}{k} sin(kt) = 2(sint - \frac{1}{2} sin2t + \frac{1}{3} sin3t - \frac{1}{4}sin4t + ...)$$
+        </p>
+
+        <p class="note"><a target="_blank" href="https://colab.research.google.com/drive/1sXGi6MyLdlMuCLj1-nK2rlXcLn4XjE_g?usp=sharing">Разложение пилообразного сигнала по системе тригонометрических функций</a></p>
+
+        <p>
+            Рассмотрим интеграл от произведения четной f(t) и нечётной g(t) функций на отрезке, симметричном относительно нуля:
+            $$ \int_{-a}^{a} f(t) g(t) dt = \int_{-a}^{0} f(t) g(t) dt + \int_{0}^{a} f(t) g(t) dt = 
+            \int_{-a}^{0} f(-t) (-g(-t)) dt + \int_{0}^{a} f(t) g(t) dt =
+            -\int_{0}^{a} f(t) g(t) dt + \int_{0}^{a} f(t) g(t) dt = 0$$
+
+            Получается, что такой интеграл всегда равен 0, а значит при разложении четной функции в действительный ряд Фурье, интеграл от произведения этой 
+            функции и синуса (нечетной функции) также обратится в ноль. А значит, в разложении четной функции будут участвовать только члены ряда с косинусом.
+            Аналогично, в разложении нечетной функции в формуле суммы ряда останутся только члены с синусами (что мы и получили при разложении пилообразного 
+            сигнала в действительный ряд Фурье).
+        </p>
+        <p>
+            При разложении в ряд Фурье функцию с произвольным периодом Т, кратность расширения или сжатия равна 2π/T, а значит первую гармонику 
+            составляют cos(2πt/T) и sin(2πt/T). Тогда:
+            $$ f(t) = \frac{a_0}{2} + \sum_{k=1}^{\infty} (a_k cos(\frac{2\pi}{T}kt) + b_k sin(\frac{2\pi}{T}kt)) = 
+             \frac{a_0}{2} + \sum_{k=1}^{\infty} (a_k cos(\omega_0 kt) + b_k sin(\omega_0 kt))$$
+             , где 
+             $$\omega_0 = \frac{2\pi}{T}$$
+
+             $$ t  \rightarrow \omega_0 t$$ 
+             $$ [-\pi, \pi]  \rightarrow [-\frac{T}{2}, \frac{T}{2}]$$
+
+             $$ 
+             a_k = \frac {2}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}} f(t) cos(\omega_0 kt) dt
+             $$
+            $$ 
+             b_k = \frac {2}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}} f(t) sin(\omega_0 kt) dt
+             $$
+        </p>
+    </div>
+
+</body>
+</html>
