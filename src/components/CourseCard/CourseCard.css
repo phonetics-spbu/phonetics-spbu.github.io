@@ -1,0 +1,18 @@
+.course-card {
+    margin: 20px 0;
+}
+
+.course-card-button {
+    margin-right: 20px;
+    width: 400px;
+    font-size: 16px;
+    color: #25292e;
+    background-color: #f6f8fa;
+    box-shadow: 0px 1px 0px 0px #1f23280a;
+    border-radius: .375rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 5px;
+    border: 1px solid #25292e;
+}

@@ -1,0 +1,54 @@
+.side-menu {
+    width: 250px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-right: 1px solid #dee2e6;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.course-contents h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 1.1em;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.course-contents ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.course-contents li {
+    margin-bottom: 8px;
+}
+
+.chapter-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #2c3e50;
+    text-decoration: none;
+    padding: 6px 0;
+    transition: color 0.2s;
+}
+
+.chapter-link:hover {
+    color: #3498db;
+}
+
+.loading-message, .error-message {
+    color: #7f8c8d;
+    font-style: italic;
+    padding: 10px 0;
+}
+
+.empty-menu {
+    background-color: white;
+}
+
+.error-message {
+    color: #e74c3c;
+}

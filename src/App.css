@@ -1,0 +1,49 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+}
+
+.content-area {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.course-page {
+  display: flex;
+}
+
+.course-card {
+  display: flex;
+}
+
+.chapter-page {
+  display: flex;
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+
+  .side-menu {
+    width: 100%;
+    order: 2;
+  }
+}

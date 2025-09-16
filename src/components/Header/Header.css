@@ -1,0 +1,57 @@
+.header {
+    display: flex;
+    border-bottom: 2px #cccccc solid;
+    position: relative;
+    padding-left: 20px;
+}
+
+.header-container {
+    width: 80%;
+    margin-right: 20px;
+    height: 200px;
+}
+
+.header_img_div {
+    width: 20%;
+    text-align: right;
+    font-size: 12px;
+    font-weight: 100;
+}
+
+.header_img {
+    width: 210px;
+    margin: 20px;
+}
+
+.header-title {
+    font-size: 36px;
+    font-weight: 400;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.header_uni {
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: 20px;
+}
+
+.header_chair {
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 5px;
+}
+
+.header-button {
+    margin-right: 20px;
+    font-size: 16px;
+    color: #25292e;
+    background-color: #f6f8fa;
+    box-shadow: 0px 1px 0px 0px #1f23280a;
+    border-radius: .375rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 5px;
+    border: 1px solid #25292e;
+}
