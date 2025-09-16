@@ -3,7 +3,7 @@ const coursesData = [
         id: 'linear_models',
         title: "Линейные модели и фильтры",
         description: "Общая и прикладная фонетика, 3 курс",
-        author: "Титюшина",
+        author: "tityushina",
         chapters: [
             { id: 1, title: "Простая гармоника и гармонический сигнал. Колебание струны. Тембр.", filename: "lm_1.html" },
             { id: 2, title: "Цифровой и аналоговый сигнал. Дискретизация. Частота Найквиста.", filename: "lm_2.html" },
@@ -33,7 +33,7 @@ const coursesData = [
         id: 'dsp',
         title: "Цифровая обработка сигналов",
         description: "Общая и прикладная фонетика, 4 курс",
-        author: "Титюшина",
+        author: "tityushina",
         chapters: [
             { id: 1, title: "1 тема", filename: "dsp_1.html" },
             { id: 2, title: "2 тема", filename: "dsp_2.html" },
@@ -43,7 +43,7 @@ const coursesData = [
         id: 'python_1_mag',
         title: "Основы программирования на языке Python",
         description: "Теория и история языка и языки народов Европы, 1 курс",
-        author: "Титюшина",
+        author: "tityushina",
         chapters: [
             { id: 1, title: "Переменные и типы данных", filename: "python_1_mag_1.html" },
             { id: 2, title: "Целочисленная арифметика, конструкция if", filename: "python_1_mag_2.html" },
@@ -62,7 +62,7 @@ const coursesData = [
         id: 'python_2_mag',
         title: "Основы программирования на языке Python (углубленный курс)",
         description: "Теория и история языка и языки народов Европы, 2 курс",
-        author: "Титюшина",
+        author: "tityushina",
         chapters: [
             { id: 1, title: "Повторение", filename: "python_2_mag_1.html" },
             { id: 2, title: "Классы в Python", filename: "python_2_mag_2.html" },
@@ -73,7 +73,7 @@ const coursesData = [
         id: 'signal_proc_mag',
         title: 'Обработка и интерпретация речевого сигнала',
         description: 'Искусственный интеллект в моделировании речевой деятельности, 2 курс',
-        author: "Холявин",
+        author: "kholyavin",
         chapters: [
             { id: 1, title: "Повторение. Аналого-цифровое преобразование. Цифровое представление сигнала", filename: "signal_proc_mag_1.html" },
             { id: 2, title: "Обработка сигнала во временной области", filename: "signal_proc_mag_2.html" },

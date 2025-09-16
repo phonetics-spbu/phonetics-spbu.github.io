@@ -15,7 +15,9 @@ function App() {
                         <Routes>
                             <Route path="/course/:courseId/chapter/:chapterId" element={<ChapterPage/>}/>
                             <Route path="/course/:courseId" element={<CoursePage/>}/>
-                            <Route path="/" element={<HomePage/>}/>
+                            <Route path="/kholyavin" element={<HomePage author="kholyavin"/>}/>
+                            <Route path="/tityushina" element={<HomePage author="tityushina"/>}/>
+                            <Route path="/" element={<HomePage author="all"/>}/>
                         </Routes>
                     </div>
                 </div>

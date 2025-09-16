@@ -15,6 +15,16 @@ function Header() {
                                 Все курсы
                             </button>
                         </Link>
+                        <Link to="/tityushina" className="header-link">
+                            <button className="header-button">
+                                Курсы Титюшиной А.О.
+                            </button>
+                        </Link>
+                        <Link to="/kholyavin" className="header-link">
+                            <button className="header-button">
+                                Курсы Холявина П.А.
+                            </button>
+                        </Link>
                     </nav>
                 </div>
             </div>
