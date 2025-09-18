@@ -6,16 +6,18 @@
 }
 
 .header-container {
-    width: 80%;
+    width: 70%;
     margin-right: 20px;
 }
 
 .header_img_div {
-    width: 20%;
+    width: 30%;
     text-align: right;
     font-size: 12px;
     font-weight: 100;
     margin-right: 20px;
+    height: inherit;
+    position: relative;
 }
 
 .header_img {
@@ -44,6 +46,7 @@
 
 .header-button {
     margin-right: 20px;
+    margin-bottom: 20px;
     font-size: 16px;
     color: #25292e;
     background-color: #f6f8fa;
@@ -56,8 +59,42 @@
     border: 1px solid #25292e;
 }
 
+.header_authors {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 20px;
+}
+
 @media (max-width: 768px) {
     .header-button {
-        margin-bottom: 5px;
+        margin-bottom: 10px;
+    }
+
+    .header-container {
+        width: 60%;
+    }
+
+    .header_img_div {
+        width: 40%;
+    }
+
+    .header_img {
+        width: 150px;
+    }
+
+    .header-button {
+        font-size: 14px;
+    }
+
+    .header_authors {
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 10px;
+    }
+
+    .header-title {
+        font-size: 30px;
+        margin-top: 20px;
+        margin-bottom: 30px;
     }
 }

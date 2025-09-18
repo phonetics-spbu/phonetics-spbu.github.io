@@ -26,9 +26,10 @@
 }
 
 .chapter-page-content {
-    margin-left: 20px;
+    margin-right: 20px;
     overflow-y: auto;
     flex: 1 1;
+    width: 100%;
 }
 
 @media (max-width: 768px) {

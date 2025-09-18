@@ -55,7 +55,6 @@ function ChapterPage() {
 
     return (
         <div className="chapter-page">
-            <SideMenu/>
             <div className="chapter-page-content">
                 <h2>{chapter.title}</h2>
                 <MathJaxContext>
@@ -64,6 +63,7 @@ function ChapterPage() {
                     />
                 </MathJaxContext>
             </div>
+            <SideMenu/>
         </div>
     );
 }
