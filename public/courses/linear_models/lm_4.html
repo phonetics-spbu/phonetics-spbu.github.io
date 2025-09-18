@@ -22,5 +22,26 @@
 </head>
 <body>
 
+<p>Комплексный ряд Фурье является разложением по ортонормированной системе функций
+    $$..., e^{-2jt}, e^{-jt}, 1, e^{jt}, e^{2jt}, ...$$
+</p>
+
+<p>
+    На отрезке [-π, π] разложение имеет вид:
+    $$f(t) = \sum_{k=-\infty}^{\infty}{C_k e^{jkt}}$$
+    $$C_k = \frac{1}{2\pi} \int_{-\pi}^{\pi}f(t)e^{-jkt}dt$$
+</p>
+
+<p>
+    На произвольном интервале [-T, T] разложение имеет вид:
+    $$f(t) = \sum_{k=-\infty}^{\infty}{C_k e^{j \omega_0 kt}}$$
+    $$C_k = \frac{1}{T} \int_{-T/2}^{T/2}f(t)e^{-j \omega_0 kt}dt$$
+    $$\omega_0 = \frac {2\pi}{T}$$
+</p>
+
+<p class="note"><a
+        href="https://colab.research.google.com/github/annashell/linear_models/blob/main/meander_complex_fourier_spectrum.ipynb">Комплексное
+    разложение прямоугольного импульса</a></p>
+
 </body>
 </html>
