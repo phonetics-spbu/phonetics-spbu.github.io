@@ -39,6 +39,26 @@
     $$\omega_0 = \frac {2\pi}{T}$$
 </p>
 
+<p>
+    Связь между комплексными и действительными коэффициентами разложения:
+    $$C_k = \frac{1}{T} \int_{-T/2}^{T/2} f(t)(cos(\omega_0 kt) - j sin(\omega_0 kt))dt =  \hspace{10mm}(формула Эйлера)$$
+    $$ = \frac{1}{T} \int_{-T/2}^{T/2} f(t)(cos(\omega_0 kt))dt - \frac{j}{T} \int_{-T/2}^{T/2} f(t)(sin(\omega_0 kt))dt$$
+</p>
+<p>При этом,
+                 $$
+             a_k = \frac {2}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}} f(t) cos(\omega_0 kt) dt
+             $$
+            $$
+             b_k = \frac {2}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}} f(t) sin(\omega_0 kt) dt
+             $$
+</p>
+<p>
+    Тогда,
+    $$C_k = \frac{1}{2}(a_k - jb_k), k = 1, 2, ...$$
+    $$C_k = \frac{a_0}{2}, k = 0$$
+    $$C_k = \frac{1}{2}(a_k + jb_k), k = -1, -2, ...$$
+</p>
+
 <p class="note"><a
         href="https://colab.research.google.com/github/annashell/linear_models/blob/main/meander_complex_fourier_spectrum.ipynb">Комплексное
     разложение прямоугольного импульса</a></p>
