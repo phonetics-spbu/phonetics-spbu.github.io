@@ -17,3 +17,15 @@
     padding: 5px;
     border: 1px solid #25292e;
 }
+
+@media (max-width: 768px) {
+
+    .course-card {
+        margin: 10px 0 0 0;
+    }
+    .course-card-button {
+        width: 300px;
+        height: 120px;
+        font-size: 12px;
+    }
+}

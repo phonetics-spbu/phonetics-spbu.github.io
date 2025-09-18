@@ -31,6 +31,12 @@
     flex: 1 1;
 }
 
+@media (max-width: 768px) {
+    .chapter-page .side-menu {
+        display: none;
+    }
+}
+
 /*.chapter-content {*/
 /*    visibility: hidden;*/
 /*    transition: visibility 0.3s;*/

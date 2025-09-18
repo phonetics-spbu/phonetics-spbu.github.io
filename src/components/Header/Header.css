@@ -8,7 +8,6 @@
 .header-container {
     width: 80%;
     margin-right: 20px;
-    height: 200px;
 }
 
 .header_img_div {
@@ -28,7 +27,7 @@
     font-size: 36px;
     font-weight: 400;
     margin-top: 40px;
-    margin-bottom: 20px;
+    margin-bottom: 60px;
 }
 
 .header_uni {
@@ -55,4 +54,10 @@
     cursor: pointer;
     padding: 5px;
     border: 1px solid #25292e;
+}
+
+@media (max-width: 768px) {
+    .header-button {
+        margin-bottom: 5px;
+    }
 }
