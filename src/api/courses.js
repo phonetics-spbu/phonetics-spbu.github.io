@@ -77,6 +77,7 @@ const coursesData = [
         chapters: [
             { id: 1, title: "Повторение. Аналого-цифровое преобразование. Цифровое представление сигнала", filename: "signal_proc_mag_1.html" },
             { id: 2, title: "Обработка сигнала во временной области", filename: "signal_proc_mag_2.html" },
+            { id: 3, title: "Обработка сигнала в частотной области", filename: "signal_proc_mag_3.html" },
         ]
     },
 ];
