@@ -1,0 +1,240 @@
+TODO:
+
+Move ex. B9 (/æ/ – /ɑː/) to ex. 21 (/ɑː/), rework to remove /k/, /ɡ/
+
+----------
+
+2025-09-19
+v1.0.2
+
+Other changes:
+Fixed typos
+Added THOUGHT to /ɔː/ examples.
+
+----------
+
+2025-09-07
+v1.0.1
+
+Other changes:
+Fixed typos
+
+----------
+
+2025-09-05
+v1.0.0
+
+Other changes:
+Printer-friendly layout
+Updated B-exercise numbering:
+    17.5 -> 18
+    18-31 -> 19-32
+    31.5 -> 33
+    32-33 -> 34-35
+    33.5 -> 36
+    34-36 -> 37-39
+    36.5 -> 40
+    37-41 -> 41-45
+    41.5 -> 46
+    42-44 -> 47-49
+    44.5 -> 50
+    45-47 -> 51-53
+    47.5 -> 54
+    48 -> 55
+    48.5 -> 56
+    49-50 -> 57-58
+    50.5 -> 59
+    51-60 -> 60-69
+Removed unnecessary italics
+
+----------
+
+2024-11-23
+v0.17.0
+
+Other changes:
+Added alternate recording (male voice)!
+Added comments for new recording
+Fixed typos
+
+----------
+
+2024-10-04
+v0.16.6
+
+Reworked exercises:
+B54: added lines /pleɪd – bleɪd – kleɪd – ɡleɪd/ and /twelv – dwel – kwel – ɡwelf/
+B59: added line /kwəʊ – kluː – kruː – kjuː – huː/
+
+----------
+
+2024-10-02
+v0.16.5
+
+Other changes:
+Added info on dark and clear allophones of /l/
+Fixed typos
+
+----------
+
+2024-10-01
+v0.16.4
+
+Other changes:
+Better snail graphic
+Fixed typos
+
+----------
+
+2024-09-30
+v0.16.3
+
+Other changes:
+Added pronunciations for phonetic terms
+Added O'Connor to list of sources
+Fixed typos
+
+----------
+
+2024-09-29
+v0.16.2
+
+Other changes:
+Added foreword w/ link to github
+Added epigraph from Pygmalion because ART
+Added list of sources
+
+----------
+
+2024-09-28
+v0.16.1
+
+Other changes:
+Added list of symbols and notational conventions
+Added eng->rus dictionary of essential phonetic terms
+Added sound for intonation exercises (now the only questian there is to ask,, is why?)
+Minor layout changes
+Fixed typos
+
+----------
+
+2024-09-25
+v0.16.0
+
+New exercises:
+B50.5. Diphthong + diphthong
+
+----------
+
+2024-09-25
+v0.15.0
+
+New exercises:
+B44.5. /ɜː/ – /wɜː/
+B47.5. /e͜ɪ/ – /e͜ɪə/ – /e͜ə/
+B48.5. /ɔ͜ɪə/ – /ɔ͜ɪə/ – /ə͜ʊ/ – /ə͜ʊə/
+
+Reworked exercises:
+69: split into two parts (/w/ and /wɜː/), each with a separate recording
+
+Other changes:
+Replaced "near"-terms with clearer IPA terms:
+    near-front -> retracted front
+    near-back -> advanced back
+    near-close -> lowered close
+    near-open -> raised open
+Changed /ɪkˈspɪərɪəns/ to /ekˈspɪərɪəns/ in ex. 62 as in audio
+Added note in ex. 61: This word [experience] is more often pronounced as /ɪkˈspɪərɪəns/
+Fixed typos
+
+----------
+
+2024-09-24
+v0.14.0
+
+New exercises:
+B41.5. /ɪŋ/ – /ɪn/
+
+Other changes:
+Fixed typos
+
+----------
+
+2024-09-22
+v0.13.0
+
+New exercises:
+B36.5. /a͜ɪ/ – /a͜ɪə/ – /a͜ʊ/ – /a͜ʊə/
+
+Reworked exercises:
+B38: replaced /viːz – vɪəz – vɪz/ with /hiːz – hɪəz – hɪz/ to accommodate for available sound
+B42: added words with other vowels
+
+Other changes:
+Added sound for ex. B38
+Replaced /spɔː/ with /spʊə/ in sound for ex. B45, removed note
+Added note in ex. 61 concerning unstressed /ɪə/ vs /i(ː)/ + /ə/
+Fixed note in ex. 72 to correctly point out which words are pronounced with /ɔː/
+Added note in ex. 72 concerning the pronunciations of 'jewel' and 'fluent'
+Removed redundant "Note" in notes
+Fixed typos
+
+----------
+
+2024-09-20
+v0.12.1
+
+Other changes:
+Added sound for ex. B31, B34, B35
+Fixed typos
+
+----------
+
+2024-09-18
+v0.12.0
+
+New exercises:
+B31.5. /t͡ʃ/ – /d͡ʒ/
+B33.5. /t͡ʃɔː/ – /t͡ʃɜː/ – /d͡ʒɔː/ – /d͡ʒɜː/
+
+Reworked exercises:
+B19: replaced 'crucial' - 'bushel' with 'elusion' - 'cushion' to avoid using /r/; moved to end of exercise
+B24: replaced 'ruble' with 'pupil' to avoid using /r/
+
+Other changes:
+Fixed typos
+
+----------
+
+2024-09-14
+v0.11.0
+
+New exercises:
+B17.5. /v/ – /ð/ – /z/, /ð/ – /d/
+
+Other changes:
+Added info on yod-dropping and yod coalescence and corresponding notes for ex. 47
+Added alternate symbol /əː/ for /ɜː/
+Fixed typos
+
+----------
+
+2024-09-13
+v0.10.0
+
+New exercises:
+B10. Nasal release
+B11. Lateral release
+
+Reworked exercises:
+B15 to include only minimal pairs
+B1, B2 not to include /m/
+
+Other changes:
+Added page headers
+Fixed B exercises numbering
+Atypical spellings are now marked with a superscript !
+Sounds that are used before they are introduced are now in bold
+Added notes for ex. 32, 33
+Fixed broken links
+Fixed typos
