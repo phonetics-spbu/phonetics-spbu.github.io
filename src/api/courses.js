@@ -80,6 +80,17 @@ const coursesData = [
             { id: 3, title: "Обработка сигнала в частотной области", filename: "signal_proc_mag_3.html" },
         ]
     },
+    {
+        id: 'english_phonetics',
+        title: 'Практическая фонетика английского языка',
+        description: 'Общая и прикладная фонетика, 1-2 курсы',
+        author: "kholyavin",
+        chapters: [
+            { id: 1, title: "Вводный курс", filename: "english_phonetics_intro.html" },
+            { id: 2, title: "Акцентуация", filename: "english_phonetics_accentuation.html" },
+            { id: 3, title: "Чистописание", filename: "english_phonetics_handwriting.html" },
+        ]
+    },
 ];
 
 export const getAllCourses = () => {

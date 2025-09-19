@@ -30,7 +30,7 @@ function Header() {
             </div>
             <div className="header_img_div">
                 <img alt="" className="header_img" src={process.env.PUBLIC_URL + "/img/anteater.jpg"}></img>
-                <div className="header_authors">© Кафедра фонетики СПбГУ & Титюшина Анна & Павел Холявин, 2025</div>
+                <div className="header_authors">© Кафедра фонетики СПбГУ & Титюшина Анна & Холявин Павел, 2025</div>
             </div>
         </header>
     );
