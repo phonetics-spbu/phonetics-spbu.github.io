@@ -93,7 +93,7 @@ const coursesData = [
     },
     {
         id: 'avar',
-        title: '>Методическое пособие по аварскому языку',
+        title: 'Методическое пособие по аварскому языку',
         description: 'Общая и прикладная фонетика, 3 курс',
         author: "kholyavin",
         chapters: [
