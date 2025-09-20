@@ -39,7 +39,6 @@ function ChapterPage() {
                   /src="img\//g, 
                   `src="${process.env.PUBLIC_URL}/courses/${courseId}/img/`
                 );
-                console.log("html", process.env.PUBLIC_URL, `src="${process.env.PUBLIC_URL}/courses/${courseId}/img/`)
                 setContent(fixedHtml);
                 setLoading(false);
               })
@@ -55,6 +54,7 @@ function ChapterPage() {
 
     return (
         <div className="chapter-page">
+            <div className="desktop_side_menu"><SideMenu/></div>
             <div className="chapter-page-content">
                 <h2>{chapter.title}</h2>
                 <MathJaxContext>
@@ -63,7 +63,7 @@ function ChapterPage() {
                     />
                 </MathJaxContext>
             </div>
-            <SideMenu/>
+            <div className="mobile_side_menu"><SideMenu/></div>
         </div>
     );
 }
