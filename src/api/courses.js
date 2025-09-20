@@ -91,6 +91,26 @@ const coursesData = [
             { id: 3, title: "Чистописание", filename: "english_phonetics_handwriting.html" },
         ]
     },
+    {
+        id: 'avar',
+        title: '>Методическое пособие по аварскому языку',
+        description: 'Общая и прикладная фонетика, 3 курс',
+        author: "kholyavin",
+        chapters: [
+            { id: 1, title: "Введение", filename: "avar_intro.html" },
+            { id: 2, title: "Дифференциальные признаки согласных аварского языка", filename: "avar_distinctive_features.html" },
+            { id: 3, title: "Лабиовелярный аппроксимант /w/", filename: "avar_w.html" },
+            { id: 4, title: "Зубные аффрикаты /t͡s/ – /t͡sː/ – /t͡sʼ/ – /t͡sʼː/", filename: "avar_dental_affricates.html" },
+            { id: 5, title: "Альвеолярные аффрикаты /t͡ʃ/ – /t͡ʃː/ – /t͡ʃʼ/ – /t͡ʃʼː/", filename: "avar_alveolar_affricates.html" },
+            { id: 6, title: "Латеральные согласные /t͡ɬː/ – /t͡ɬʼː/ – /l/ – /ɬ/ – /ɬː/", filename: "avar_laterals.html" },
+            { id: 7, title: "Гуттуральные согласные", filename: "avar_gutturals.html" },
+            { id: 8, title: "Заднеязычные согласные /ɡ/ – /k/ – /kʼ/ – /k͡xː/ – /k͡xʼː/ – /х/", filename: "avar_velars.html" },
+            { id: 9, title: "Увулярные согласные /q͡χː/ – /q͡χʼː/ – /ʁ/ – /χ/ – /χː/", filename: "avar_uvulars.html" },
+            { id: 10, title: "Фарингальные согласные /ʕ/ – /ħ/", filename: "avar_pharyngeals.html" },
+            { id: 11, title: "Ларингальные согласные /ʔ/ – /h/", filename: "avar_glottals.html" },
+            { id: 12, title: "Приложение: задача на аварские числительные", filename: "avar_numbers.html" },
+        ]
+    },
 ];
 
 export const getAllCourses = () => {
