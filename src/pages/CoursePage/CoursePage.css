@@ -3,6 +3,14 @@
     width: 100%;
 }
 
+.mobile_side_menu {
+    display: none;
+}
+
+.desktop_side_menu {
+    display: block;
+}
+
 @media (max-width: 768px) {
 
     .course-page-content {
@@ -14,5 +22,13 @@
         padding: 10px;
         width: 100%;
         margin-right: 20px;
+    }
+
+    .desktop_side_menu {
+        display: none;
+    }
+
+     .mobile_side_menu {
+        display: block;
     }
 }

@@ -24,11 +24,13 @@ function CoursePage() {
 
     return (
         <div className="course-page">
+            <div className="desktop_side_menu"><SideMenu /></div>
+
             <div className="course-page-content">
                 <h2>{course.title}</h2>
                 <p className="course-description">{course.description}</p>
             </div>
-            <SideMenu />
+            <div className="mobile_side_menu"><SideMenu /></div>
         </div>
     );
 }
