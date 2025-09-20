@@ -23,7 +23,7 @@ function HomePage({author}) {
                 <div>Загрузка курсов...</div>
             ) : (
                 <div className="courses-grid">
-                    {courses.filter(course => author == "all" || course.author == author).map(course => (
+                    {courses.filter(course => author === "all" || course.author === author).map(course => (
                         <CourseCard key={course.id} course={course} />
                     ))}
                 </div>
