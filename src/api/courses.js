@@ -1,8 +1,11 @@
+import { avar_intro_text } from "./courses_descriptions"
+
 const coursesData = [
     {
         id: 'linear_models',
         title: "Линейные модели и фильтры",
         description: "Общая и прикладная фонетика, 3 курс",
+        long_description: "Общая и прикладная фонетика, 3 курс",
         author: "tityushina",
         chapters: [
             { id: 1, title: "Простая гармоника и гармонический сигнал. Колебание струны. Тембр.", filename: "lm_1.html" },
@@ -33,6 +36,7 @@ const coursesData = [
         id: 'dsp',
         title: "Цифровая обработка сигналов",
         description: "Общая и прикладная фонетика, 4 курс",
+        long_description: "Общая и прикладная фонетика, 4 курс",
         author: "tityushina",
         chapters: [
             { id: 1, title: "1 тема", filename: "dsp_1.html" },
@@ -43,6 +47,7 @@ const coursesData = [
         id: 'python_1_mag',
         title: "Основы программирования на языке Python",
         description: "Теория и история языка и языки народов Европы, 1 курс",
+        long_description: "Теория и история языка и языки народов Европы, 1 курс",
         author: "tityushina",
         chapters: [
             { id: 1, title: "Переменные и типы данных", filename: "python_1_mag_1.html" },
@@ -62,6 +67,7 @@ const coursesData = [
         id: 'python_2_mag',
         title: "Основы программирования на языке Python (углубленный курс)",
         description: "Теория и история языка и языки народов Европы, 2 курс",
+        long_description: "Теория и история языка и языки народов Европы, 2 курс",
         author: "tityushina",
         chapters: [
             { id: 1, title: "Повторение", filename: "python_2_mag_1.html" },
@@ -73,6 +79,7 @@ const coursesData = [
         id: 'signal_proc_mag',
         title: 'Обработка и интерпретация речевого сигнала',
         description: 'Искусственный интеллект в моделировании речевой деятельности, 2 курс',
+        long_description: 'Искусственный интеллект в моделировании речевой деятельности, 2 курс',
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Повторение. Аналого-цифровое преобразование. Цифровое представление сигнала", filename: "signal_proc_mag_1.html" },
@@ -84,6 +91,7 @@ const coursesData = [
         id: 'english_phonetics',
         title: 'Практическая фонетика английского языка',
         description: 'Общая и прикладная фонетика, 1-2 курсы',
+        long_description: 'Общая и прикладная фонетика, 1-2 курсы',
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Вводный курс", filename: "english_phonetics_intro.html" },
@@ -95,6 +103,7 @@ const coursesData = [
         id: 'avar',
         title: 'Методическое пособие по аварскому языку',
         description: 'Общая и прикладная фонетика, 3 курс',
+        long_description: avar_intro_text,
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Введение", filename: "avar_intro.html" },

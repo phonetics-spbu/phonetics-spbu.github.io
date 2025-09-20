@@ -16,8 +16,6 @@ function HomePage({author}) {
             .catch(() => setLoading(false));
     }, []);
 
-    console.log(author, courses)
-
     return (
         <div className="home-page">
             <div className="home-page-header">Доступные курсы:</div>

@@ -8,7 +8,6 @@ function CoursePage() {
     const { courseId } = useParams();
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
-    console.log("courseId", courseId)
 
     useEffect(() => {
         getCourseDetails(courseId)
@@ -28,7 +27,7 @@ function CoursePage() {
 
             <div className="course-page-content">
                 <h2>{course.title}</h2>
-                <p className="course-description">{course.description}</p>
+                <p className="course-description" dangerouslySetInnerHTML={{ __html: course.long_description }}></p>
             </div>
             <div className="mobile_side_menu"><SideMenu /></div>
         </div>
