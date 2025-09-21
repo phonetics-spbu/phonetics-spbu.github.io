@@ -1,11 +1,11 @@
-import { avar_intro_text } from "./courses_descriptions"
+import { avar_intro_text, lm_intro_text } from "./courses_descriptions"
 
 const coursesData = [
     {
         id: 'linear_models',
         title: "Линейные модели и фильтры",
         description: "Общая и прикладная фонетика, 3 курс",
-        long_description: "Общая и прикладная фонетика, 3 курс",
+        long_description: lm_intro_text,
         author: "tityushina",
         chapters: [
             { id: 1, title: "Простая гармоника и гармонический сигнал. Колебание струны. Тембр.", filename: "lm_1.html" },
