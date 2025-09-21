@@ -120,6 +120,16 @@ const coursesData = [
             { id: 12, title: "Приложение: задача на аварские числительные", filename: "avar_numbers.html" },
         ]
     },
+    {
+        id: 'python_genling_bac',
+        title: 'Основы программирования на языке Python',
+        description: 'Теоретическое и экспериментальное языкознание, 2 курс',
+        long_description: 'Теоретическое и экспериментальное языкознание, 2 курс',
+        author: "kholyavin",
+        chapters: [
+            { id: 1, title: "Переменные, типы данных, ввод и вывод", filename: "python_genling_bac_1.html" },
+        ]
+    },
 ];
 
 export const getAllCourses = () => {
