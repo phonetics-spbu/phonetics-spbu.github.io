@@ -124,10 +124,11 @@ const coursesData = [
         id: 'python_genling_bac',
         title: 'Основы программирования на языке Python',
         description: 'Теоретическое и экспериментальное языкознание, 2 курс',
-        long_description: 'Теоретическое и экспериментальное языкознание, 2 курс',
+        long_description: 'Теоретическое и экспериментальное языкознание (бакалавриат), 2 курс',
         author: "kholyavin",
         chapters: [
-            { id: 1, title: "Переменные, типы данных, ввод и вывод", filename: "python_genling_bac_1.html" },
+            { id: 1, title: "Аттестация по курсу", filename: "python_genling_bac_intro.html" },
+            { id: 2, title: "Переменные, типы данных, ввод и вывод", filename: "python_genling_bac_1.html" },
         ]
     },
 ];
