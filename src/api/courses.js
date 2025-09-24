@@ -85,6 +85,7 @@ const coursesData = [
             { id: 1, title: "Повторение. Аналого-цифровое преобразование. Цифровое представление сигнала", filename: "signal_proc_mag_1.html" },
             { id: 2, title: "Обработка сигнала во временной области", filename: "signal_proc_mag_2.html" },
             { id: 3, title: "Обработка сигнала в частотной области", filename: "signal_proc_mag_3.html" },
+            { id: 4, title: "Психоакустические шкалы", filename: "signal_proc_mag_4.html" },
         ]
     },
     {
@@ -124,10 +125,11 @@ const coursesData = [
         id: 'python_genling_bac',
         title: 'Основы программирования на языке Python',
         description: 'Теоретическое и экспериментальное языкознание, 2 курс',
-        long_description: 'Теоретическое и экспериментальное языкознание, 2 курс',
+        long_description: 'Теоретическое и экспериментальное языкознание (бакалавриат), 2 курс',
         author: "kholyavin",
         chapters: [
-            { id: 1, title: "Переменные, типы данных, ввод и вывод", filename: "python_genling_bac_1.html" },
+            { id: 1, title: "Аттестация по курсу", filename: "python_genling_bac_intro.html" },
+            { id: 2, title: "Переменные, типы данных, ввод и вывод", filename: "python_genling_bac_1.html" },
         ]
     },
 ];
