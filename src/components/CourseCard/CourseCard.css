@@ -16,6 +16,16 @@
     cursor: pointer;
     padding: 5px;
     border: 1px solid #25292e;
+    position: relative;
+}
+
+.year_descr {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-size: 10pt;
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
 
 @media (max-width: 768px) {
@@ -28,4 +38,8 @@
         height: 120px;
         font-size: 12px;
     }
+
+    .year_descr {
+    font-size: 8pt;
+}
 }

@@ -4,7 +4,9 @@ const coursesData = [
     {
         id: 'linear_models',
         title: "Линейные модели и фильтры",
-        description: "Общая и прикладная фонетика, 3 курс бакалвриата",
+        description: "Общая и прикладная фонетика",
+        level: "bac",
+        year: 3,
         long_description: lm_intro_text,
         author: "tityushina",
         chapters: [
@@ -35,8 +37,10 @@ const coursesData = [
     {
         id: 'dsp',
         title: "Цифровая обработка сигналов",
-        description: "Общая и прикладная фонетика, 4 курс бакалавриата",
+        description: "Общая и прикладная фонетика",
         long_description: "Общая и прикладная фонетика, 4 курс бакалавриата",
+        level: "bac",
+        year: 4,
         author: "tityushina",
         chapters: [
             { id: 1, title: "1 тема", filename: "dsp_1.html" },
@@ -46,8 +50,10 @@ const coursesData = [
     {
         id: 'python_1_mag',
         title: "Основы программирования на языке Python",
-        description: "Теория и история языка и языки народов Европы, 1 курс магистратуры",
+        description: "Теория и история языка и языки народов Европы",
         long_description: "Теория и история языка и языки народов Европы, 1 курс магистратуры",
+        level: "mag",
+        year: 1,
         author: "tityushina",
         chapters: [
             { id: 1, title: "Переменные и типы данных", filename: "python_1_mag_1.html" },
@@ -66,8 +72,10 @@ const coursesData = [
     {
         id: 'python_2_mag',
         title: "Основы программирования на языке Python (углубленный курс)",
-        description: "Теория и история языка и языки народов Европы, 2 курс магистратуры",
+        description: "Теория и история языка и языки народов Европы",
         long_description: "Теория и история языка и языки народов Европы, 2 курс магистратуры",
+        level: "mag",
+        year: 2,
         author: "tityushina",
         chapters: [
             { id: 1, title: "Повторение", filename: "python_2_mag_1.html" },
@@ -78,8 +86,10 @@ const coursesData = [
     {
         id: 'signal_proc_mag',
         title: 'Обработка и интерпретация речевого сигнала',
-        description: 'Искусственный интеллект в моделировании речевой деятельности, 2 курс магистратуры',
+        description: 'Искусственный интеллект в моделировании речевой деятельности',
         long_description: 'Искусственный интеллект в моделировании речевой деятельности, 2 курс магистратуры',
+        level: "mag",
+        year: 2,
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Повторение. Аналого-цифровое преобразование. Цифровое представление сигнала", filename: "signal_proc_mag_1.html" },
@@ -93,6 +103,8 @@ const coursesData = [
         title: 'Практическая фонетика английского языка',
         description: 'Общая и прикладная фонетика, 1-2 курсы бакалавриата',
         long_description: 'Общая и прикладная фонетика, 1-2 курсы бакалавриата',
+        level: "bac",
+        year: 1,
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Вводный курс", filename: "english_phonetics_intro.html" },
@@ -103,8 +115,10 @@ const coursesData = [
     {
         id: 'avar',
         title: 'Методическое пособие по аварскому языку',
-        description: 'Общая и прикладная фонетика, 3 курс бакалавриата',
+        description: 'Общая и прикладная фонетика',
         long_description: avar_intro_text,
+        level: "bac",
+        year: 3,
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Введение", filename: "avar_intro.html" },
@@ -124,8 +138,10 @@ const coursesData = [
     {
         id: 'python_genling_bac',
         title: 'Основы программирования на языке Python',
-        description: 'Теоретическое и экспериментальное языкознание, 2 курс бакалавриата',
+        description: 'Теоретическое и экспериментальное языкознание',
         long_description: 'Теоретическое и экспериментальное языкознание (бакалавриат), 2 курс бакалавриата',
+        level: "bac",
+        year: 2,
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Аттестация по курсу", filename: "python_genling_bac_intro.html" },
@@ -135,8 +151,10 @@ const coursesData = [
     {
         id: 'ling_programming',
         title: 'Программирование лингвистических задач',
-        description: 'Общая и прикладная фонетика, 4 курс бакалавриата',
+        description: 'Общая и прикладная фонетика',
         long_description: 'Общая и прикладная фонетика, 4 курс бакалавриата',
+        level: "bac",
+        year: 4,
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Чтение и запись звуковых данных", filename: "wav_reading.html" },
