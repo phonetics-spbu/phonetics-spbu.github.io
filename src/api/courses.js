@@ -132,6 +132,16 @@ const coursesData = [
             { id: 2, title: "Переменные, типы данных, ввод и вывод", filename: "python_genling_bac_1.html" },
         ]
     },
+    {
+        id: 'ling_programming',
+        title: 'Программирование лингвистических задач',
+        description: 'Общая и прикладная фонетика, 4 курс',
+        long_description: lm_intro_text,
+        author: "kholyavin",
+        chapters: [
+            { id: 1, title: "Чтение и запись звуковых данных", filename: "wav_reading.html" },
+        ]
+    },
 ];
 
 export const getAllCourses = () => {

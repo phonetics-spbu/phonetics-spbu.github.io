@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Аттестация по курсу</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+    <link href="styles/syntax_highlight.css" rel="stylesheet">
+    <base target="_blank">
+</head>
+
+<body>
+<div class="chapter-content">
+
+<p>Для хранения звуковых данных существует большое количество различных
+форматов. Они делятся на две категории: те, в которых данные сжимаются,
+и те, в которых этого не происходит. Сжатие может происходить как с
+потерями (в этом случае невозможно с точностью восстановить исходные
+данные), так и без них.</p>
+<h3 id="файлы-wav">Файлы WAV</h3>
+<p>Самый распространённый формат для хранения звуковых данных без сжатия
+— WAV. В нём хранятся значения амплитуды каждого отсчёта цифрового
+аудиосигнала. Формат WAV является разновидностью формата RIFF (Resource
+Interchange File Format), который подразумевает хранение данных блоками
+(англ. <em>chunks</em>). Файлы формата WAV состоят из двух основных
+частей: заголовка и собственно данных. Структура заголовка приведена в
+таблице ниже:</p>
+<table>
+<thead>
+<tr>
+<th>Название поля</th>
+<th>Количество байт</th>
+<th>Информация, содержащаяся в поле</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FileTypeBlocID</td>
+<td>4</td>
+<td>Строка <code>"RIFF"</code>: идентификатор формата</td>
+</tr>
+<tr>
+<td>FileSize</td>
+<td>4</td>
+<td>Размер файла в байтах минус 8</td>
+</tr>
+<tr>
+<td>FileFormatID</td>
+<td>4</td>
+<td>Строка <code>"WAVE"</code>: идентификатор формата</td>
+</tr>
+<tr>
+<td>FormatBlocID</td>
+<td>4</td>
+<td>Строка <code>"fmt "</code>: идентификатор чанка (описание
+формата)</td>
+</tr>
+<tr>
+<td>BlocSize</td>
+<td>4</td>
+<td>Размер текущего блока минус 8</td>
+</tr>
+<tr>
+<td>AudioFormat</td>
+<td>2</td>
+<td>Формат аудио (см. ниже)</td>
+</tr>
+<tr>
+<td>NbrChannels</td>
+<td>2</td>
+<td>Количество каналов (1 — моно, 2 — стерео)</td>
+</tr>
+<tr>
+<td>Frequency</td>
+<td>4</td>
+<td>Частота дискретизации (в герцах)</td>
+</tr>
+<tr>
+<td>BytePerSec</td>
+<td>4</td>
+<td>Количество байт в секунду</td>
+</tr>
+<tr>
+<td>BytePerBloc</td>
+<td>2</td>
+<td>Количество байт на один блок</td>
+</tr>
+<tr>
+<td>BitsPerSample</td>
+<td>2</td>
+<td>Количество бит на один отсчёт</td>
+</tr>
+<tr>
+<td>DataBlocID</td>
+<td>4</td>
+<td>Строка <code>"data"</code>: идентификатор чанка (сами данные)</td>
+</tr>
+<tr>
+<td>DataSize</td>
+<td>4</td>
+<td>Размер данных в байтах</td>
+</tr>
+<tr>
+<td>SampledData</td>
+<td>(вариативно)</td>
+<td>Данные об амплитуде каждого отсчёта</td>
+</tr>
+</tbody>
+</table>
+<p>В заголовке может храниться и другая информация, например,
+метаданные. Если в файле больше одного канала, то данные об амплитуде
+отсчётов из каждого канала чередуются. Например, если в файле два
+канала, то в поле SampledData хранится сначала первый отсчёт первого
+канала, затем первый отсчёт второго канала, затем второй отсчёт первого
+канала и т. д.</p>
+<h4 id="основные-стандарты-кодирования-аудиоданных">Основные стандарты
+кодирования аудиоданных</h4>
+<p>В поле AudioFormat хранится специальное число, которое показывает, в
+каком виде хранятся данные об амплитуде каждого отсчёта. Используются
+следующие основные стандарты:</p>
+<ol type="1">
+<li><p>Импульсно-кодовая модуляция (<em>pulse code modulation</em>,
+<em>PCM</em>): значения амплитуды хранятся напрямую. Они могут храниться
+в виде целых чисел (код 1, 0x0001) или в виде чисел с плавающей запятой
+по стандарту IEEE 754 (код 3, 0x0003). Целочисленный PCM (<em>integer
+PCM</em>) используется в подавляющем большинстве случаев, и далее будет
+предполагаться, что используется он, если не сказано иное.</p></li>
+<li><p>Адаптивная дифференциальная импульсно-кодовая манипуляция
+(<em>adaptive differential pulse code modulation</em>, <em>ADPCM</em>):
+хранятся не значения амплитуды, а разности амплитуд соседних отсчётов,
+при этом шаг квантования варьируется (код 2, 0x0002).</p></li>
+<li><p>Мю-закон (<em>mu-law</em>): амплитуда кодируется по специальной
+формуле (код 7, 0x0007).</p></li>
+</ol>
+<p>$$ F(x) = \text{sgn}(x) {\ln(1 + \mu \lvert x \rvert) \over \ln(1 +
+\mu)}, -1 \le x \le 1, $$</p>
+<p>где μ = 255.</p>
+<ol start="4" type="1">
+<li>А-закон (<em>A-law</em>): амплитуда кодируется по специальной
+формуле (код 6, 0x0006).</li>
+</ol>
+<p>$$ F(X) = \text{sgn}(x) \begin{cases} {A \lvert x \rvert \over 1 +
+\ln(A)}, &amp; \lvert x \rvert \lt {1 \over A}, \ {1 + \ln(A \lvert x
+\rvert) \over 1 + \ln(A)}, &amp; {1 \over A} \le \lvert x \rvert \lt 1,
+\end{cases} $$</p>
+<p>где A = 87.6 в европейском стандарте.</p>
+<h4 id="количество-байт-на-отсчёт">Количество байт на отсчёт</h4>
+<p>Количество байт, отведённое на хранение одного отсчёта, будет
+определять количество уровней квантования, а тип данных, избранный для
+хранения, будет определять диапазон значений амплитуды (см. таблицу
+ниже).</p>
+<table>
+<thead>
+<tr>
+<th>Кол-во байт</th>
+<th>Тип данных в языке C</th>
+<th>Диапазон значений</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>char</td>
+<td>0—255</td>
+</tr>
+<tr>
+<td>2</td>
+<td>short</td>
+<td>−32768—32767</td>
+</tr>
+<tr>
+<td>3</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>4</td>
+<td>int</td>
+<td>−2147483648—2147483647</td>
+</tr>
+</tbody>
+</table>
+<p>Обратите внимание, что в 8-битных файлах значения амплитуды хранятся
+в беззнаковом типе, поэтому отрицательных значений в таких файлах быть
+не может.</p>
+<p>Несмотря на то, что существует стандарт записи, при котором на один
+отсчёт отводится 3 байта (24 бита), 24-битного целочисленного типа не
+существует. В связи с этим такие файлы поддерживаются не всеми
+библиотеками.</p>
+<p>Если значения хранятся в виде чисел с плавающей запятой, то на один
+отсчёт может отводиться 32 или 64 бита (см. таблицу ниже).</p>
+<table>
+<thead>
+<tr>
+<th>Кол-во байт</th>
+<th>Тип данных в языке C</th>
+<th>Диапазон</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td>float</td>
+<td>−3.40282347×10<sup>38</sup>—−1.17549435×10<sup>−38</sup>, 0,
+1.17549435×10<sup>−38</sup>—3.40282347×10<sup>38</sup></td>
+</tr>
+<tr>
+<td>8</td>
+<td>double</td>
+<td>−1.797693134862315×10<sup>308</sup>—−2.225073858507201×10<sup>−308</sup>,
+0,
+2.225073858507201×10<sup>−308</sup>—1.797693134862315×10<sup>308</sup></td>
+</tr>
+</tbody>
+</table>
+<h4 id="нормализация-амплитуд">Нормализация амплитуд</h4>
+<p>В связи с большим разбросом диапазона амплитуд, при обработке их
+принято нормализовывать путём деления на максимальное возможное значение
+для данного типа данных. Таким образом, все амплитуды приводятся в
+диапазон от −1 до 1. В программе Wave Assistant такая нормализация не
+проводится, и по оси ординат отложена амплитуда в изначальных, «сырых»
+значениях. В программе Praat, напротив, такая нормализация проводится, и
+по оси ординат отложена амплитуда от −1 до 1.</p>
+<h4 id="положение-отсчётов">Положение отсчётов</h4>
+<p>В формате WAV позиция каждого отсчёта не кодируется, все отсчёты идут
+просто по порядку. Поэтому, чтобы определить, в каком месте сигнала
+находится тот или иной отсчёт, необходимо знать номер этого отсчёта и
+частоту дискретизации, которая показывает, сколько отсчётов помещается в
+одну секунду. Для перевода из отсчётов в секунды можно воспользоваться
+формулой:</p>
+<p>$$ t = {n \over F_s},$$</p>
+<p>где F<sub>s</sub> — частота дискретизации.</p>
+<p>Обратная формула (поскольку номер отсчёта — целое число, необходимо
+округлить результат):</p>
+<p>$$ n = \left[ t \cdot F_s \right] $$</p>
+<h4 id="файлы-без-заголовка">Файлы без заголовка</h4>
+<p>Иногда, если информация о формате файла (стандарте кодирования,
+частоте дискретизации и др.) уже известна, заголовок у файла не пишется.
+Такие файлы называются RAW («сырые» файлы) и могут иметь расширения
+.raw, .pcm или .sbl (этим расширением пользуется программа Wave
+Assistant).</p>
+<p><img src="courses/ling_programming/images/headless.jpg" alt="image" /></p>
+<h3
+id="работа-с-файлами-wav-с-помощью-встроенных-библиотек-python">Работа с
+файлами WAV с помощью встроенных библиотек Python</h3>
+<p>Для работы с файлами WAV нам понадобится встроенная библиотека <a
+href="https://docs.python.org/3/library/wave.html"><code>wave</code></a>.</p>
+<h4 id="чтение-файлов">Чтение файлов</h4>
+<p>Чтобы открыть файл, воспользуемся функцией
+<code>wave.open()</code>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> wave</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> wave.<span class="bu">open</span>(<span class="st">&quot;cta0001.wav&quot;</span>, mode<span class="op">=</span><span class="st">&quot;rb&quot;</span>)</span></code></pre></div>
+<p>Вторым аргументом мы передали режим, в котором открываем файл: в
+данном случае мы открываем его для чтения. Тогда функция вернёт объект
+класса <code>Wave_read</code>, через методы которого мы будем получать
+доступ к данным файла.</p>
+<p>Получим данные о параметрах файла: длине сигнала в отсчётах, частоте
+дискретизации, количестве байт на один отсчёт и количестве каналов.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>num_samples <span class="op">=</span> f.getnframes()</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>samplerate <span class="op">=</span> f.getframerate()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sampwidth <span class="op">=</span> f.getsampwidth()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>num_channels <span class="op">=</span> f.getnchannels()</span></code></pre></div>
+<p>Параметры можно получить все сразу, используя метод
+<code>.getparams()</code>. Он вернёт кортеж (<code>namedtuple</code>) со
+следующими параметрами: количество каналов, количество байт на отсчёт,
+частота дискретизации, количество отсчётов, тип сжатия, название типа
+сжатия (на самом деле сжатие в Python не поддерживается, поэтому
+последние два параметра будут всегда <code>'NONE'</code> и
+<code>'not compressed'</code>).</p>
+<p>Прочитать отсчёты из файла можно с помощью метода
+<code>.readframes()</code>. Он принимает в качестве аргумента количество
+чисел, которые нужно прочитать. Оно будет равно длине сигнала в
+отсчётах, умноженной на количество каналов.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>num_frames <span class="op">=</span> num_samples <span class="op">*</span> num_channels</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data_bytes <span class="op">=</span> f.readframes(num_frames)</span></code></pre></div>
+<p>Метод возвращает объект типа <code>bytes</code> — то есть просто
+последовательность байт. Её необходимо преобразовать в
+последовательность целых чисел. Для этого воспользуемся
+методом-конструктором <code>int.from_bytes()</code>. Этот метод
+принимает на вход последовательность байт, соответствующих одному числу,
+порядок байт в числе и является ли тип знаковым.</p>
+<p>Под порядком байт (англ. <em>endianness</em>) понимается порядок, в
+котором записываются байты: сначала может идти старший байт (<em>most
+significant byte</em>), тогда порядок называется <em>big-endian</em> (от
+старшего к младшему), а может идти младший байт (<em>least significant
+byte</em>), тогда порядок называется <em>little-endian</em> (от младшего
+к старшему). Первый вариант интуитивно кажется более логичным, потому
+что он совпадает с правилами записи чисел арабскими цифрами, от старших
+разрядов к младшим. Однако чаще (в том числе в файлах WAV) используется
+порядок <em>little-endian</em>, поэтому в аргумент
+<code>byteorder</code> мы передадим строку <code>"little"</code>.</p>
+<p>Как указывалось выше, беззнаковый тип используется только в 8-битных
+файлах, поэтому в аргумент <code>signed</code> передадим выражение,
+которое будет равно <code>False</code> только тогда, когда количество
+байт на отсчёт (<code>sampwidth</code>) не равно 1:
+<code>sampwidth != 1</code>.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>signal <span class="op">=</span> [</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">int</span>.from_bytes(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        data_bytes[i:i<span class="op">+</span>sampwidth],</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        byteorder<span class="op">=</span><span class="st">&quot;little&quot;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        signed<span class="op">=</span>(sampwidth <span class="op">!=</span> <span class="dv">1</span>),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(data), sampwidth)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
+<p>Теперь в переменной <code>signal</code> содержится список из
+<code>num_frames</code> значений, каждое из которых соответствует
+значению амплитуды одного отсчёта.</p>
+<h4 id="библиотека-struct">Библиотека <code>struct</code></h4>
+<p>Преобразование можно проводить и с помощью библиотеки <a
+href="https://docs.python.org/3/library/struct.html"><code>struct</code></a>.
+Для этого воспользуемся функцией <code>struct.unpack()</code>. Она
+принимает в качестве аргументов специальную строку, описывающую формат
+считываемых чисел, и сами данные.</p>
+<p>Форматную строку сконструируем следующим образом: переведём
+количество чисел в строковый формат и прибавим букву, которая обозначает
+тип, соответствующий количеству байт на отсчёт (с полной таблицей
+обозначений можно ознакомиться в <a
+href="https://docs.python.org/3/library/struct.html#format-characters">документации</a>).</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sampwidth_to_char <span class="op">=</span> {<span class="dv">1</span>: <span class="st">&quot;c&quot;</span>, <span class="dv">2</span>: <span class="st">&quot;h&quot;</span>, <span class="dv">4</span>: <span class="st">&quot;i&quot;</span>}</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fmt <span class="op">=</span> <span class="bu">str</span>(num_frames) <span class="op">+</span> sampwidth_to_char[sampwidth]</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>signal <span class="op">=</span> struct.unpack(fmt, data_bytes)</span></code></pre></div>
+<p>Теперь в переменной <code>signal</code> содержится кортеж из
+<code>num_frames</code> значений, каждое из которых соответствует
+значению амплитуды одного отсчёта.</p>
+<p>Обратите внимание, что мы нигде специально не указывали порядок байт:
+<code>struct</code> по умолчанию работает с системным порядком байт (а в
+большинстве случаев это <em>little-endian</em>). В том случае, если
+системный порядок <em>big-endian</em>, нужный порядок можно указать
+перед буквой типа:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fmt <span class="op">=</span> <span class="bu">str</span>(num_frames) <span class="op">+</span> <span class="st">&quot;&lt;&quot;</span> <span class="op">+</span> sampwidth_to_char[sampwidth]</span></code></pre></div>
+<h4 id="визуализация-данных">Визуализация данных</h4>
+<p>Воспользуемся библиотекой <code>matplotlib</code>, чтобы вывести
+осциллограмму на экран.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.plot(signal)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Time, samples&quot;</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Amplitude, raw&quot;</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="courses/ling_programming/images/cta0001_raw.png" alt="image" /></p>
+<p>По оси <em>x</em> отложено время, измеренное в отсчётах, а по оси
+<em>y</em> — «сырые», т. е. ненормализованные значения амплитуды.</p>
+<p>Чтобы по оси <em>x</em> отложить время в секундах, для каждого номера
+отсчёта определим, какому времени он соответствует. Для этого разделим
+каждый номер на частоту дискретизации:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> [s <span class="op">/</span> samplerate <span class="cf">for</span> s <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(signal))]</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>plt.plot(times, signal)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Time, seconds&quot;</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Amplitude, raw&quot;</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="courses/ling_programming/images/cta0001_seconds.png" alt="image" /></p>
+<h4 id="чтение-стереофайлов">Чтение стереофайлов</h4>
+<p>Попробуем теперь прочитать стереофайл, то есть файл с двумя каналами,
+по одному для каждого уха. В двухканальных файлах на самом деле можно
+хранить совсем разные сигналы: например, в диалоговых корпусах часто
+речь одного собеседника хранится в левом канале, а речь другого — в
+правом. Или в одном канале может храниться запись с микрофона, а в
+другом — синхронизированная с ней электроглоттограмма.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> wave.<span class="bu">open</span>(<span class="st">&quot;cta0001_stereo.wav&quot;</span>, mode<span class="op">=</span><span class="st">&quot;rb&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>num_samples <span class="op">=</span> f.getnframes()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>samplerate <span class="op">=</span> f.getframerate()</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>sampwidth <span class="op">=</span> f.getsampwidth()</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>num_channels <span class="op">=</span> f.getnchannels()</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>num_frames <span class="op">=</span> num_samples <span class="op">*</span> num_channels</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>data_bytes <span class="op">=</span> f.readframes(num_frames)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>signal <span class="op">=</span> [</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">int</span>.from_bytes(</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        data_bytes[i:i<span class="op">+</span>sampwidth],</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        byteorder<span class="op">=</span><span class="st">&quot;little&quot;</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        signed<span class="op">=</span>(sampwidth <span class="op">!=</span> <span class="dv">1</span>),</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(data), sampwidth)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
+<p>В файле <code>cta0001_stereo.wav</code> левый канал на самом деле
+идентичен правому. Чтобы в этом убедиться, разделим отсчёты по каналам
+(как мы помним, отсчёты в файле чередуются). Для этого воспользуемся
+срезами.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>left <span class="op">=</span> signal[::<span class="dv">2</span>]</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>right <span class="op">=</span> signal[<span class="dv">1</span>::<span class="dv">2</span>]</span></code></pre></div>
+<p>Код ниже выведет <code>True</code>, что показывает, что каналы
+действительно идентичны.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(left <span class="op">==</span> right)</span></code></pre></div>
+<pre><code>True</code></pre>
+<h4 id="чтение-24-битных-файлов-с-помощью-struct">Чтение 24-битных
+файлов с помощью <code>struct</code></h4>
+<p>Как указывалось выше, чтение файлов, где на хранение одного отсчёта
+отводится 3 байта, сталкивается с трудностями. Это связано с тем, что не
+существует 24-битного целочисленного типа. Такие файлы без проблем
+прочитаются с помощью <code>int.from_bytes()</code>, но при
+использовании <code>struct</code> нам придётся модифицировать
+прочитанные данные так, чтобы мы могли интерпретировать их как 32-битные
+целые числа. Прочитаем файл как обычно:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> wave.<span class="bu">open</span>(<span class="st">&quot;24bit.wav&quot;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>num_samples <span class="op">=</span> f.getnframes()</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>samplerate <span class="op">=</span> f.getframerate()</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>sampwidth <span class="op">=</span> f.getsampwidth() <span class="co"># 3</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>num_channels <span class="op">=</span> f.getnchannels()</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>data_bytes <span class="op">=</span> f.readframes(num_samples <span class="op">*</span> num_channels)</span></code></pre></div>
+<p>Теперь переберём байты тройками и к каждой тройке в начало добавим
+нулевой байт. Тогда получится 32-битное число, в 2<sup>8</sup> раз
+большее имеющегося в виду. Для объединения байт в одну
+последовательность воспользуемся методом <code>bytes.join()</code>,
+который работает точно так же, как его строковый аналог. В качестве
+разделителя укажем пустую последовательность байт <code>b""</code>.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>data_bytes <span class="op">=</span> <span class="st">b&quot;&quot;</span>.join(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">b&quot;&quot;</span>.join((<span class="st">b&quot;</span><span class="ch">\x00</span><span class="st">&quot;</span>, data_bytes[i:i<span class="op">+</span><span class="dv">3</span>]))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(data_bytes), <span class="dv">3</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Распакуем данные:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fmt <span class="op">=</span> <span class="bu">str</span>(num_samples <span class="op">*</span> num_channels) <span class="op">+</span> <span class="st">&quot;i&quot;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>signal <span class="op">=</span> struct.unpack(fmt, data_bytes)</span></code></pre></div>
+<p>И приведём числа к изначальным величинам путём побитового сдвига
+(эквивалентно делению на 2<sup>8</sup>).</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>signal <span class="op">=</span> [i <span class="op">&gt;&gt;</span> <span class="dv">8</span> <span class="cf">for</span> i <span class="kw">in</span> signal]</span></code></pre></div>
+<h3 id="запись-файлов">Запись файлов</h3>
+<p>Чтобы записать аудиоданные в файл, нужно преобразовать их в
+последовательность байт. Для этого можно воспользоваться методом
+<code>int.to_bytes()</code> или библиотекой <code>struct</code>.</p>
+<p>Для примера сгенерируем синусоидальный сигнал. Зададим частоту
+дискретизации, количество байт на отсчёт, количество каналов и
+длительность сигнала в секундах. Чтобы вычислить количество отсчётов в
+итоговом сигнале, умножим длительность на частоту дискретизации.</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> sin, pi</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>samplerate <span class="op">=</span> <span class="dv">22050</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>sampwidth <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>num_channels <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>duration <span class="op">=</span> <span class="dv">2</span>  <span class="co"># секунды </span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>num_samples <span class="op">=</span> samplerate <span class="op">*</span> duration</span></code></pre></div>
+<p>Зададим значение амплитуды нашей синусоиды (половина от максимально
+возможной). У беззнаковых типов максимальное число определяется как
+2<sup>(количество бит на число)</sup> − 1, у знаковых —
+2<sup>(количество бит на число − 1)</sup> − 1.</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>max_ampl <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> (sampwidth <span class="op">*</span> <span class="dv">8</span> <span class="op">-</span> (<span class="dv">0</span> <span class="cf">if</span> sampwidth <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> <span class="dv">1</span>)) <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>ampl <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> max_ampl</span></code></pre></div>
+<p>Зададим частоту в герцах и сгенерируем синусоиду с помощью функции
+<code>math.sin()</code> и спискового включения. Не забудем сделать так,
+чтобы все значения сигнала были целыми числами (иначе мы не сможем
+записать их в файл).</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>freq <span class="op">=</span> <span class="dv">100</span>  <span class="co"># герцы</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>sine <span class="op">=</span> [<span class="bu">int</span>(ampl <span class="op">*</span> sin(x <span class="op">*</span> freq <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> pi <span class="op">/</span> samplerate)) <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(num_samples)]</span></code></pre></div>
+<p>Изобразим первые 1000 отсчётов синусоиды на графике:</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plt.plot(sine[:<span class="dv">1000</span>])</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Time, samples&quot;</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Amplitude, raw&quot;</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="courses/ling_programming/images/sine_1000.png" alt="image" /></p>
+<p>Метод <code>.to_bytes()</code> есть у каждого целочисленного объекта.
+Он берёт на вход количество байт на число, порядок записи байт и
+логическое значение, показывающее, является ли тип знаковым. Объединим
+полученные последовательности байт в одну большую последовательность при
+помощи метода <code>bytes.join()</code>. В качестве разделителя укажем
+пустую последовательность байт <code>b""</code>.</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>data_bytes <span class="op">=</span> <span class="st">b&quot;&quot;</span>.join(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    s.to_bytes(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>        sampwidth,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>        byteorder<span class="op">=</span><span class="st">&quot;little&quot;</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>        signed<span class="op">=</span>(sampwidth <span class="op">!=</span> <span class="dv">1</span>),</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> s <span class="kw">in</span> sine</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>То же самое с помощью <code>struct</code>:</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>sampwidth_to_char <span class="op">=</span> {<span class="dv">1</span>: <span class="st">&quot;c&quot;</span>, <span class="dv">2</span>: <span class="st">&quot;h&quot;</span>, <span class="dv">4</span>: <span class="st">&quot;i&quot;</span>}</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>fmt <span class="op">=</span> <span class="bu">str</span>(num_samples) <span class="op">+</span> sampwidth_to_char[sampwidth]</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>data_bytes <span class="op">=</span> struct.pack(fmt, <span class="op">*</span>sine)</span></code></pre></div>
+<p>И теперь последовательность байт можно записать в файл вместе со
+всеми необходимыми параметрами:</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> wave.<span class="bu">open</span>(<span class="st">&quot;sine_wave.wav&quot;</span>, <span class="st">&quot;wb&quot;</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>f.setnchannels(num_channels)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>f.setsampwidth(sampwidth)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>f.setframerate(samplerate)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>f.writeframes(data_bytes)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>f.close()</span></code></pre></div>
+<h4 id="чтение-файлов-без-заголовка">Чтение файлов без заголовка</h4>
+<p>В аудиофайлах без заголовка хранятся только данные, а все параметры
+должны быть известны заранее, например, из файлов разметки.</p>
+<p>Зададим параметры, с которыми будем читать файл:</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>samplerate <span class="op">=</span> <span class="dv">22050</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>sampwidth <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>num_channels <span class="op">=</span> <span class="dv">1</span></span></code></pre></div>
+<p>Откроем файл в режиме бинарного чтения (<code>"rb"</code>) с помощью
+обычной встроенной функции <code>open()</code> и считаем оттуда
+последовательность байт:</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;cta0001.sbl&quot;</span>, <span class="st">&quot;rb&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    data_bytes <span class="op">=</span> f.read()</span></code></pre></div>
+<p>И преобразуем её в список целых чисел, как раньше:</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>signal <span class="op">=</span> [</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">int</span>.from_bytes(</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>        data_bytes[i:i<span class="op">+</span>sampwidth],</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>        byteorder<span class="op">=</span><span class="st">&quot;little&quot;</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>        signed<span class="op">=</span>(sampwidth <span class="op">!=</span> <span class="dv">1</span>),</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(data), sampwidth)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
+<p>Если мы хотим воспользоваться <code>struct</code>, то сначала
+вычислим количество отсчётов как количество байт в последовательности
+(определим с помощью <code>len()</code>), делённое на количество байт на
+один отсчёт:</p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>sampwidth_to_char <span class="op">=</span> {<span class="dv">1</span>: <span class="st">&quot;c&quot;</span>, <span class="dv">2</span>: <span class="st">&quot;h&quot;</span>, <span class="dv">4</span>: <span class="st">&quot;i&quot;</span>}</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>num_samples <span class="op">=</span> <span class="bu">len</span>(data_bytes) <span class="op">//</span> sampwidth</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>fmt <span class="op">=</span> <span class="bu">str</span>(num_samples) <span class="op">+</span> sampwidth_to_char[sampwidth]</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>signal <span class="op">=</span> struct.unpack(fmt, data_bytes)</span></code></pre></div>
+<p>Запись файлов без заголовка осуществляется также с помощью
+<code>open()</code>:</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;output.sbl&quot;</span>, <span class="st">&quot;wb&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    f.write(data_bytes)</span></code></pre></div>
+<h3 id="работа-с-файлами-wav-с-помощью-библиотеки-scipy">Работа с
+файлами WAV с помощью библиотеки <code>scipy</code></h3>
+<p>Встроенные библиотеки Python предлагают довольно ограниченные
+возможности для работы с файлами WAV. Так, они поддерживают только
+целочисленные форматы: при попытке открыть файл с вещественными
+значениями с помощью <code>wave.open()</code> возникнет ошибка. Кроме
+того, как можно убедиться, чтение аудиофайлов — не самый простой
+процесс, требующий нескольких строк кода на открытие каждого файла.
+Наконец, вычисления в Python достаточно медленные: было бы удобно
+получать аудиоданные сразу в виде массивов <code>numpy</code>.</p>
+<p>Для этого можно воспользоваться модулем <a
+href="https://docs.scipy.org/doc/scipy/reference/io.html#module-scipy.io.wavfile"><code>io.wavfile</code></a>
+из библиотеки <code>scipy</code>. Именно этот способ является
+рекомендованным и наиболее удобным на практике.</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.io <span class="im">import</span> wavfile</span></code></pre></div>
+<p>В нём определены функции для чтения (<code>read()</code>) и записи
+(<code>write()</code>) файлов WAV.</p>
+<h4 id="чтение-файлов-1">Чтение файлов</h4>
+<p>Функция <code>read()</code> принимает на вход имя файла или файловый
+объект, открытый для чтения, а возвращает частоту дискретизации (целое
+число) и <code>numpy</code>-массив, содержащий значения амплитуды в
+каждом отсчёте. Прочитаем файл:</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>samplerate, signal <span class="op">=</span> wavfile.read(<span class="st">&quot;cta0001.wav&quot;</span>)</span></code></pre></div>
+<p>Длина массива будет соответствовать количеству отсчётов, а тип данных
+этого массива — количеству байт на отсчёт. Тип данных хранится в
+атрибуте <code>.dtype</code>:</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(signal.dtype)</span></code></pre></div>
+<pre><code>int16</code></pre>
+<p>Таблица соответствий стандартов записи и типов
+<code>numpy</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Стандарт записи</th>
+<th>Тип данных</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8-bit integer</td>
+<td><code>numpy.uint8</code></td>
+</tr>
+<tr>
+<td>16-bit integer</td>
+<td><code>numpy.int16</code></td>
+</tr>
+<tr>
+<td>24-bit integer</td>
+<td><code>numpy.int32</code></td>
+</tr>
+<tr>
+<td>32-bit integer</td>
+<td><code>numpy.int32</code></td>
+</tr>
+<tr>
+<td>32-bit float</td>
+<td><code>numpy.float32</code></td>
+</tr>
+<tr>
+<td>64-bit float</td>
+<td><code>numpy.float64</code></td>
+</tr>
+</tbody>
+</table>
+<p>При чтении стереофайлов массив будет двумерным. Посмотрим на размеры
+каждого измерения, которые хранятся в атрибуте <code>shape</code> (это
+кортеж):</p>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>samplerate, signal <span class="op">=</span> wavfile.read(<span class="st">&quot;cta0001_stereo.wav&quot;</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(signal.shape)</span></code></pre></div>
+<pre><code>(38535, 2)</code></pre>
+<p>Первое число — количество отсчётов в сигнале (количество строк в
+массиве), а второе — количество каналов (количество столбцов в
+массиве).</p>
+<h4 id="запись-файлов-1">Запись файлов</h4>
+<p>Запишем в новый файл синусоидальный сигнал, но в этот раз сгенерируем
+его с помощью <code>numpy</code>. Зададим параметры:</p>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>samplerate <span class="op">=</span> <span class="dv">22050</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>sampwidth <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>duration <span class="op">=</span> <span class="dv">2</span>  <span class="co"># секунды </span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>num_samples <span class="op">=</span> samplerate <span class="op">*</span> duration</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>max_ampl <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> (sampwidth <span class="op">*</span> <span class="dv">8</span> <span class="op">-</span> (<span class="dv">0</span> <span class="cf">if</span> sampwidth <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> <span class="dv">1</span>)) <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>ampl <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> max_ampl</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>freq <span class="op">=</span> <span class="dv">100</span>  <span class="co"># герцы</span></span></code></pre></div>
+<p>Зададим соответствия между количеством байт на отсчёт и типом
+данных:</p>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>sampwidth_to_dtype <span class="op">=</span> {</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>: np.uint8,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span>: np.int16,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">4</span>: np.int32,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Сгенерируем синусоиду:</p>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>sine <span class="op">=</span> ampl <span class="op">*</span> np.sin(np.arange(num_samples) <span class="op">*</span> freq <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">/</span> samplerate)</span></code></pre></div>
+<p>Переведём её в нужный тип данных с помощью метода
+<code>.astype()</code>:</p>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>sine_int <span class="op">=</span> sine.astype(sampwidth_to_dtype[sampwidth])</span></code></pre></div>
+<p>И запишем её в новый файл с помощью функции <code>write()</code>,
+которая принимает на вход имя файла, частоту дискретизации и массив с
+данными:</p>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>wavfile.write(<span class="st">&quot;sine_wave_numpy.wav&quot;</span>, samplerate, sine_int)</span></code></pre></div>
+<p>Ничто не мешает нам использовать и вещественные числа:</p>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>sine_float <span class="op">=</span> sine.astype(np.float32)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>wavfile.write(<span class="st">&quot;sine_wave_numpy_float.wav&quot;</span>, samplerate, sine_float)</span></code></pre></div>
+<h4 id="чтение-файлов-без-заголовка-1">Чтение файлов без заголовка</h4>
+<p>Чтобы прочитать файл без заголовка, можно воспользоваться функцией
+<code>np.frombuffer()</code>:</p>
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;cta0001.sbl&quot;</span>, <span class="st">&quot;rb&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    raw_signal <span class="op">=</span> f.read()</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>signal <span class="op">=</span> np.frombuffer(raw_signal, dtype<span class="op">=</span>np.int16)</span></code></pre></div>
+<h4 id="порядок-байт-в-numpy">Порядок байт в <code>numpy</code></h4>
+<p><code>numpy</code>, как и <code>struct</code>, по умолчанию исползует
+системный порядок байт. Если вам необходимо указать конкретный порядок
+байт, определите специальный тип <code>numpy</code>:</p>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> np.dtype(np.int16).newbyteorder(<span class="st">&quot;&lt;&quot;</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>signal <span class="op">=</span> np.frombuffer(raw_signal, dtype<span class="op">=</span>dt)</span></code></pre></div>
+<h3 id="работа-с-файлами-wav-с-помощью-библиотеки-wavio">Работа с
+файлами WAV с помощью библиотеки <code>wavio</code></h3>
+<p>Библиотека <a
+href="https://pypi.org/project/wavio/"><code>wavio</code></a> также
+позволяет работать с аудиоданными как с <code>numpy</code>-массивами.
+Она поддерживает 24-битные файлы (но не поддерживает вещественные числа)
+и позволяет легко переходить от одного формата к другому. В ней
+определены функции <code>read()</code> и <code>write()</code>.</p>
+<h4 id="чтение-файлов-2">Чтение файлов</h4>
+<p>Функция <code>read()</code> возвращает специальный объект класса
+<code>wavio.Wav</code>, который содержит три поля: <code>data</code> —
+<code>numpy</code>-массив с данными, <code>rate</code> — частота
+дискретизации и <code>sampwidth</code> — количество байт на отсчёт.</p>
+<div class="sourceCode" id="cb43"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> wavio</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> wavio.read(<span class="st">&quot;cta0001.wav&quot;</span>)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>signal, samplerate, sampwidth <span class="op">=</span> data.data, data.rate, data.sampwidth</span></code></pre></div>
+<p>Массив с данными всегда двумерный, даже когда канал один: в этом
+случае второе измерение равно единице.</p>
+<h4 id="запись-файлов-2">Запись файлов</h4>
+<p>Для записи воспользуемся функцией <code>wavio.write()</code>. Функция
+берёт на вход три обязательных аргумента: файл для записи, данные в виде
+<code>numpy</code>-массива и частота дискретизации. Кроме этого, у неё
+есть три необязательных параметра: <code>sampwidth</code> — количество
+байт на отсчёт, <code>scale</code> — коэффициент масштабирования и
+<code>clip</code> — режим работы с обрезанными данными.</p>
+<p>Если не передавать аргумент <code>sampwidth</code>, он будет
+определён на основе типа данных массива. Если значения массива не входят
+в диапазон типа, соответствующего переданному <code>sampwidth</code>,
+они будут обрезаны (<em>clipped</em>). Этот аргумент становится
+обязательным, если данные не целочисленного типа. Тогда амплитуды
+масштабируются так, чтобы −1 соответствовало минимальному возможному
+значению для заданного количества байт на отсчёт, а 1 —
+максимальному.</p>
+<p>Масштабированием можно управлять и вручную при помощи аргумента
+<code>scale</code>, но только в том случае, если данные вещественного
+типа. Если это строка <code>"auto"</code>, то данные автоматически
+подстроятся под весь доступный диапазон. Если это число, то данные будут
+масштабированы так, что амплитуды, равные этому числу, превратятся в
+максимальное доступное значение.</p>
+<p>Наконец, аргумент <code>clip</code> определяет, что произойдёт, если
+при записи значения амплитуды были обрезаны (см. выше). Если он равен
+строке <code>"warn"</code> (по умолчанию), то на экран будет выведено
+предупреждение, если строке <code>"raise"</code> — будет вызвано
+исключение, если строке <code>"ignore"</code> — ничего не произойдёт.
+Запишем нашу синусоиду в файл:</p>
+<div class="sourceCode" id="cb44"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>wavio.write(<span class="st">&quot;output_wavio.wav&quot;</span>, sine, samplerate, sampwidth<span class="op">=</span><span class="dv">2</span>)</span></code></pre></div>
+<h3 id="работа-с-файлами-wav-с-помощью-библиотеки-librosa">Работа с
+файлами WAV с помощью библиотеки <code>librosa</code></h3>
+<p><a
+href="https://librosa.org/doc/latest/index.html"><code>librosa</code></a>
+— это библиотека для анализа музыки и вообще аудио. Она ориентирована в
+первую очередь на музыку, но содержит и ряд полезных в речевых
+технологиях инструментов.</p>
+<p>В <code>librosa</code> аудиосигнал также представлен в виде
+<code>numpy</code>-массива. Чтобы прочитать файл, используем функцию
+<code>librosa.load()</code>. Она берёт на вход в качестве аргументов имя
+файла и ряд дополнительных параметров (все передаются только по
+ключевому слову — <em>keyword-only</em>): <code>sr</code> — желаемая
+частота дискретизации; <code>mono</code> — логическое значение,
+показывающее, нужно ли переводить сигнал в одноканальную версию;
+<code>offset</code> — время начала чтения файла в секундах;
+<code>duration</code> — длительность читаемого фрагмента в секундах;
+<code>dtype</code> — тип данных выходного массива; <code>res_type</code>
+— <a
+href="https://librosa.org/doc/latest/generated/librosa.resample.html#librosa.resample">тип
+передискретизации</a>.</p>
+<p>Обратите внимание, что у аргумента <code>sr</code> установлено
+значение по умолчанию 22050 Гц, и, если его не передавать, сигнал будет
+автоматически приведён к этой частоте дискретизации. Чтобы не менять
+частоту дискретизации, передайте в аргумент <code>sr</code>
+<code>None</code>.</p>
+<p>Функция возвращает два значения: массив с аудиоданными и частоту
+дискретизации. При этом в массиве все амплитуды будут нормализованы,
+т. е. приведены в диапазон от −1 до 1 путём деления на максимально
+возможное значение (в качестве типа данных по умолчанию используется
+<code>numpy.float32</code>).</p>
+<div class="sourceCode" id="cb45"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>data, samplerate <span class="op">=</span> librosa.load(<span class="st">&quot;cta0001.wav&quot;</span>, sr<span class="op">=</span><span class="va">None</span>)</span></code></pre></div>
+<p>В аргумент <code>sr</code> можно передать любую нужную частоту
+дискретизации:</p>
+<div class="sourceCode" id="cb46"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>data, samplerate <span class="op">=</span> librosa.load(<span class="st">&quot;cta0001.wav&quot;</span>, sr<span class="op">=</span><span class="dv">44100</span>)</span></code></pre></div>
+<h3 id="практические-задания">Практические задания</h3>
+<h4 id="1-деление-файла-пополам">1. Деление файла пополам</h4>
+<p>Напишите программу, которая считывает .wav-файл, делит его на две
+половины и каждую записывает в отдельный файл. Оформите в виде функции,
+которая берёт на вход имя файла и возвращает имена получившихся
+файлов.</p>
+<p><strong>Указания к выполнению</strong>: можно пользоваться любым
+методом чтения и записи файлов (но помните, что рекомендуемым является
+чтение с помощью <code>scipy.io.wavfile</code>). Использование
+встроенного модуля <code>wave</code> даст дополнительное преимущество:
+прочитанные данные не нужно преобразовывать в числа из байтового
+формата, т. к. <code>bytes</code> можно поделить на части с помощью
+срезов, как любые итерируемые объекты. Помните, что длина каждой части
+должна быть кратна количеству байт на отсчёт!</p>
+<h4 id="2-преобразование-из-sbl-в-wav">2. Преобразование из SBL в
+WAV</h4>
+<p>Напишите программу, которая считывает .sbl-файл и сохраняет его как
+.wav. Оформите в виде функции, которая берёт на вход имя файла, частоту
+дискретизации, количество байт на отсчёт (по умолчанию — 2) и количество
+каналов (по умолчанию — 1) и возвращает имя получившегося файла.</p>
+<h4 id="3-модификация-файла-wav">3. Модификация файла WAV</h4>
+<p>Напишите программу, которая:</p>
+<ol type="1">
+<li>Считывает моноканальный файл WAV;</li>
+<li>Делает из него стереофайл так: в правый канал помещает отсчёты
+левого в обратном порядке;</li>
+<li>Вставляет паузы 200 мс (или любое другое число, но явно прописанное
+в коде) на 1/4, 1/2 и 3/4 длительности;</li>
+<li>Записывает в новый файл.</li>
+</ol>
+
+</div>
+</body>
+</html>
