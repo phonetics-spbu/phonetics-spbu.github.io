@@ -88,13 +88,46 @@
     $$ f(x) = \frac{sinx}{x}$$
     называется кардинальным синусом или функцией выборки единичного отсчета.
 </p>
-<img alt="lm_4_1" src="img/lm_4_1.jpg"/>
+<img alt="lm_4_1" src="img/lm_4_1.png" style="width: 50%;"/>
 
 <p class="note"><a
         href="https://colab.research.google.com/github/annashell/linear_models/blob/main/meander_complex_fourier_spectrum.ipynb">Комплексное
     разложение прямоугольного импульса</a></p>
 
-<p></p>
+<p>
+    <b>Теорема Парсеваля:</b> мощность функции заключается в сумме мощностей гармоник
+    $$ ||f(t)||^2 = \frac{1}{T}\int_{-\frac{T}{2}}^\frac{T}{2} |f(t)|^2dt = \sum_{k=-\infty}^{\infty}|C_k|^2$$
+</p>
+<h2>Свойства разложения в ряд Фурье:</h2>
+<p>
+    1. <b>Масштабирование:</b> увеличим амплитуду сигнала в <b>a</b> раз
+    $$ C_k' = \frac{1}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}}af(t)e^{-j\omega_0kt}dt = a\frac{1}{T}\int_{-\frac{T}{2}}^{\frac{T}{2}}f(t)e^{-j\omega_0kt}dt = aC_k$$
+    Все коэффициенты Фурье изменились в <b>a</b> раз. Спектр фаз остался без изменений.
+</p>
+
+<p>
+    2. <b>Сложение двух сигналов:</b> пусть f(t) представляет собой линейную комбинацию двух других функций
+    $$ f(t) = a_1f_1(t) + a_2f_2(t)$$
+    $$ C_k' = \frac{1}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}}(a_1f_1(t) + a_2f_2(t))e^{-j\omega_0kt}dt =
+    a_1\frac{1}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}}f_1(t)e^{-j\omega_0kt}dt + a_2\frac{1}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}}f_2(t)e^{-j\omega_0kt}dt
+    = a_1C_{1k} + a_2C_{2k}$$
+    Значит, преобразование Фурье линейно.
+</p>
+
+<p>
+    3. <b>Сдвиг сигнала во времени:</b> сдвинем f(t) по времени на &#x3c4;
+    $$ C_k' = \frac{1}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}}f(t - \tau)e^{-j\omega_0kt}dt $$
+    Сделаем замену:
+    $$u = t - \tau \Rightarrow dt = du;$$
+    $$ -\frac{T}{2} - \tau < u < \frac{T}{2} - \tau$$
+    $$ C_k' = \frac{1}{T} \int_{-\frac{T}{2} - \tau}^{\frac{T}{2} - \tau}f(u)e^{-j\omega_0k(u + \tau)}du
+    = e^{-j\omega_0k\tau}\frac{1}{T} \int_{-\frac{T}{2} - \tau}^{\frac{T}{2} - \tau}f(u)e^{-j\omega_0ku}du = e^{-j\omega_0k\tau} C_k$$
+    Значит,
+    $$ C_k' = e^{-j\omega_0k\tau} C_k$$
+    Получается, что
+    $$|C_k'| = |e^{-j\omega_0k\tau}C_k| = |C_k|$$
+    Значит, при сдвиге по времени спектр фаз изменяется, а спектр амплитуд - нет.
+</p>
 
 </body>
 </html>
