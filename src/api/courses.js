@@ -1,4 +1,4 @@
-import { avar_intro_text, lm_intro_text } from "./courses_descriptions"
+import { avar_intro_text, lm_intro_text, ling_programming_text } from "./courses_descriptions"
 
 const coursesData = [
     {
@@ -139,13 +139,14 @@ const coursesData = [
         id: 'python_genling_bac',
         title: 'Основы программирования на языке Python',
         description: 'Теоретическое и экспериментальное языкознание',
-        long_description: 'Теоретическое и экспериментальное языкознание (бакалавриат), 2 курс бакалавриата',
+        long_description: 'Теоретическое и экспериментальное языкознание, 2 курс бакалавриата',
         level: "bac",
         year: 2,
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Аттестация по курсу", filename: "python_genling_bac_intro.html" },
             { id: 2, title: "Переменные, типы данных, ввод и вывод", filename: "python_genling_bac_1.html" },
+            { id: 3, title: "Списки, логические значения и условия", filename: "python_genling_bac_2.html" },
         ]
     },
     {
@@ -157,9 +158,22 @@ const coursesData = [
         year: 4,
         author: "kholyavin",
         chapters: [
+            { id: 1, title: "Чтение и запись звуковых данных", filename: "ling_programming_1.html" },
+        ]
+    },
+    {
+        id: 'python_textbook',
+        title: 'Python для фонетистов',
+        description: 'Методическое пособие',
+        long_description: ling_programming_text,
+        level: "bac",
+        year: 2,
+        author: "kholyavin",
+        chapters: [
             { id: 1, title: "Чтение и запись звуковых данных", filename: "wav_reading.html" },
         ]
     },
+    
 ];
 
 export const getAllCourses = () => {
