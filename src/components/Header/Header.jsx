@@ -1,4 +1,3 @@
-import {Link} from 'react-router-dom';
 import './Header.css';
 
 function Header() {
@@ -9,23 +8,6 @@ function Header() {
                     <div className="header_uni">Санкт-Петербургский государственный университет</div>
                     <div className="header_chair">Кафедра фонетики и методики преподавания иностранных языков</div>
                     <div className="header-title">Учебные курсы</div>
-                    <nav>
-                        <Link to="/" className="header-link">
-                            <button className="header-button">
-                                Все курсы
-                            </button>
-                        </Link>
-                        <Link to="/tityushina" className="header-link">
-                            <button className="header-button">
-                                Курсы Титюшиной А.О.
-                            </button>
-                        </Link>
-                        <Link to="/kholyavin" className="header-link">
-                            <button className="header-button">
-                                Курсы Холявина П.А.
-                            </button>
-                        </Link>
-                    </nav>
                 </div>
             </div>
             <div className="header_img_div">
