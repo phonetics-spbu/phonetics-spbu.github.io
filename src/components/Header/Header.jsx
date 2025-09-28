@@ -1,13 +1,20 @@
+import { useNavigate } from 'react-router-dom';
 import './Header.css';
 
 function Header() {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate('/');
+    };
+
     return (
         <header className="header">
             <div className="header-container">
                 <div>
                     <div className="header_uni">Санкт-Петербургский государственный университет</div>
                     <div className="header_chair">Кафедра фонетики и методики преподавания иностранных языков</div>
-                    <div className="header-title">Учебные курсы</div>
+                    <div className="header-title" onClick={handleClick}>Учебные курсы</div>
                 </div>
             </div>
             <div className="header_img_div">
