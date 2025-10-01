@@ -43,8 +43,7 @@ const coursesData = [
         year: 4,
         author: "tityushina",
         chapters: [
-            { id: 1, title: "1 тема", filename: "dsp_1.html" },
-            { id: 2, title: "2 тема", filename: "dsp_2.html" },
+            { id: 1, title: "Влияние фазы на восприятие", filename: "dsp_1.html" },
         ]
     },
     {
