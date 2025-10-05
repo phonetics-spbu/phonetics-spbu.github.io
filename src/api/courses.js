@@ -148,6 +148,7 @@ const coursesData = [
             { id: 1, title: "Аттестация по курсу", filename: "python_genling_bac_intro.html" },
             { id: 2, title: "Переменные, типы данных, ввод и вывод", filename: "python_genling_bac_1.html" },
             { id: 3, title: "Списки, логические значения и условия", filename: "python_genling_bac_2.html" },
+            { id: 4, title: "Циклы", filename: "python_genling_bac_3.html" },
         ]
     },
     {
