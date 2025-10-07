@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Чтение и запись файлов разметки Wave Assistant</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+    <link href="styles/syntax_highlight.css" rel="stylesheet">
+    <base target="_blank">
+</head>
+
+<body>
+<div class="chapter-content">
+
+<h3 id="устройство-файлов-seg">Устройство файлов SEG</h3>
+<h4 id="уровни-разметки">Уровни разметки</h4>
+<p>Программа Wave Assistant использует свой стандарт для разметки
+аудиоданных, т. е. данных о начале и конце звуковых отрезков и их
+названиях. Wave Assistant поддерживает до 16 уровней разметки, которые
+кодируются цветом (зелёный — G, синий — B, красный — R и жёлтый — Y) и
+цифрой от 1 до 4. Каждому уровню сопоставлено своё кодовое число,
+которое является степенью двойки (см. таблицу).</p>
+<table>
+<thead>
+<tr>
+<th>Уровень</th>
+<th>Код</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G1</td>
+<td>2<sup>0</sup> = 1</td>
+</tr>
+<tr>
+<td>B1</td>
+<td>2<sup>1</sup> = 2</td>
+</tr>
+<tr>
+<td>R1</td>
+<td>2<sup>2</sup> = 4</td>
+</tr>
+<tr>
+<td>Y1</td>
+<td>2<sup>3</sup> = 8</td>
+</tr>
+<tr>
+<td>G2</td>
+<td>2<sup>4</sup> = 16</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>2<sup>5</sup> = 32</td>
+</tr>
+<tr>
+<td>R2</td>
+<td>2<sup>6</sup> = 64</td>
+</tr>
+<tr>
+<td>Y2</td>
+<td>2<sup>7</sup> = 128</td>
+</tr>
+<tr>
+<td>G3</td>
+<td>2<sup>8</sup> = 256</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>2<sup>9</sup> = 512</td>
+</tr>
+<tr>
+<td>R3</td>
+<td>2<sup>10</sup> = 1024</td>
+</tr>
+<tr>
+<td>Y3</td>
+<td>2<sup>11</sup> = 2048</td>
+</tr>
+<tr>
+<td>G4</td>
+<td>2<sup>12</sup> = 4096</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>2<sup>13</sup> = 8192</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>2<sup>14</sup> = 16384</td>
+</tr>
+<tr>
+<td>Y4</td>
+<td>2<sup>15</sup> = 32768</td>
+</tr>
+</tbody>
+</table>
+<p>Чтобы легко построить зависимость между названиями уровней и их
+кодами, воспользуемся функцией <code>product</code> из встроенного
+модуля <code>itertools</code>. Эта функция позволяет построить декартово
+произведение двух итерируемых объектов: из набора четырёх цветов и
+четырёх цифр мы получим все возможные комбинации цвета и цифры.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> product</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>letters <span class="op">=</span> <span class="st">&quot;GBRY&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>nums <span class="op">=</span> <span class="st">&quot;1234&quot;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>levels <span class="op">=</span> [ch <span class="op">+</span> num <span class="cf">for</span> ch, num <span class="kw">in</span> product(letters, nums)]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(levels)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>level_codes <span class="op">=</span> [<span class="dv">2</span> <span class="op">**</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(levels))]</span></code></pre></div>
+<pre><code>[&#39;G1&#39;, &#39;G2&#39;, &#39;G3&#39;, &#39;G4&#39;, &#39;B1&#39;, &#39;B2&#39;, &#39;B3&#39;, &#39;B4&#39;, &#39;R1&#39;, &#39;R2&#39;, &#39;R3&#39;, &#39;R4&#39;, &#39;Y1&#39;, &#39;Y2&#39;, &#39;Y3&#39;, &#39;Y4&#39;]</code></pre>
+<p>Построим словари для конвертации из названия уровня в его код и
+наоборот:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>level2code <span class="op">=</span> {i: j <span class="cf">for</span> i, j <span class="kw">in</span> <span class="bu">zip</span>(levels, level_codes)}</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>code2level <span class="op">=</span> {j: i <span class="cf">for</span> i, j <span class="kw">in</span> <span class="bu">zip</span>(levels, level_codes)}</span></code></pre></div>
+<p>На каждом уровне пользователь имеет возможность ставить метки,
+обозначающие границы интересующих его явлений. Каждая метка описывается
+своей позицией в файле и названием (строка, которая может быть
+пустой)</p>
+<h4 id="структура-файла-seg">Структура файла SEG</h4>
+<p>Метки Wave Assistant хранятся в специальных файлах SEG. Метки разных
+уровней могут быть записаны в одном файле (тогда используется расширение
+.seg) или в разных (тогда используются расширения вида .seg_G1, где
+после подчёркивания идёт название уровня).</p>
+<p>Файл SEG представляет собой текстовый файл, состоящий из нескольких
+секций. Название каждой секции пишется заглавными буквами на отдельной
+строке и заключается в квадратные скобки.</p>
+<p>Первая секция называется <code>[PARAMETERS]</code> (параметры) и
+представляет собой заголовок файла, где записаны характеристики
+звукового файла, а также количество меток. Типичная структура этой
+секции:</p>
+<pre><code>[PARAMETERS]
+SAMPLING_FREQ=22050
+BYTE_PER_SAMPLE=2
+CODE=0
+N_CHANNEL=1
+N_LABEL=13</code></pre>
+<p>Здесь обычно записываются следующие параметры: частота дискретизации
+(<code>SAMPLING_FREQ</code>), количество байт на отсчёт
+(<code>BYTE_PER_SAMPLE</code>), код записи (<code>CODE</code>),
+количество каналов (<code>N_CHANNEL</code>), количество меток
+(<code>N_LABEL</code>). Значения этих параметров представляют собой
+целые числа и записываются после названия параметра через знак
+равенства.</p>
+<p>Отдельно стоит сказать о параметре <code>CODE</code>. В большинстве
+случаев он будет равен 0, однако в некоторых нечасто использующихся
+стандартах записи он будет принимать другие значения (см. таблицу).</p>
+<table>
+<thead>
+<tr>
+<th>Стандарт записи</th>
+<th>Код</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Signed 32-bit</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Unsigned 8-bit</td>
+<td>2</td>
+</tr>
+<tr>
+<td>μ-law</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>Если стандарт не указан в таблице выше, он либо кодируется кодом 0,
+либо не поддерживается Wave Assistant. В частности, обратите внимание,
+что сигналы с вещественными значениями в программе не
+поддерживаются.</p>
+<p>Следующая секция называется <code>[LABELS]</code> (метки) и содержит
+информацию о разметке аудиофайла. Каждая метка записывается на отдельной
+строчке и определяется тремя параметрами: положение метки <strong>в
+байтах</strong>, уровень метки в виде степени двойки и название метки
+(может быть пустым). Эти значения отделяются друг от друга запятыми.
+Типичная структура этой секции:</p>
+<pre><code>[LABELS]
+0,2,j
+8492,2,u0
+12708,2,r&#39;
+13708,2,i4
+18180,2,t
+24904,2,r&#39;
+25940,2,i0
+31544,2,f
+36806,2,a4
+38604,2,n
+41618,2,a4
+44508,2,f
+54662,2,</code></pre>
+<p>Обратите внимание, что позиция метки определяется не номером отсчёта,
+которому она соответствует, а номером его первого байта (нумерация
+начинается с нуля). Чтобы перевести номер байта в номер отсчёта (т. е.
+индекс соответствующего элемента в массиве), нужно разделить его на
+количество байт на отсчёт и на количество каналов.</p>
+<p>На рисунке ниже представлена схема соответствия номеров байт и
+отсчётов в 16-битном стереофайле. Отсчёты левого канала обозначены
+буквой L, отсчёты правого — буквой R.</p>
+<p><img src="courses/python_textbook/images/bytes_to_samples.png" alt="image" width="100%"/></p>
+<p>После секции <code>[LABELS]</code> могут встречаться и другие секции,
+например, <code>[HISTORY]</code>, которая содержит историю модификаций
+сигнала. Однако такая информация не относится собственно к разметке и
+встречается очень редко.</p>
+<h4 id="кодировка-файлов-seg">Кодировка файлов SEG</h4>
+<p>Поскольку файлы SEG — это текстовые файлы, при работе с ними
+неизбежно встаёт вопрос кодировок. Одни и те же символы могут быть
+по-разному представлены в памяти компьютера. За соответствие символов и
+их закодированных представлений отвечают кодировки. Поскольку символов,
+которыми пользуется человечество, очень много (сюда входят символы,
+цифры и знаки препинания разных письменностей, математические знаки,
+эмодзи и многое другое), часто в разных случаях используются разные
+кодировки.</p>
+<p>Количество символов, которые может вместить себя кодировка,
+определяется количеством байт, которое в ней отводится на хранение
+одного символа. Это значение может быть как фиксированным, так и
+переменным. В однобайтных кодировках может быть закодировано не более
+2<sup>8</sup> = 256 различных символов.</p>
+<p>Большинство современных кодировок имеют пересечения, потому что они
+основаны на кодировке ASCII. Эта кодировка содержит коды для букв
+латинского алфавита, основных знаков препинания и ряда служебных
+символов. На код одного символа в ней отводится всего 7 бит (всего 128
+символов), поэтому её легко расширить до однобайтной, назначив старший
+бит каждого кода нулём. Тогда все коды, начинающиеся с 1, могут быть
+использованы для представления других символов. Так устроена, например,
+кодировка Windows-1251: байты, старший бит которых равен 1, используются
+для кодирования букв кириллицы и некоторых дополнительных символов. В
+кодировке Windows-1252 эти же коды используются для кодирования букв
+европейских языков, не входящих в основную латиницу (вроде <em>ö</em>
+или <em>é</em>).</p>
+<p>Чаще всего сейчас используется кодировка UTF-8, в которой могут быть
+представлены все символы Unicode — большой кодовой таблицы, где каждому
+символу присвоено уникальное число. В UTF-8 один символ может быть
+закодирован одним, двумя, тремя или четырьмя байтами. Одним байтом
+кодируются символы ASCII, поэтому эти символы выглядят одинаково в UTF-8
+и в других ASCII-совместимых кодировках. Отсюда следует, что файл,
+содержащий только символы ASCII, будет закодирован одинаково и в UTF-8,
+и, например, в Windows-1251.</p>
+<p>В реальной практике настоятельно рекомендуется использование
+кодировки UTF-8 как международного стандарта. Кроме того, в Windows-1251
+не могут быть закодированы символы транскрипций, как, например,
+расширенная латиница (<em>š</em> или <em>č</em>) или символы МФА
+(<em>œ</em> или <em>ə</em>). Если же разметка состоит только из символов
+ASCII, то выбор между Windows-1251 и UTF-8 будет неважен.</p>
+<p>В текстовых файлах никак не отражена кодировка, в которой они
+записаны, поэтому, если она заранее неизвестна, однозначно определить её
+в общем случае невозможно. Однако из-за того, что в UTF-8 используется
+переменная длина кода, не все последовательности байт будут допустимы в
+этой кодировке. Поэтому мы точно будем знать, что файл закодирован
+<strong>не</strong> в этой кодировке, если в нём есть недопустимые
+последовательности байт.</p>
+<p>Кроме того, у UTF-8 есть вариант UTF-8-BOM (<code>utf-8-sig</code> в
+терминологии Python), в котором первый символ — специальный знак, т. н.
+<em>byte order mark</em> (BOM) который используется в том числе для
+того, чтобы указать, что используется таблица Unicode. Это символ с
+кодом <code>U+FEFF</code> (т. е. FEFF<sub>16</sub> =
+65279<sub>10</sub>). В UTF-8 он кодируется последовательностью байт
+<code>EF BB BF</code>.</p>
+<p>При работе с файлами SEG чаще всего придётся делать выбор между
+Windows-1251, UTF-8 и UTF-8-BOM (Wave Assistant поддерживает также
+UTF-16). Можно написать специальную функцию, которая в большинстве
+случаев будет автоматически определять корректную кодировку. Чтобы
+задать кодировку, с которой будет прочитан или записан файл, передадим
+её в аргумент <code>encoding</code> функции <code>open()</code>.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> detect_encoding(file_path: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    encoding <span class="op">=</span> <span class="st">&quot;utf-8&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        text <span class="op">=</span> <span class="bu">open</span>(file_path, <span class="st">&#39;r&#39;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>).read()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">UnicodeDecodeError</span>:</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            <span class="bu">open</span>(file_path, <span class="st">&#39;r&#39;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-16&quot;</span>).read()</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>            encoding <span class="op">=</span> <span class="st">&quot;utf-16&quot;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">UnicodeError</span>:</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            encoding <span class="op">=</span> <span class="st">&quot;cp1251&quot;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> text.startswith(<span class="st">&quot;</span><span class="ch">\ufeff</span><span class="st">&quot;</span>):  <span class="co"># т.н. byte order mark</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>            encoding <span class="op">=</span> <span class="st">&quot;utf-8-sig&quot;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> encoding</span></code></pre></div>
+<p>Функция считает по умолчанию, что файл закодирован в UTF-8. Если при
+попытке открыть файл возникло исключение
+<code>UnicodeDecodeError</code>, то в нём присутствуют недопустимые
+последовательности байт для выбранной кодировки. Если же первый символ
+раскодированной последовательности — <code>U+FEFF</code>
+(<code>"\ufeff"</code> в формате записи символов Unicode, используемом в
+Python), то кодировка — UTF-8-SIG.</p>
+<p>Понятно, что некоторые коды Windows-1251 всё же будут допустимыми в
+UTF-8:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;lol.txt&quot;</span>, <span class="st">&quot;w&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;cp1251&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">&quot;Пё&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;lol.txt&quot;</span>, <span class="st">&quot;r&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f.read())  <span class="co"># Greek Capital Letter Sho ???</span></span></code></pre></div>
+<pre><code>ϸ</code></pre>
+<p>Код выше выводит на экран символ <em>ϸ</em> (Greek Capital Letter
+Sho). Кириллические буквы <em>П</em> и <em>ё</em> кодируются в
+Windows-1251 байтами <code>CF</code> и <code>BF</code>, что
+соответствует коду буквы <em>ϸ</em> в UTF-8. Однако такие случаи в
+реальной практике не встречаются: вероятность того, что файл
+Windows-1251 будет содержать только допустимые в UTF-8
+последовательности байт, близка к нулю.</p>
+<h3 id="чтение-и-запись-файлов-seg">Чтение и запись файлов SEG</h3>
+<h4 id="чтение-файлов-seg">Чтение файлов SEG</h4>
+<p>Напишем функцию для чтения файла SEG. Она будет принимать на вход
+путь к файлу, а возвращать параметры в виде словаря и список меток,
+каждая из которых будет представлена в виде словаря с тремя полями:
+<code>"position"</code> — индекс соответствующего отсчёта,
+<code>"level"</code> — буквенно-цифровое представление уровня и
+"<code>name</code>" — название (текст) метки.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_seg(filename: <span class="bu">str</span>, encoding: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;utf-8-sig&quot;</span>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">dict</span>, <span class="bu">list</span>[<span class="bu">dict</span>]]:</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(filename, encoding<span class="op">=</span>encoding) <span class="im">as</span> f:</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        lines <span class="op">=</span> [line.strip() <span class="cf">for</span> line <span class="kw">in</span> f.readlines()]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># найдём границы секций в списке строк:</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    header_start <span class="op">=</span> lines.index(<span class="st">&quot;[PARAMETERS]&quot;</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    data_start <span class="op">=</span> lines.index(<span class="st">&quot;[LABELS]&quot;</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># прочитаем параметры</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    params <span class="op">=</span> {}</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> lines[header_start:data_start <span class="op">-</span> <span class="dv">1</span>]:</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        key, value <span class="op">=</span> line.split(<span class="st">&quot;=&quot;</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        params[key] <span class="op">=</span> <span class="bu">int</span>(value)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># прочитаем метки</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    labels <span class="op">=</span> []</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> lines[data_start:]:</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># если в строке нет запятых, значит, это не метка и метки закончились</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> line.count(<span class="st">&quot;,&quot;</span>) <span class="op">&lt;</span> <span class="dv">2</span>:</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>        pos, level, name <span class="op">=</span> line.split(<span class="st">&quot;,&quot;</span>, maxsplit<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>        label <span class="op">=</span> {</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>            <span class="co"># чтобы перевести в отсчёты, разделим на кол-во байт на отсчёт</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>            <span class="co"># и на количество каналов</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;position&quot;</span>: <span class="bu">int</span>(pos) <span class="op">//</span> params[<span class="st">&quot;BYTE_PER_SAMPLE&quot;</span>] <span class="op">//</span> params[<span class="st">&quot;N_CHANNEL&quot;</span>],</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;level&quot;</span>: code2level[<span class="bu">int</span>(level)],</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;name&quot;</span>: name,</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>        labels.append(label)</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> params, labels</span></code></pre></div>
+<p>Обратите внимание на использование параметра <code>maxsplit</code> в
+методе <code>.split()</code>. Поскольку в названиях меток могут
+содержаться запятые, вызов метода без этого параметра приведёт к
+разбиению имени метки по этим запятым. Поэтому зададим
+<code>maxsplit=2</code>, чтобы разбиение произошло только по первым двум
+запятым в строке.</p>
+<h4 id="запись-файлов-seg">Запись файлов SEG</h4>
+<p>Напишем функцию для записи меток в файл SEG. Она будет принимать на
+вход словарь с параметрами и список меток в том же формате, который
+возвращает функция <code>read_seg()</code>, а также имя целевого файла и
+кодировка, в которой необходимо его записать.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> write_seg(params: <span class="bu">dict</span>, labels: <span class="bu">list</span>, filename: <span class="bu">str</span>, encoding: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;utf-8-sig&quot;</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># зададим значения параметров по умолчанию</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># вы можете изменить функцию так, чтобы параметры можно было передавать как ключевые слова</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    param_defaults <span class="op">=</span> {</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;SAMPLING_FREQ&quot;</span>: <span class="dv">44100</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;BYTE_PER_SAMPLE&quot;</span>: <span class="dv">2</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;CODE&quot;</span>: <span class="dv">0</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;N_CHANNEL&quot;</span>: <span class="dv">1</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;N_LABEL&quot;</span>: <span class="dv">0</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># запишем в словарь переданные в функцию значения параметров</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    params <span class="op">=</span> param_defaults <span class="op">|</span> params</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># количество меток определим как длину списка labels</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    params[<span class="st">&quot;N_LABEL&quot;</span>] <span class="op">=</span> <span class="bu">len</span>(labels)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(filename, <span class="st">&quot;w&quot;</span>, encoding<span class="op">=</span>encoding) <span class="im">as</span> f:</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        f.write(<span class="st">&quot;[PARAMETERS]</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> key, value <span class="kw">in</span> params.items():</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">=</span><span class="sc">{</span>value<span class="sc">}</span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        f.write(<span class="st">&quot;[LABELS]</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> label <span class="kw">in</span> labels:</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>            label_byte <span class="op">=</span> (</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>                params[<span class="st">&#39;BYTE_PER_SAMPLE&#39;</span>] <span class="op">*</span> </span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>                params[<span class="st">&#39;N_CHANNEL&#39;</span>] <span class="op">*</span> label[<span class="st">&#39;position&#39;</span>]</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>label_byte<span class="sc">}</span><span class="ss">,&quot;</span>)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>level2code[label[<span class="st">&#39;level&#39;</span>]]<span class="sc">}</span><span class="ss">,&quot;</span>)</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>label[<span class="st">&#39;name&#39;</span>]<span class="sc">}</span><span class="ch">\n</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<h4 id="попарная-обработка-меток">Попарная обработка меток</h4>
+<p>Каждая метка обозначает единственную точку в сигнале — чаще всего
+границу между двумя линейными участками (например, двумя фонами или
+фоном и паузой). Поэтому две соседние метки будут соответствовать
+границам одного такого участка. Полезно уметь обрабатывать метки парами.
+Для этого можно воспользоваться функцией <code>zip()</code>, которая
+позволяет итерировать сразу по нескольким итерируемым объектам,
+например, спискам:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>names_list <span class="op">=</span> [<span class="st">&quot;John&quot;</span>, <span class="st">&quot;Jack&quot;</span>, <span class="st">&quot;Jill&quot;</span>]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>last_names_list <span class="op">=</span> [<span class="st">&quot;Smith&quot;</span>, <span class="st">&quot;Jones&quot;</span>, <span class="st">&quot;Doe&quot;</span>]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>grades_list <span class="op">=</span> [<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, last_name, grade <span class="kw">in</span> <span class="bu">zip</span>(names_list, last_names_list, grades_list):</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name, last_name, grade)</span></code></pre></div>
+<pre><code>John Smith 5
+Jack Jones 4
+Jill Doe 5</code></pre>
+<p>Если списки, которые мы передаём в <code>zip()</code>, разной длины,
+то по умолчанию итерация будет идти до конца самого короткого из них.
+Поэтому мы можем передать в <code>zip()</code> список меток и новый
+список, который будет содержать все метки, кроме первой (для создания
+такого списка воспользуемся срезами).</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>params, labels <span class="op">=</span> read_seg(<span class="st">&quot;cta0001.seg_B1&quot;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> start, end <span class="kw">in</span> <span class="bu">zip</span>(labels, labels[<span class="dv">1</span>:]):</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(start[<span class="st">&quot;name&quot;</span>], start[<span class="st">&quot;position&quot;</span>], end[<span class="st">&quot;position&quot;</span>])</span></code></pre></div>
+<pre><code>j 0 4246
+u0 4246 6354
+r&#39; 6354 6854
+i4 6854 9090
+t 9090 12452
+r&#39; 12452 12970
+i0 12970 15772
+f 15772 18403
+a4 18403 19302
+n 19302 20809
+a4 20809 22254
+f 22254 27331</code></pre>
+<h3 id="практические-задания">Практические задания</h3>
+<h4 id="1-визуализация-разметки">1. Визуализация разметки</h4>
+<p>Напишите программу, которая рисует осциллограмму с помощью
+<code>matplotlib.pyplot</code> и вертикальными линиями изображает
+положение каждой метки в файле. Используйте функцию <a
+href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.vlines.html"><code>plt.vlines()</code></a>,
+которая принимает на вход положение линии по оси <em>x</em> и положение
+её начала и конца по оси <em>y</em>. Пример результата:</p>
+<p><img src="courses/python_textbook/images/cta_labels.png" /></p>
+<h4 id="2-визуализация-разметки-с-текстом">2. Визуализация разметки с
+текстом</h4>
+<p>Модифицируйте программу так, чтобы в середине каждой пары меток было
+помещено её название. Используйте функцию <a
+href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.text.html"><code>plt.text()</code></a>,
+которая принимает на вход координаты по осям <em>x</em> и <em>y</em> и
+строку текста. Пример результата:</p>
+<p><img src="courses/python_textbook/images/cta_labels_text.png" /></p>
+<h4 id="3-поиск-самого-длинного-и-самого-короткого-интервала">3. Поиск
+самого длинного и самого короткого интервала</h4>
+<p>Напишите программу, которая считывает файл .seg и выводит на экран
+самый длинный и самый короткий интервал в нём, не считая тех, у которых
+пустое имя. Для каждого интервала нужно вывести его начало, конец, длину
+(всё в секундах с точностью до 1 мс) и название.</p>
+<h4 id="4-перенос-разметки-из-текстового-файла-в-файл-seg">4. Перенос
+разметки из текстового файла в файл SEG</h4>
+<p>Файл d01_s01_cards.seg_R1 содержит границы реплик, каждая из которых
+называется turn_XXX, где XXX — её порядковый номер. Параллельный ему
+файл d01_s01_cards.txt содержит орфографическую расшифровку этих реплик.
+Каждая строка файла выглядит так:</p>
+<pre><code>XXX    текст реплики</code></pre>
+<p>Номер и текст реплики разделены знаком табуляции (<code>\t</code>).
+Создайте файл d01_s01_cards.seg_R2, где метка, обозначающая начало
+каждой реплики, будет содержать её текст (без номера). Не забудьте
+изменить уровень меток с R1 на R2.</p>
+<h4 id="5-изменение-позиций-меток-под-новую-частоту-дискретизации">5.
+Изменение позиций меток под новую частоту дискретизации</h4>
+<p>Файл cta0001_new_fs.wav содержит тот же звук, что и cta0001.wav, но с
+другой частотой дискретизации. Напишите программу, которая определяет
+новую частоту дискретизации и создаёт файл cta0001_new_fs.seg_B1,
+подходящий к новой версии файла.</p>
+<h4 id="6-сдвиг-меток-на-заданный-промежуток">6. Сдвиг меток на заданный
+промежуток</h4>
+<p>Напишите функцию, которая принимает на вход список меток и заданный
+интервал, выраженный в отсчётах (положительный или отрицательный), а
+возвращает список меток, где позиция каждой сдвинута на этот интервал.
+Позиция метки после сдвига не должна стать отрицательной. Проверьте
+функцию на файле cta0001.seg_B1 и сдвиге 441 отсчёт.</p>
+<h4 id="7-деление-файла-wav-по-меткам">7. Деление файла WAV по
+меткам</h4>
+<p>Напишите программу, которая считывает файл .wav и параллельный ему
+файл .seg, делит файл .wav на интервалы, разграниченные метками из файла
+.seg, и записывает каждый фрагмент в отдельный файл, названный
+порядковым номером интервала и именем метки, открывающей соответствующий
+фрагмент. Если имя метки пустое, этот интервал необходимо
+пропустить.</p>
+<h4 id="8-удаление-согласных">8. Удаление согласных</h4>
+<p>Напишите программу, которая считывает файл .wav и параллельный ему
+файл .seg, содержащий разметку на звуки. Любой интервал, который не
+содержит гласные звуки, должен стать паузой. Для этого амплитуду всех
+отсчётов в нём нужно сделать нулём. В корпусе CORPRES, откуда взят файл
+cta0001, для обозначения гласных фонем русского языка используются
+латинские буквы <em>i, e, a, o, u, y</em> и цифры от 1 до 4,
+показывающие степень редукции, например: <em>a4</em>.</p>
+<h4 id="9-создание-класса-seg">9*. Создание класса <code>Seg</code></h4>
+<p>Напишите модуль для чтения и записи файлов .seg. В модуле должны быть
+реализованы два класса:</p>
+<ul>
+<li>класс <code>Label</code> с полями <code>position</code> (целое
+число, положение метки в отсчётах), <code>level</code> (строка, формат
+"буква-цифра"), <code>name</code> (строка)</li>
+<li>класс <code>Seg</code> с методами для чтения и записи как одиночного
+файла .seg, так и группы файлов .seg_**</li>
+</ul>
+
+</div>
+</body>
+</html>
