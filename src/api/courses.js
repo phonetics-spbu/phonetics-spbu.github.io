@@ -97,6 +97,7 @@ const coursesData = [
             { id: 3, title: "Обработка сигнала в частотной области", filename: "signal_proc_mag_3.html" },
             { id: 4, title: "Психоакустические шкалы", filename: "signal_proc_mag_4.html" },
             { id: 5, title: "Автоматическое определение ЧОТ", filename: "signal_proc_mag_5.html" },
+            { id: 6, title: "Voice Activity Detection", filename: "signal_proc_mag_6.html" },
         ]
     },
     {
@@ -161,6 +162,7 @@ const coursesData = [
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Чтение и запись звуковых данных", filename: "ling_programming_1.html" },
+            { id: 2, title: "Чтение и запись файлов разметки Wave Assistant", filename: "ling_programming_2.html" },
         ]
     },
     {
@@ -173,6 +175,7 @@ const coursesData = [
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Чтение и запись звуковых данных", filename: "wav_reading.html" },
+            { id: 2, title: "Чтение и запись файлов разметки Wave Assistant", filename: "seg_reading.html" },
         ]
     },
     
