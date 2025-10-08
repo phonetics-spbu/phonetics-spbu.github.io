@@ -45,6 +45,7 @@ const coursesData = [
         chapters: [
             { id: 1, title: "Влияние фазы на восприятие", filename: "dsp_1.html" },
             { id: 2, title: "Дискретное косинусное преобразование", filename: "dsp_2.html" },
+//            { id: 3, title: "Дискретное косинусное преобразование", filename: "dsp_3.html" },
         ]
     },
     {
