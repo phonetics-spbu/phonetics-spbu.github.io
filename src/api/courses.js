@@ -38,7 +38,7 @@ const coursesData = [
         id: 'dsp',
         title: "Цифровая обработка сигналов",
         description: "Общая и прикладная фонетика",
-        long_description: "Общая и прикладная фонетика, 4 курс бакалавриата",
+        long_description: lm_intro_text,
         level: "bac",
         year: 4,
         author: "tityushina",
