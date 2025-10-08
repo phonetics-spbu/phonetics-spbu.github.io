@@ -44,6 +44,7 @@ const coursesData = [
         author: "tityushina",
         chapters: [
             { id: 1, title: "Влияние фазы на восприятие", filename: "dsp_1.html" },
+            { id: 2, title: "Дискретное косинусное преобразование", filename: "dsp_2.html" },
         ]
     },
     {
