@@ -38,12 +38,14 @@ const coursesData = [
         id: 'dsp',
         title: "Цифровая обработка сигналов",
         description: "Общая и прикладная фонетика",
-        long_description: "Общая и прикладная фонетика, 4 курс бакалавриата",
+        long_description: lm_intro_text,
         level: "bac",
         year: 4,
         author: "tityushina",
         chapters: [
             { id: 1, title: "Влияние фазы на восприятие", filename: "dsp_1.html" },
+            { id: 2, title: "Дискретное косинусное преобразование", filename: "dsp_2.html" },
+//            { id: 3, title: "Дискретное косинусное преобразование", filename: "dsp_3.html" },
         ]
     },
     {
