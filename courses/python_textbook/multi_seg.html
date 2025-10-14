@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Файловые системы и работа с многоуровневой разметкой</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+    <link href="styles/syntax_highlight.css" rel="stylesheet">
+    <base target="_blank">
+</head>
+
+<body>
+<div class="chapter-content">
+
+<h3 id="файловые-системы">Файловые системы</h3>
+<p>Файловые системы обладают древовидной структурой: файлы могут бьть
+помещены в директории (папки), которые могут быть вложенными. Пример
+файлового дерева приведён ниже.</p>
+<pre><code>C:
+├─ Program Files
+├─ Folder_1
+│  ├─ Folder_2
+│  │  ├─ file_3.docx
+│  ├─ file1.txt
+│  ├─ file2.txt
+├─ file4.png</code></pre>
+<p>Имя файла, то есть его уникальный (для данной папки) идентификатор —
+это строка. В любой системе существуют ограничения на имена файлов, в
+частности, на символы, которые могут в них встречаться. Рекомендуется
+ограничиваться символами ASCII (кроме зарезервированных) и не
+использовать пробелы.</p>
+<p>Часть имени файла между последней точкой и концом — его расширение.
+Оно указывает на тип его содержимого, но эта связь условна и существует
+только по договорённости.</p>
+<p>Имя файла нужно отличать от переменной, которая работает
+непосредственно с файлом:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;lol.txt&quot;</span>, <span class="st">&quot;w&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="bu">type</span>(f))</span></code></pre></div>
+<pre><code>&lt;class &#39;_io.TextIOWrapper&#39;&gt;</code></pre>
+<p>Здесь переменная <code>f</code> указывает на специальный объект,
+предназначенный для работы с указанным файлом.</p>
+<p>В Windows имена папок и файлов разделяются между собой обратным
+слешем <code>\</code>. В Unix, Mac — прямым слешем <code>/</code>.</p>
+<p><img src="courses/python_textbook/images/paths.jpg" alt="image" /></p>
+<p>Обратный слеш в строках Python используется для
+<em>escape</em>-последовательностей, таких как <code>\n</code> или
+<code>\t</code>. Поэтому, если вы работаете на Windows, нужно быть
+внимательным. Прописывать пути можно любым из перечисленных ниже
+способов:</p>
+<ol type="1">
+<li>Используя «сырые» строки (<em>r-strings</em>), в которых все
+служебные последовательности игнорируются.</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="vs">r&quot;C:</span><span class="er">\</span><span class="vs">Folder_1</span><span class="ch">\f</span><span class="vs">ile1</span><span class="dv">.</span><span class="vs">txt&quot;</span></span></code></pre></div>
+<ol start="2" type="1">
+<li>Используя <em>escape</em>-последовательность <code>\\</code>,
+обозначающую обратный слеш.</li>
+</ol>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">&quot;C:</span><span class="ch">\\</span><span class="st">Folder_1</span><span class="ch">\\</span><span class="st">file1.txt&quot;</span></span></code></pre></div>
+<ol start="3" type="1">
+<li>Используя прямой слеш (Python автоматически подставит системный
+разделитель путей).</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">&quot;C:/Folder_1/file1.txt&quot;</span></span></code></pre></div>
+<p>Если вы работаете на Mac или в любой Unix-подобной системе (включая
+Google Colab), используйте только последний вариант.</p>
+<p>Пути бывают относительные и абсолютные. Абсолютные указывают путь от
+корневой папки (или от буквы диска в Windows). Относительные указывают
+путь от текущей папки (из которой запускается код). Переход на один
+уровень вверх обозначается двумя точками <code>..</code>.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>path1 <span class="op">=</span> <span class="st">&quot;Folder_2/file_3.docx&quot;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>path2 <span class="op">=</span> <span class="vs">r&quot;</span><span class="dv">..</span><span class="vs">/file4</span><span class="dv">.</span><span class="vs">png&quot;</span></span></code></pre></div>
+<h4 id="модуль-os">Модуль <code>os</code></h4>
+<p>Для работы с путями и файловыми системами существует несколько
+встроенных модулей. Ряд полезных функций содержится в модуле <a
+href="https://docs.python.org/3/library/os.html"><code>os</code></a> и
+во входящем в нём модуле <a
+href="https://docs.python.org/3/library/os.path.html"><code>os.path</code></a>.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span></code></pre></div>
+<p>Функция <code>os.path.join()</code> позволяет соединить несколько
+имён в один путь:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>filepath <span class="op">=</span> os.path.join(<span class="st">&quot;Folder_1&quot;</span>, <span class="st">&quot;file1.txt&quot;</span>)</span></code></pre></div>
+<pre><code>Folder_1/file1.txt</code></pre>
+<p>Функция <code>os.path.split()</code>, наоборот, делит путь на
+составляющие: путь к последнему элементу (файлу или папке) и имя самого
+последнего элемента.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>path, <span class="bu">file</span> <span class="op">=</span> os.path.split(<span class="st">&quot;C:/Folder_1/file1.txt&quot;</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(path)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">file</span>)</span></code></pre></div>
+<pre><code>C:/Folder_1
+file1.txt</code></pre>
+<p>В константе <code>os.sep</code> хранится системный разделитель
+путей:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(os.sep)</span></code></pre></div>
+<pre><code>/</code></pre>
+<p>В Unix-подобных системах код выше выведет слеш.</p>
+<p>Функция <code>os.path.splitext</code> позволяет отделить расширение
+от имени файла:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">file</span>, ext <span class="op">=</span> os.path.splitext(<span class="st">&quot;file1.txt&quot;</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">file</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ext)</span></code></pre></div>
+<pre><code>file1
+.txt</code></pre>
+<p>Функция <code>os.path.exists()</code> вернёт <code>True</code>, если
+путь, переданный в неё, действительно существует, и <code>False</code> в
+противном случае.</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(os.path.exists(<span class="st">&quot;Folder_1&quot;</span>))</span></code></pre></div>
+<pre><code>True</code></pre>
+<p>Её удобно использовать с условным оператором:</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.exists(<span class="st">&quot;Folder_1&quot;</span>):</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div>
+<p>Функция <code>os.makedirs()</code> позволяет создать папку по
+заданному пути, при этом все промежуточные папки, если их нет, будут
+созданы. Если конечная папка уже существует, будет вызвана ошибка.</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>os.makedirs(<span class="st">&quot;Folder_1/Folder_2&quot;</span>)</span></code></pre></div>
+<p>Функция <code>os.listdir()</code> возвращает список всех файлов и
+папок внутри папки (без какого-либо порядка). Если пути, который был
+передан в функцию, не существует, или это не директория, будет вызвана
+ошибка.</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(os.listdir(<span class="st">&quot;C:/Folder_1&quot;</span>))</span></code></pre></div>
+<pre><code>[&#39;Folder_2&#39;, &#39;file2.txt&#39;, &#39;file1.txt&#39;]</code></pre>
+<p>Функция <code>os.scandir()</code> аналогична
+<code>os.listdir()</code>, но возвращает не список, а итератор, который
+можно использовать в цикле.</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> os.scandir(<span class="st">&quot;C:/Folder_1&quot;</span>):</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name)</span></code></pre></div>
+<pre><code>Folder_1
+file2.txt
+file1.txt</code></pre>
+<p>Функция <code>os.walk()</code> позволяет совершать рекурсивный обход
+файлового дерева, заходя в каждую встретившуюся папку. <code>"."</code>
+обозначает текущую директорию. На каждом шаге она возвращает путь к
+обрабатываемой директории, список её поддиректорий и список её
+файлов.</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> root, dirs, files <span class="kw">in</span> os.walk(<span class="st">&quot;.&quot;</span>):</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(root, dirs, files)</span></code></pre></div>
+<pre><code>. [&#39;Folder_1&#39;, &#39;Program Files&#39;] [&#39;file4.png&#39;]
+./Folder_1 [&#39;Folder_2&#39;] [&#39;file2.txt&#39;, &#39;file1.txt&#39;]
+./Folder_1/Folder_2 [] [&#39;file_3.docx&#39;]
+./Program Files [] []</code></pre>
+<p>Функция <code>os.chdir()</code> позволяет сменить текущую
+директорию.</p>
+<h4 id="модуль-glob">Модуль <code>glob</code></h4>
+<p><img src="courses/python_textbook/images/i-am-glob.png" alt="image" /></p>
+<p>Модуль <code>glob</code> позволяет находить пути по заданной маске
+(по правилам Unix). Используются следующие основные символы:
+<code>?</code> — заместитель одного символа, <code>*</code> —
+заместитель произвольного количества символов (в том числе
+нулевого).</p>
+<p>Например, маска <code>"cta????.wav"</code> будет соответствовать всем
+файлам, у которых после букв <em>cta</em> идёт ровно 4 символа, а затем
+расширение <em>.wav</em>. Маска <code>"cta*.wav"</code> будет
+соответствовать всем файлам, название которых начинается с букв
+<em>cta</em> и заканчивается расширением <em>.wav</em> (в том числе
+<em>cta.wav</em>). По маске <code>"*.*"</code> найдутся файлы с любыми
+названиями и расширениями.</p>
+<p>В квадратных скобках <code>[]</code> можно указывать набор подходящих
+символов (<code>[abc]</code>) или диапазон (<code>[a-c]</code>). Если
+сразу после открывающей скобки поставить восклицательный знак
+<code>!</code>, то под маску будут подходить все символы, кроме
+перечисленных в скобках.</p>
+<p>Примечание: <code>glob</code> внутри себя использует
+<code>os.scandir()</code> и функцию <code>fnmatch()</code> из модуля
+<code>fnmatch</code>, которая определяет, подходит ли данное имя под
+заданную маску.</p>
+<p>Функция <code>glob.glob()</code> возвращает список путей, подходящих
+под заданную маску.</p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> glob</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(glob.glob(<span class="st">&quot;C:/Folder_1/*.*&quot;</span>))</span></code></pre></div>
+<p>Маска может отражать как абсолютный путь, так и относительный.
+Относительный путь будет отсчитываться от текущей папки или от
+директории, переданной в необязательном аргументе
+<code>root_dir</code>.</p>
+<p>Если передать аргумент <code>recursive=True</code>, то
+<code>**</code> будет обозначать любую последовательность директорий или
+файлов (в том числе пустую). Обратите внимание, что в больших файловых
+деревьях использование <code>**</code> может приводить к большому
+времени поиска. Если передать аргумент <code>include_hidden=True</code>,
+то в <code>**</code> будут входить и скрытые директории.</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(glob.glob(<span class="st">&quot;C:/**/*.*&quot;</span>))</span></code></pre></div>
+<p>Функция <code>glob.iglob()</code>, в отличие от
+<code>glob.glob()</code>, вместо списка возвращает итератор, что
+позволяет не хранить весь список в памяти:</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> glob.iglob(<span class="st">&quot;C:/Folder_1/*.*&quot;</span>):</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div>
+<h3 id="работа-с-многоуровневой-разметкой">Работа с многоуровневой
+разметкой</h3>
+<p>В большинстве случаев разметка обладает иерархической структурой:
+например, если в сигнале на разных уровнях отмечены границы звуков, слов
+и синтагм, то каждая синтагма состоит из определённых слов, каждое из
+которых, в свою очередь, состоит из определённых звуков. В связи с этим
+полезно уметь определять, какие интервалы более низкого уровня входят в
+какие интервалы более высокого.</p>
+<p>Определим, из каких звуков состоит каждое слово в файле cta0001.wav.
+В корпусе CORPRES реальная транскрипция размещена на уровне B1, а
+границы слов — на уровне Y1.</p>
+<p>Используем написанную ранее функцию <code>read_seg()</code>, чтобы
+прочитать метки на обоих уровнях. Обратите внимание, что метки Y1
+содержат кириллические буквы и были записаны в кодировке
+Windows-1251.</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>params, labels_upper <span class="op">=</span> read_seg(<span class="st">&quot;cta0001.seg_Y1&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;cp1251&quot;</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>_, labels_lower <span class="op">=</span> read_seg(<span class="st">&quot;cta0001.seg_B1&quot;</span>)</span></code></pre></div>
+<p>Теперь наша задача заключается в том, чтобы для каждой пары жёлтых
+меток определить, какие синие метки в неё попадают. Удобно считать, что
+интервалы, заданные двумя метками, полуоткрытые: если синяя метка
+совпадает с началом жёлтого интервала, она будет в него входить, а если
+с концом — не будет.</p>
+<p>Проще всего поступить следующим образом: переберём циклом все пары
+жёлтых меток (пропуская те, которые соответствуют не словам, а паузам —
+их имена пустые). В каждой итерации цикла переберём все синие метки и
+оставим только те, которые попадают в текущий жёлтый интервал.</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> start, end <span class="kw">in</span> <span class="bu">zip</span>(labels_upper, labels_upper[<span class="dv">1</span>:]):</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> start[<span class="st">&quot;name&quot;</span>]:</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(start[<span class="st">&quot;position&quot;</span>], end[<span class="st">&quot;position&quot;</span>], start[<span class="st">&quot;name&quot;</span>])</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> label <span class="kw">in</span> labels_lower:</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> start[<span class="st">&quot;position&quot;</span>] <span class="op">&lt;=</span> label[<span class="st">&quot;position&quot;</span>] <span class="op">&lt;</span> end[<span class="st">&quot;position&quot;</span>]:</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(label[<span class="st">&quot;name&quot;</span>], end<span class="op">=</span><span class="st">&quot; &quot;</span>)</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<pre><code>0 9090 юрий
+j u0 r&#39; i4 
+9090 27331 трифонов
+t r&#39; i0 f a4 n a4 f</code></pre>
+<p>Можно заметить, что код выше неэффективен: для каждого слова мы
+перебираем все синие метки заново, хотя, с одной стороны, если мы внесли
+синюю метки в какое-то слово до этого, в этом она точно уже не появится,
+а с другой — если какая-то метка вышла за границы слова, то и все метки
+после неё тоже в слово не попадут. Поэтому внесём в код соответствующие
+улучшения:</p>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>idx <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> start, end <span class="kw">in</span> <span class="bu">zip</span>(labels_upper, labels_upper[<span class="dv">1</span>:]):</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> start[<span class="st">&quot;name&quot;</span>]:</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(start[<span class="st">&quot;position&quot;</span>], end[<span class="st">&quot;position&quot;</span>], start[<span class="st">&quot;name&quot;</span>])</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> label <span class="kw">in</span> labels_lower[idx:]:</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> label[<span class="st">&quot;position&quot;</span>] <span class="op">&gt;=</span> end[<span class="st">&quot;position&quot;</span>]:</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>        idx <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(label[<span class="st">&quot;name&quot;</span>], end<span class="op">=</span><span class="st">&quot; &quot;</span>)</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<pre><code>0 9090 юрий
+j u0 r&#39; i4 
+9090 27331 трифонов
+t r&#39; i0 f a4 n a4 f </code></pre>
+<p>Теперь в переменной <code>idx</code> мы запоминаем номер последней
+обработанной метки и начинаем следующий цикл после неё; а если метка
+вышла за границы слова, остановим цикл с помощью <code>break</code>.</p>
+<p>Обратите также внимание на этот фрагмент:</p>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> start[<span class="st">&quot;name&quot;</span>]:</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">continue</span></span></code></pre></div>
+<p>Такой приём называется <em>guard clause</em>. Он позволяет сэкономить
+отступ: если бы мы написали более интуитивно:</p>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> start[<span class="st">&quot;name&quot;</span>]:</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(start[<span class="st">&quot;position&quot;</span>], end[<span class="st">&quot;position&quot;</span>], start[<span class="st">&quot;name&quot;</span>])</span></code></pre></div>
+<p>то весь последующий код у нас оказался бы сдвинут на один отступ
+вправо, что снижает читаемость.</p>
+<h3 id="практические-задания">Практические задания</h3>
+<h4 id="1-поиск-файлов-seg-заданного-уровня">1. Поиск файлов SEG
+заданного уровня</h4>
+<p>Напишите функцию, которая принимает на вход имя папки (в данном
+случае <em>cta_seg</em>) и уровень <em>seg</em> (в данном случае B1 или
+Y1), ищет там все файлы SEG соответствующего уровня и возвращает их
+список.</p>
+<h4 id="2-сбор-информации-из-файлов-seg">2. Сбор информации из файлов
+SEG</h4>
+<p>Модифицируйте функцию так, чтобы она открывала каждый найденный файл
+SEG, читала оттуда названия меток (кроме пустых) и записывала их в
+текстовый файл — метки из каждого файла SEG на отдельной строке,
+разделённые пробелами. Пример результата:</p>
+<pre><code>cta_seg_B1.txt</code></pre>
+<pre><code>j u0 r&#39; i4 t r&#39; i0 f a4 n a4 f
+a1 b m&#39; e0 n
+...</code></pre>
+<h4 id="3-функция-для-обработки-двухуровневой-аннотации">3. Функция для
+обработки двухуровневой аннотации</h4>
+<p>На основе кода выше напишите функцию, которая принимает на вход два
+имени файлов .seg и возвращает список списков следующего формата:</p>
+<pre><code>[
+    [[метка1_1, метка1_2], [метка2_1, метка2_2, ...]],
+    [[метка1_2, метка1_3], [метка2_5, метка2_6, ...]],
+    ...
+]</code></pre>
+<p>где <code>метка1_*</code> - это метки из первого файла, а
+<code>метка2_*</code> - метки из второго, которые лежат между
+соответствующими метками из первого.</p>
+<h4 id="4-произносительный-словарь">4. Произносительный словарь</h4>
+<p>Напишите программу, которая обрабатывает корпус файлов SEG и строит
+на его основе произносительный словарь. Результат необходимо записать в
+текстовый файл в алфавитном порядке. Например:</p>
+<pre><code>...
+обмен a1 b m&#39; e0 n
+...
+трифонов t r&#39; i0 f a4 n a4 f
+...
+юрий j u0 r&#39; i4
+...</code></pre>
+<p>Помните, что у вас обязательно возникнут слова с одинаковым
+написанием, но разным произношением! Каждый вариант нужно записать на
+своей строчке, но только один раз! Абсолютно одинаковых строк в итоговом
+файле быть не должно:</p>
+<pre><code>...
+в f
+в v
+...</code></pre>
+<h4 id="5-определение-зависимости-длины-слова-от-количества-звуков">5.
+Определение зависимости длины слова от количества звуков</h4>
+<p>На основе архива <em>cta_seg</em> с помощью <a
+href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.scatter.html"><code>matplotlib.pyplot.scatter()</code></a>
+постройте график, где по оси <em>x</em> будет отложена длительность
+слова в секундах, а по оси <em>y</em> — количество составляющих его
+звуков (по уровню B1).</p>
+
+
+</div>
+</body>
+</html>
