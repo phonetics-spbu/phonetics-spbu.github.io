@@ -7,6 +7,9 @@ function SideMenu() {
     const { courseId } = useParams();
     const location = useLocation();
     const [chapters, setChapters] = useState([]);
+    const [title, setTitle] = useState([]);
+    const [year, setYear] = useState([]);
+    const [level, setLevel] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -19,9 +22,16 @@ function SideMenu() {
                 if (courseId && location.pathname.startsWith('/course/')) {
                     const data = await getCourseContent(courseId);
                     setChapters(data.chapters);
+                    setTitle(data.title);
+                    setLevel(data.level);
+                    setYear(data.year);
+
                     setError(null);
                 } else {
                     setChapters([]);
+                    setTitle("");
+                    setLevel("");
+                    setYear("");
                 }
             } catch (err) {
                 setError('Не удалось загрузить содержание курса');
@@ -54,6 +64,8 @@ function SideMenu() {
         <aside className="side-menu">
             {chapters.length > 0 ? (
                 <div className="course-contents">
+                    <h2>{title}</h2>
+                    <h3>{year} курс {level === "bac" ? "бакалавриата" : "магистратуры"}</h3>
                     <h3>Содержание курса</h3>
                     <ul>
                         {chapters.map(chapter => (

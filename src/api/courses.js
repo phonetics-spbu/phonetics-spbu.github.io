@@ -200,5 +200,5 @@ export const getCourseDetails = (courseId) => {
 export const getCourseContent = (courseId) => {
     console.log('Fetching content for course:', courseId);
     const course = coursesData.find(c => c.id === courseId);
-    return course ? Promise.resolve({ chapters: course.chapters }) : Promise.reject("Course not found");
+    return course ? Promise.resolve({ chapters: course.chapters, title: course.title, level: course.level, year: course.year }) : Promise.reject("Course not found");
 };
