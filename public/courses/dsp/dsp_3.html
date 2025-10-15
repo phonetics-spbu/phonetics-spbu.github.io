@@ -25,14 +25,50 @@
 <div class="chapter-content">
     <p>
         Для линейной стационарной системы из принципа суперпозиции вытекает, что сигнал на выходе линейной системы может быть представлен в виде дискретной
-        свёртки входного сигнала и импульсной характеристики системы.
+        свёртки входного сигнала и импульсной характеристики системы:
+        $$\mathscr{F}\{x[n]\} = \mathscr{F}\{x_1[n] + x_2[n]\} = \mathscr{F}\{x_1[n]\} + \mathscr{F}\{x_2[n]\}$$
+        $$\mathscr{F}\{ax[n]\} = a\mathscr{F}\{x[n]\}$$
     </p>
         Рассмотрим класс гомоморфных систем, подчиняющихся обобщенному принципу суперпозиции, в котором сложение заменяется свёрткой.
-        $$$$
+        $$\mathscr{H}\{x[n]\} = \mathscr{H}\{x_1[n] * x_2[n]\} = \mathscr{H}\{x_1[n]\} + \mathscr{H}\{x_2[n]\}$$
+    </p>
+    <p>
+        Для линейных систем теорема о свёртке:
+        $$ \overline{z} = \overline{x} * \overline{y} \Leftrightarrow \mathscr{F}(\overline{z}) = \mathscr{F}(\overline{x})\mathscr{F}(\overline{y})$$
+        Тогда, аналогично введем гомоморфное преобразование:
+        $$ \overline{z} = \overline{x} * \overline{y} \Leftrightarrow \mathscr{H}(\overline{z}) = \mathscr{H}(\overline{x}) + \mathscr{H}(\overline{y})$$
+    </p>
+    <p>
+        Определение комплексного кепстра:
+        $$ \widehat{x}[n] = \frac{1}{2\pi} \int^{\pi}_{-\pi} ln \mathscr{F}(e^{j\omega})d\omega $$
+        $$ \mathscr{F}(e^{j\omega}) = \sum_{n=0}^{N-1} x[n] e^{-j\omega n}, $$
+        $$ -\pi \leq \omega \leq  \pi$$
+        Представим преобразование Фурье в виде произведения амплитудной и фазовой части:
+        $$ \mathscr{F}(e^{j\omega}) = |\mathscr{F}(e^{j\omega})| e^{j\phi(\omega)} \Rightarrow ln(\mathscr{F}(e^{j\omega})) =
+        ln(|\mathscr{F}(e^{j\omega})|) + j\phi(\omega)$$
+        Возьмём только логарифм амплитудного спектра, его действительную часть, тогда действительный кепстр:
+        $$ \widehat{x}[n] = \frac{1}{2\pi} \int^{\pi}_{-\pi} ln |\mathscr{F}(e^{j\omega})|d\omega $$
+        Обратное преобразование Фурье:
+        $$\mathscr{F}^{-1}: x[n] = \frac{1}{2\pi} \int_{-pi}^{\pi}\mathscr{F}(e^{j\omega})e^{j\omega n}d\omega$$
+        Тогда,
+        $$ \widehat{x}[n] = \mathscr{F}^{-1}(ln |\mathscr{F}(e^{j\omega})|) $$
+        Докажем, что кепстр гомоморфный, то есть, что
+        $$ \overline{z} = \overline{x} * \overline{y} \Leftrightarrow \mathscr{H}(\overline{z}) = \mathscr{H}(\overline{x}) + \mathscr{H}(\overline{y})$$
+        Из теоремы о свёртке:
+        $$\mathscr{F}(\overline{z}) = \mathscr{F}(\overline{x}*\overline{y}) = \mathscr{F}(\overline{x})\mathscr{F}(\overline{y})$$
+        $$\mathscr{F}(\overline{x}) = |\mathscr{F}(\overline{x})|e^{j\phi_x} \Rightarrow
+        \mathscr{F}(\overline{z}) = |\mathscr{F}(\overline{x})| |\mathscr{F}(\overline{y})|e^{j(\phi_x + \phi_y)}$$
+        Тогда,
+        $$ln|\mathscr{F}(\overline{z})| = ln|\mathscr{F}(\overline{x})| + ln|\mathscr{F}(\overline{y})|$$
+        Подставим в определение кепстра:
+        $$\widehat{z} = \frac{1}{2\pi} \int^{\pi}_{-\pi} ln |\mathscr{F}(z)|e^{j\omega t}d\omega =
+        \frac{1}{2\pi} \int^{\pi}_{-\pi} (ln |\mathscr{F}(x)| + ln |\mathscr{F}(y)|)e^{j\omega t}d\omega =
+        \frac{1}{2\pi} \int^{\pi}_{-\pi} ln |\mathscr{F}(x)|e^{j\omega t}d\omega + \frac{1}{2\pi} \int^{\pi}_{-\pi} ln |\mathscr{F}(y)|e^{j\omega t}d\omega =
+        \widehat{x} + \widehat{y}$$
     </p>
 
     <p class="note">
-        <b>Ноутбук: уплотнение энергии в ДКП-2</b>
+        <b>Ноутбук: нахождение ЧОТ с помощью кепстра</b>
         <br/>
         <a
                 target="_blank"
