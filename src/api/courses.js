@@ -154,6 +154,7 @@ const coursesData = [
             { id: 3, title: "Списки, логические значения и условия", filename: "python_genling_bac_2.html" },
             { id: 4, title: "Циклы", filename: "python_genling_bac_3.html" },
             { id: 5, title: "List comprehension. Срезы", filename: "python_genling_bac_4.html" },
+            { id: 6, title: "Работа с последовательностями", filename: "python_genling_bac_5.html" },
         ]
     },
     {
