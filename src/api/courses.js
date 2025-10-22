@@ -102,6 +102,7 @@ const coursesData = [
             { id: 5, title: "Автоматическое определение ЧОТ", filename: "signal_proc_mag_5.html" },
             { id: 6, title: "Voice Activity Detection", filename: "signal_proc_mag_6.html" },
             { id: 7, title: "Моделирование мелодического контура", filename: "signal_proc_mag_7.html" },
+            { id: 8, title: "Темпоральные характеристики", filename: "signal_proc_mag_8.html" },
         ]
     },
     {
@@ -155,6 +156,7 @@ const coursesData = [
             { id: 3, title: "Списки, логические значения и условия", filename: "python_genling_bac_2.html" },
             { id: 4, title: "Циклы", filename: "python_genling_bac_3.html" },
             { id: 5, title: "List comprehension. Срезы", filename: "python_genling_bac_4.html" },
+            { id: 6, title: "Работа с последовательностями", filename: "python_genling_bac_5.html" },
         ]
     },
     {
