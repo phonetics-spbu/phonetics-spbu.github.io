@@ -84,6 +84,7 @@ const coursesData = [
             { id: 2, title: "Классы в Python", filename: "python_2_mag_2.html" },
             { id: 3, title: "Работа с файлами разметки Praat", filename: "python_2_mag_3.html" },
             { id: 4, title: "Работа с аудио", filename: "python_2_mag_4.html" },
+            { id: 5, title: "Pymorphy3", filename: "python_2_mag_5.html" },
         ]
     },
     {
