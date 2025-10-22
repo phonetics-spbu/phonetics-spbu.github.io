@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Мел-кепстральные коэффициенты</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+<h3>Алгоритм вычисления мел-кепстральных коэффициентов</h3>
+
+<p>1. Вычисление ДПФ: сигнал разбивается на перекрывающиеся окна размером, соответствующим целой степени двойки, остаток дополняется нулями.
+    $$ X[k] = \frac{1}{N} \sum_{n=0}^{N-1}x[n]e^{-j\frac{2\pi}{N}kn}$$
+    К каждому фрейму применяется оконная функция.
+</p>
+<p>2. Создание банка треугольных фильтров (M штук):
+    $$H_m[k] = \left\{ \begin{array}{rcl}
+        0 & \mbox{при} & k < f[m-1]\\
+        \frac{k - f[m-1]}{f[m] - f[m-1]} & \mbox{при} & f[m-1] \leq k \leq f[m] \\
+        \frac{f[m+1] - k}{f[m+1] - f[m]} & \mbox{при} & f[m] \leq k \leq f[m+1] \\
+        0 & \mbox{при} &  k > f[m+1]
+        \end{array}\right. $$
+    <img alt="dsp_4_1" src="img/dsp_4_1.png"/>
+</p>
+<p>Альернативная передаточная функция:
+    $$H_m[k] = \left\{ \begin{array}{rcl}
+        0 & \mbox{при} & k < f[m-1]\\
+        \frac{2(k - f[m-1])}{(f[m+1] - f[m-1])(f[m] - f[m-1])} & \mbox{при} & f[m-1] \leq k \leq f[m] \\
+        \frac{2(f[m+1] - k)}{(f[m+1] - f[m-1])(f[m] - f[m-1])} & \mbox{при} & f[m] \leq k \leq f[m+1] \\
+        0 & \mbox{при} &  k > f[m+1]
+        \end{array}\right. $$
+    Точки f[m] расположены на равном расстоянии в мел-шкале. Формула перевода Герц в мелы:
+    $$
+    B(f) = 1127 ln(1 + \frac{f}{700})
+    $$
+    Из мел в Герцы:
+    $$
+    B^{-1}(f) = 700 (e^{\frac{f}{1127}} - 1)
+    $$
+    Тогда, частота m-й границы треугольного фильтра в Герцах:
+    $$
+    f[m] = \frac{N}{f_{sample_rate}}B^{-1} (B(f_L) + m \frac{B(f_H) - B(f_L)}{M+1}),
+    $$
+    $$
+    f_L, f_H - верхняя \hspace{2mm} и\hspace{2mm} нижняя\hspace{2mm} частоты\hspace{2mm} банка\hspace{2mm} фильтров\hspace{2mm} в\hspace{2mm} Гц, N - размер\hspace{2mm} окна\hspace{2mm} ДПФ
+    $$
+</p>
+
+<p>3. Ищем логарифм энергии каждого фильтра:
+    $$S[m] = ln[\sum_{k=0}^{N-1}{|X_a[k]|^2 H_m[k]}], \hspace{10mm} 0 \leq m \leq M $$
+
+</p>
+
+<p>4. Применяем косинусное преобразование:
+    $$c[n] = \sum_{m=0}^{M-1}{S[m]cos(\frac{\pi n (m + \frac{1}{2})}{M})}, \hspace{10mm} 0 \leq n \leq M $$
+
+</p>
+
+<p class="note">
+    <b>Ноутбук: MFCC</b>
+    <br/>
+    <a
+            target="_blank"
+            href="https://colab.research.google.com/github/phonetics-spbu/phonetics-spbu.github.io/blob/main/public/courses/dsp/ipynb/MFCC.ipynb"
+    >
+        Открыть в Colab
+    </a>
+    <br/>
+
+    <a
+            target="_blank"
+            href="https://github.com/phonetics-spbu/phonetics-spbu.github.io/blob/main/public/courses/dsp/ipynb/MFCC.ipynb"
+    >
+        Открыть на Github
+    </a>
+    <br/>
+    <a
+            href="courses/dsp/ipynb/MFCC.ipynb"
+            download
+    >
+        Скачать на устройство
+    </a>
+</p>
+
+
+
+
+</body>
+</html>

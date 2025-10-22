@@ -26,7 +26,6 @@
 <body>
 <div class="chapter-content">
 
-<div class="note">
 <h3 id="файловые-системы">Файловые системы</h3>
 <p>Файловые системы обладают древовидной структурой: файлы могут бьть
 помещены в директории (папки), которые могут быть вложенными. Пример
@@ -57,7 +56,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a hr
 предназначенный для работы с указанным файлом.</p>
 <p>В Windows имена папок и файлов разделяются между собой обратным
 слешем <code>\</code>. В Unix, Mac — прямым слешем <code>/</code>.</p>
-<p><img width="80%" src="courses/python_textbook/images/paths.jpg" alt="image" /></p>
+<p><img src="courses/python_textbook/images/paths.jpg" alt="image" /></p>
 <p>Обратный слеш в строках Python используется для
 <em>escape</em>-последовательностей, таких как <code>\n</code> или
 <code>\t</code>. Поэтому, если вы работаете на Windows, нужно быть
@@ -172,7 +171,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a h
 <p>Функция <code>os.chdir()</code> позволяет сменить текущую
 директорию.</p>
 <h4 id="модуль-glob">Модуль <code>glob</code></h4>
-<p><img width="80%" src="courses/python_textbook/images/i-am-glob.png" alt="image" /></p>
+<p><img src="courses/python_textbook/images/i-am-glob.png" alt="image" /></p>
 <p>Модуль <code>glob</code> позволяет находить пути по заданной маске
 (по правилам Unix). Используются следующие основные символы:
 <code>?</code> — заместитель одного символа, <code>*</code> —
@@ -218,8 +217,6 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a h
 <div class="sourceCode" id="cb29"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> glob.iglob(<span class="st">&quot;C:/Folder_1/*.*&quot;</span>):</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div>
-</div>
-
 <h3 id="работа-с-многоуровневой-разметкой">Работа с многоуровневой
 разметкой</h3>
 <p>В большинстве случаев разметка обладает иерархической структурой:
