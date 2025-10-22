@@ -16,7 +16,7 @@ const coursesData = [
             { id: 4, title: "Комплексный ряд Фурье", filename: "lm_4.html" },
             { id: 5, title: "Дискретное преобразование Фурье", filename: "lm_5.html" },
             { id: 6, title: "Быстрое преобразование Фурье", filename: "lm_6.html" },
-            { id: 7, title: "Интегральное преобразование Фурье", filename: "lm_7.html" },
+//            { id: 7, title: "Интегральное преобразование Фурье", filename: "lm_7.html" },
             { id: 8, title: "Окна и свёртки", filename: "lm_8.html" },
             { id: 9, title: "Корреляция и автокорреляция", filename: "lm_9.html" },
             { id: 10, title: "Линейные системы и их свойства", filename: "lm_10.html" },
@@ -46,6 +46,7 @@ const coursesData = [
             { id: 1, title: "Влияние фазы на восприятие", filename: "dsp_1.html" },
             { id: 2, title: "Дискретное косинусное преобразование", filename: "dsp_2.html" },
             { id: 3, title: "Гомоморфные системы: кепстр", filename: "dsp_3.html" },
+            { id: 4, title: "Мел-кепстральные коэффициенты (MFCC)", filename: "dsp_4.html" },
         ]
     },
     {
