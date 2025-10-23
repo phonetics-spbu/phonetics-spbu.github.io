@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Оконные функции</title>
     <style>
         .chapter-content {
             font-family: Arial, sans-serif;
@@ -21,6 +21,89 @@
     </style>
 </head>
 <body>
+<div class="chapter-content">
+    <p>ДПФ предполагает, что сигнал периодичен с периодом N. Если на отрезке анализа сигнала укладывается нецелое число
+        периодов, возникает
+        эффект утечки (растекания спектра). В результате, в спектре появляются частоты, которых не было в исходном
+        разложении.
+        Растекание тем шире, чем ближе разность фаз в начале и конце отрезка к &pi; и чем меньше периодов сигнала на
+        этом отрезке.</p>
+    <p>
+        Когда мы берем отрезок сигнала для БПФ, фактически мы умножаем весь сигнал на прямоугольное окно - функцию,
+        значение которой равно 1 на протяжении отрезка анализа, и 0 во всех остальных точках. Что происходит при этом в
+        частотной области?
+    </p>
+    <p>
+        Умножение во временной области эквивалентно свертке в частотной области, а значит спектр сигнала - это не чистый спектр,
+        а свертка спектра исходного сигнала и спектра прямоугольной функции. Определение свертки:
+        $$
+            y[n] = \sum^{\infty}_{k=-\infty}x[k]w[n-k]
+        $$
+        Спектр прямоугольного окна - это функция sinc:
+        $$sinc(x) = \frac{sinx}{x}$$
+        У этой функции узкий главный лепесток и множество боковых лепестков, которые медленно затухают (см. ноутбук).
+        Когда мы сворачиваем спектр сигнала с этой функцией, каждая частотная компонента исходного сигнала "размазывается"
+        по форме sinc. В итоге, слабые составляющие спектра могут быть полностью замаскированы боковыми лепестками.
+    </p>
+    <p>
+        Возможным решением проблемы может быть умножение на другую, более гладкую оконную функцию. Цель оконной функции -
+        плавно свести сигнал к нулю на краях отрезка, тем самым устраняя разрывы. "Хорошие" оконные функции имеют
+        более низкий уровень боковых лепестков, чем sinc. Однако, при снижении этого уровня происходит расширение главного лепестка.
+        Это ухудшает разрешающую способность по частоте, а сами спектральные пики становятся шире.
+    </p>
+    <p class="note">
+        <b>Ноутбук: растекание спектра и оконные функции</b>
+        <br/>
+        <a
+                target="_blank"
+                href="https://colab.research.google.com/github/phonetics-spbu/phonetics-spbu.github.io/blob/main/public/courses/linear_models/ipynb/spectral_leakage_and_window_functions.ipynb"
+        >
+            Открыть в Colab
+        </a>
+        <br/>
+
+        <a
+                target="_blank"
+                href="https://github.com/phonetics-spbu/phonetics-spbu.github.io/blob/main/public/courses/linear_models/ipynb/spectral_leakage_and_window_functions.ipynb"
+        >
+            Открыть на Github
+        </a>
+        <br/>
+        <a
+                href="courses/linear_models/ipynb/spectral_leakage_and_window_functions.ipynb"
+                download
+        >
+            Скачать на устройство
+        </a>
+
+    </p>
+    <p class="note">
+        <b>Ноутбук: параметры оконных функций</b>
+        <br/>
+        <a
+                target="_blank"
+                href="https://colab.research.google.com/github/phonetics-spbu/phonetics-spbu.github.io/blob/main/public/courses/linear_models/ipynb/window_func_parameters.ipynb"
+        >
+            Открыть в Colab
+        </a>
+        <br/>
+
+        <a
+                target="_blank"
+                href="https://github.com/phonetics-spbu/phonetics-spbu.github.io/blob/main/public/courses/linear_models/ipynb/window_func_parameters.ipynb"
+        >
+            Открыть на Github
+        </a>
+        <br/>
+        <a
+                href="courses/linear_models/ipynb/window_func_parameters.ipynb"
+                download
+        >
+            Скачать на устройство
+        </a>
+
+    </p>
+</div>
 
 </body>
 </html>
