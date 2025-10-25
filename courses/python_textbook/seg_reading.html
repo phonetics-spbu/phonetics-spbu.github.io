@@ -123,10 +123,26 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a hr
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>level_codes <span class="op">=</span> [<span class="dv">2</span> <span class="op">**</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(levels))]</span></code></pre></div>
 <pre><code>[&#39;G1&#39;, &#39;B1&#39;, &#39;R1&#39;, &#39;Y1&#39;, &#39;G2&#39;, &#39;B2&#39;, &#39;R2&#39;, &#39;Y2&#39;, &#39;G3&#39;, &#39;B3&#39;, &#39;R3&#39;, &#39;Y3&#39;, &#39;G4&#39;, &#39;B4&#39;, &#39;R4&#39;, &#39;Y4&#39;]</code></pre>
 <p>Построим словари для конвертации из названия уровня в его код и
-наоборот:</p>
+наоборот. Для этого можно воспользоваться функцией
+<code>zip()</code>.</p>
+<div class="note">
+Функция <code>zip()</code> позволяет итерировать сразу по нескольким итерируемым объектам, например, спискам:
+
 <div class="sourceCode" id="cb3"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>level2code <span class="op">=</span> {i: j <span class="cf">for</span> i, j <span class="kw">in</span> <span class="bu">zip</span>(levels, level_codes)}</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>code2level <span class="op">=</span> {j: i <span class="cf">for</span> i, j <span class="kw">in</span> <span class="bu">zip</span>(levels, level_codes)}</span></code></pre></div>
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>names_list <span class="op">=</span> [<span class="st">&quot;John&quot;</span>, <span class="st">&quot;Jack&quot;</span>, <span class="st">&quot;Jill&quot;</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>last_names_list <span class="op">=</span> [<span class="st">&quot;Smith&quot;</span>, <span class="st">&quot;Jones&quot;</span>, <span class="st">&quot;Doe&quot;</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>grades_list <span class="op">=</span> [<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, last_name, grade <span class="kw">in</span> <span class="bu">zip</span>(names_list, last_names_list, grades_list):</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name, last_name, grade)</span></code></pre></div>
+<pre><code>John Smith 5
+Jack Jones 4
+Jill Doe 5</code></pre>
+</div>
+
+<p>Используем её совместно со словарным включением:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>level2code <span class="op">=</span> {i: j <span class="cf">for</span> i, j <span class="kw">in</span> <span class="bu">zip</span>(levels, level_codes)}</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>code2level <span class="op">=</span> {j: i <span class="cf">for</span> i, j <span class="kw">in</span> <span class="bu">zip</span>(levels, level_codes)}</span></code></pre></div>
 <p>На каждом уровне пользователь имеет возможность ставить метки,
 обозначающие границы интересующих его явлений. Каждая метка описывается
 своей позицией в файле и названием (строка, которая может быть
@@ -213,7 +229,7 @@ N_LABEL=13</code></pre>
 <p>На рисунке ниже представлена схема соответствия номеров байт и
 отсчётов в 16-битном стереофайле. Отсчёты левого канала обозначены
 буквой L, отсчёты правого — буквой R.</p>
-<p><img src="courses/python_textbook/images/bytes_to_samples.png" alt="image" width="100%"/></p>
+<p><img width="100%" src="courses/python_textbook/images/bytes_to_samples.png" alt="image" /></p>
 <p>После секции <code>[LABELS]</code> могут встречаться и другие секции,
 например, <code>[HISTORY]</code>, которая содержит историю модификаций
 сигнала. Однако такая информация не относится собственно к разметке и
@@ -278,21 +294,21 @@ UTF-16). Можно написать специальную функцию, ко
 случаев будет автоматически определять корректную кодировку. Чтобы
 задать кодировку, с которой будет прочитан или записан файл, передадим
 её в аргумент <code>encoding</code> функции <code>open()</code>.</p>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> detect_encoding(file_path: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    encoding <span class="op">=</span> <span class="st">&quot;utf-8&quot;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        text <span class="op">=</span> <span class="bu">open</span>(file_path, <span class="st">&#39;r&#39;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>).read()</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">UnicodeDecodeError</span>:</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            <span class="bu">open</span>(file_path, <span class="st">&#39;r&#39;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-16&quot;</span>).read()</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>            encoding <span class="op">=</span> <span class="st">&quot;utf-16&quot;</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">UnicodeError</span>:</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            encoding <span class="op">=</span> <span class="st">&quot;cp1251&quot;</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> text.startswith(<span class="st">&quot;</span><span class="ch">\ufeff</span><span class="st">&quot;</span>):  <span class="co"># т.н. byte order mark</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>            encoding <span class="op">=</span> <span class="st">&quot;utf-8-sig&quot;</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> encoding</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> detect_encoding(file_path: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    encoding <span class="op">=</span> <span class="st">&quot;utf-8&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        text <span class="op">=</span> <span class="bu">open</span>(file_path, <span class="st">&#39;r&#39;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>).read()</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">UnicodeDecodeError</span>:</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            <span class="bu">open</span>(file_path, <span class="st">&#39;r&#39;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-16&quot;</span>).read()</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>            encoding <span class="op">=</span> <span class="st">&quot;utf-16&quot;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">UnicodeError</span>:</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            encoding <span class="op">=</span> <span class="st">&quot;cp1251&quot;</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> text.startswith(<span class="st">&quot;</span><span class="ch">\ufeff</span><span class="st">&quot;</span>):  <span class="co"># т.н. byte order mark</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>            encoding <span class="op">=</span> <span class="st">&quot;utf-8-sig&quot;</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> encoding</span></code></pre></div>
 <p>Функция считает по умолчанию, что файл закодирован в UTF-8. Если при
 попытке открыть файл возникло исключение
 <code>UnicodeDecodeError</code>, то в нём присутствуют недопустимые
@@ -302,12 +318,12 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a hr
 Python), то кодировка — UTF-8-SIG.</p>
 <p>Понятно, что некоторые коды Windows-1251 всё же будут допустимыми в
 UTF-8:</p>
-<div class="sourceCode" id="cb7"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;lol.txt&quot;</span>, <span class="st">&quot;w&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;cp1251&quot;</span>) <span class="im">as</span> f:</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">&quot;Пё&quot;</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;lol.txt&quot;</span>, <span class="st">&quot;r&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>) <span class="im">as</span> f:</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f.read())  <span class="co"># Greek Capital Letter Sho ???</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;lol.txt&quot;</span>, <span class="st">&quot;w&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;cp1251&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">&quot;Пё&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;lol.txt&quot;</span>, <span class="st">&quot;r&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f.read())  <span class="co"># Greek Capital Letter Sho ???</span></span></code></pre></div>
 <pre><code>ϸ</code></pre>
 <p>Код выше выводит на экран символ <em>ϸ</em> (Greek Capital Letter
 Sho). Кириллические буквы <em>П</em> и <em>ё</em> кодируются в
@@ -324,37 +340,37 @@ Windows-1251 будет содержать только допустимые в 
 <code>"position"</code> — индекс соответствующего отсчёта,
 <code>"level"</code> — буквенно-цифровое представление уровня и
 "<code>name</code>" — название (текст) метки.</p>
-<div class="sourceCode" id="cb9"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_seg(filename: <span class="bu">str</span>, encoding: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;utf-8-sig&quot;</span>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">dict</span>, <span class="bu">list</span>[<span class="bu">dict</span>]]:</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(filename, encoding<span class="op">=</span>encoding) <span class="im">as</span> f:</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        lines <span class="op">=</span> [line.strip() <span class="cf">for</span> line <span class="kw">in</span> f.readlines()]</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># найдём границы секций в списке строк:</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    header_start <span class="op">=</span> lines.index(<span class="st">&quot;[PARAMETERS]&quot;</span>) <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    data_start <span class="op">=</span> lines.index(<span class="st">&quot;[LABELS]&quot;</span>) <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># прочитаем параметры</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    params <span class="op">=</span> {}</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> lines[header_start:data_start <span class="op">-</span> <span class="dv">1</span>]:</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        key, value <span class="op">=</span> line.split(<span class="st">&quot;=&quot;</span>)</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        params[key] <span class="op">=</span> <span class="bu">int</span>(value)</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># прочитаем метки</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    labels <span class="op">=</span> []</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> lines[data_start:]:</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># если в строке нет запятых, значит, это не метка и метки закончились</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> line.count(<span class="st">&quot;,&quot;</span>) <span class="op">&lt;</span> <span class="dv">2</span>:</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>        pos, level, name <span class="op">=</span> line.split(<span class="st">&quot;,&quot;</span>, maxsplit<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>        label <span class="op">=</span> {</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>            <span class="co"># чтобы перевести в отсчёты, разделим на кол-во байт на отсчёт</span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>            <span class="co"># и на количество каналов</span></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;position&quot;</span>: <span class="bu">int</span>(pos) <span class="op">//</span> params[<span class="st">&quot;BYTE_PER_SAMPLE&quot;</span>] <span class="op">//</span> params[<span class="st">&quot;N_CHANNEL&quot;</span>],</span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;level&quot;</span>: code2level[<span class="bu">int</span>(level)],</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;name&quot;</span>: name,</span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>        labels.append(label)</span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> params, labels</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_seg(filename: <span class="bu">str</span>, encoding: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;utf-8-sig&quot;</span>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">dict</span>, <span class="bu">list</span>[<span class="bu">dict</span>]]:</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(filename, encoding<span class="op">=</span>encoding) <span class="im">as</span> f:</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        lines <span class="op">=</span> [line.strip() <span class="cf">for</span> line <span class="kw">in</span> f.readlines()]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># найдём границы секций в списке строк:</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    header_start <span class="op">=</span> lines.index(<span class="st">&quot;[PARAMETERS]&quot;</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    data_start <span class="op">=</span> lines.index(<span class="st">&quot;[LABELS]&quot;</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># прочитаем параметры</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    params <span class="op">=</span> {}</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> lines[header_start:data_start <span class="op">-</span> <span class="dv">1</span>]:</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        key, value <span class="op">=</span> line.split(<span class="st">&quot;=&quot;</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        params[key] <span class="op">=</span> <span class="bu">int</span>(value)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># прочитаем метки</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    labels <span class="op">=</span> []</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> lines[data_start:]:</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># если в строке нет запятых, значит, это не метка и метки закончились</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> line.count(<span class="st">&quot;,&quot;</span>) <span class="op">&lt;</span> <span class="dv">2</span>:</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>        pos, level, name <span class="op">=</span> line.split(<span class="st">&quot;,&quot;</span>, maxsplit<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>        label <span class="op">=</span> {</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>            <span class="co"># чтобы перевести в отсчёты, разделим на кол-во байт на отсчёт</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>            <span class="co"># и на количество каналов</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;position&quot;</span>: <span class="bu">int</span>(pos) <span class="op">//</span> params[<span class="st">&quot;BYTE_PER_SAMPLE&quot;</span>] <span class="op">//</span> params[<span class="st">&quot;N_CHANNEL&quot;</span>],</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;level&quot;</span>: code2level[<span class="bu">int</span>(level)],</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;name&quot;</span>: name,</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>        labels.append(label)</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> params, labels</span></code></pre></div>
 <p>Обратите внимание на использование параметра <code>maxsplit</code> в
 методе <code>.split()</code>. Поскольку в названиях меток могут
 содержаться запятые, вызов метода без этого параметра приведёт к
@@ -366,56 +382,46 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a hr
 вход словарь с параметрами и список меток в том же формате, который
 возвращает функция <code>read_seg()</code>, а также имя целевого файла и
 кодировка, в которой необходимо его записать.</p>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> write_seg(params: <span class="bu">dict</span>, labels: <span class="bu">list</span>, filename: <span class="bu">str</span>, encoding: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;utf-8-sig&quot;</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># зададим значения параметров по умолчанию</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># вы можете изменить функцию так, чтобы параметры можно было передавать как ключевые слова</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    param_defaults <span class="op">=</span> {</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;SAMPLING_FREQ&quot;</span>: <span class="dv">44100</span>,</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;BYTE_PER_SAMPLE&quot;</span>: <span class="dv">2</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;CODE&quot;</span>: <span class="dv">0</span>,</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;N_CHANNEL&quot;</span>: <span class="dv">1</span>,</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;N_LABEL&quot;</span>: <span class="dv">0</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># запишем в словарь переданные в функцию значения параметров</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    params <span class="op">=</span> param_defaults <span class="op">|</span> params</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># количество меток определим как длину списка labels</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    params[<span class="st">&quot;N_LABEL&quot;</span>] <span class="op">=</span> <span class="bu">len</span>(labels)</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(filename, <span class="st">&quot;w&quot;</span>, encoding<span class="op">=</span>encoding) <span class="im">as</span> f:</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        f.write(<span class="st">&quot;[PARAMETERS]</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> key, value <span class="kw">in</span> params.items():</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">=</span><span class="sc">{</span>value<span class="sc">}</span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        f.write(<span class="st">&quot;[LABELS]</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> label <span class="kw">in</span> labels:</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>            label_byte <span class="op">=</span> (</span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>                params[<span class="st">&#39;BYTE_PER_SAMPLE&#39;</span>] <span class="op">*</span> </span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>                params[<span class="st">&#39;N_CHANNEL&#39;</span>] <span class="op">*</span> label[<span class="st">&#39;position&#39;</span>]</span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>            )</span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>label_byte<span class="sc">}</span><span class="ss">,&quot;</span>)</span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>level2code[label[<span class="st">&#39;level&#39;</span>]]<span class="sc">}</span><span class="ss">,&quot;</span>)</span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>label[<span class="st">&#39;name&#39;</span>]<span class="sc">}</span><span class="ch">\n</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> write_seg(params: <span class="bu">dict</span>, labels: <span class="bu">list</span>, filename: <span class="bu">str</span>, encoding: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;utf-8-sig&quot;</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># зададим значения параметров по умолчанию</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># вы можете изменить функцию так, чтобы параметры можно было передавать как ключевые слова</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    param_defaults <span class="op">=</span> {</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;SAMPLING_FREQ&quot;</span>: <span class="dv">44100</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;BYTE_PER_SAMPLE&quot;</span>: <span class="dv">2</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;CODE&quot;</span>: <span class="dv">0</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;N_CHANNEL&quot;</span>: <span class="dv">1</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;N_LABEL&quot;</span>: <span class="dv">0</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># запишем в словарь переданные в функцию значения параметров</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    params <span class="op">=</span> param_defaults <span class="op">|</span> params</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># количество меток определим как длину списка labels</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    params[<span class="st">&quot;N_LABEL&quot;</span>] <span class="op">=</span> <span class="bu">len</span>(labels)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(filename, <span class="st">&quot;w&quot;</span>, encoding<span class="op">=</span>encoding) <span class="im">as</span> f:</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>        f.write(<span class="st">&quot;[PARAMETERS]</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> key, value <span class="kw">in</span> params.items():</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">=</span><span class="sc">{</span>value<span class="sc">}</span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        f.write(<span class="st">&quot;[LABELS]</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> label <span class="kw">in</span> labels:</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>            label_byte <span class="op">=</span> (</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>                params[<span class="st">&#39;BYTE_PER_SAMPLE&#39;</span>] <span class="op">*</span> </span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>                params[<span class="st">&#39;N_CHANNEL&#39;</span>] <span class="op">*</span> label[<span class="st">&#39;position&#39;</span>]</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>label_byte<span class="sc">}</span><span class="ss">,&quot;</span>)</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>level2code[label[<span class="st">&#39;level&#39;</span>]]<span class="sc">}</span><span class="ss">,&quot;</span>)</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>label[<span class="st">&#39;name&#39;</span>]<span class="sc">}</span><span class="ch">\n</span><span class="ss">&quot;</span>)</span></code></pre></div>
 <h4 id="попарная-обработка-меток">Попарная обработка меток</h4>
 <p>Каждая метка обозначает единственную точку в сигнале — чаще всего
 границу между двумя линейными участками (например, двумя фонами или
 фоном и паузой). Поэтому две соседние метки будут соответствовать
-границам одного такого участка. Полезно уметь обрабатывать метки парами.
-Для этого можно воспользоваться функцией <code>zip()</code>, которая
-позволяет итерировать сразу по нескольким итерируемым объектам,
-например, спискам:</p>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>names_list <span class="op">=</span> [<span class="st">&quot;John&quot;</span>, <span class="st">&quot;Jack&quot;</span>, <span class="st">&quot;Jill&quot;</span>]</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>last_names_list <span class="op">=</span> [<span class="st">&quot;Smith&quot;</span>, <span class="st">&quot;Jones&quot;</span>, <span class="st">&quot;Doe&quot;</span>]</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>grades_list <span class="op">=</span> [<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, last_name, grade <span class="kw">in</span> <span class="bu">zip</span>(names_list, last_names_list, grades_list):</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name, last_name, grade)</span></code></pre></div>
-<pre><code>John Smith 5
-Jack Jones 4
-Jill Doe 5</code></pre>
-<p>Если списки, которые мы передаём в <code>zip()</code>, разной длины,
-то по умолчанию итерация будет идти до конца самого короткого из них.
-Поэтому мы можем передать в <code>zip()</code> список меток и новый
-список, который будет содержать все метки, кроме первой (для создания
-такого списка воспользуемся срезами).</p>
+границам одного такого участка. Полезно уметь обрабатывать метки
+парами.</p>
+<p>Опять воспользуемся функцией <code>zip()</code> (см. выше). Если
+списки, которые мы передаём в <code>zip()</code>, разной длины, то по
+умолчанию итерация будет идти до конца самого короткого из них. Поэтому
+мы можем передать в <code>zip()</code> список меток и новый список,
+который будет содержать все метки, кроме первой (для создания такого
+списка воспользуемся срезами).</p>
 <div class="sourceCode" id="cb13"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>params, labels <span class="op">=</span> read_seg(<span class="st">&quot;cta0001.seg_B1&quot;</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> start, end <span class="kw">in</span> <span class="bu">zip</span>(labels, labels[<span class="dv">1</span>:]):</span>
@@ -432,6 +438,15 @@ a4 18403 19302
 n 19302 20809
 a4 20809 22254
 f 22254 27331</code></pre>
+<p>Аналогичного эффекта можно добиться с помощью функции
+<code>pairwise()</code> из модуля <code>itertools</code> (Python 3.10 и
+новее):</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> pairwise</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>params, labels <span class="op">=</span> read_seg(<span class="st">&quot;cta0001.seg_B1&quot;</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> start, end <span class="kw">in</span> pairwise(labels):</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(start[<span class="st">&quot;name&quot;</span>], start[<span class="st">&quot;position&quot;</span>], end[<span class="st">&quot;position&quot;</span>])</span></code></pre></div>
 <h3 id="практические-задания">Практические задания</h3>
 <h4 id="1-визуализация-разметки">1. Визуализация разметки</h4>
 <p>Напишите программу, которая рисует осциллограмму с помощью
@@ -440,7 +455,7 @@ f 22254 27331</code></pre>
 href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.vlines.html"><code>plt.vlines()</code></a>,
 которая принимает на вход положение линии по оси <em>x</em> и положение
 её начала и конца по оси <em>y</em>. Пример результата:</p>
-<p><img src="courses/python_textbook/images/cta_labels.png" /></p>
+<p><img width="100%" src="courses/python_textbook/images/cta_labels.png" /></p>
 <h4 id="2-визуализация-разметки-с-текстом">2. Визуализация разметки с
 текстом</h4>
 <p>Модифицируйте программу так, чтобы в середине каждой пары меток было
@@ -448,7 +463,7 @@ href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.vlines.html"><
 href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.text.html"><code>plt.text()</code></a>,
 которая принимает на вход координаты по осям <em>x</em> и <em>y</em> и
 строку текста. Пример результата:</p>
-<p><img src="courses/python_textbook/images/cta_labels_text.png" /></p>
+<p><img width="100%" src="courses/python_textbook/images/cta_labels_text.png" /></p>
 <h4 id="3-поиск-самого-длинного-и-самого-короткого-интервала">3. Поиск
 самого длинного и самого короткого интервала</h4>
 <p>Напишите программу, которая считывает файл .seg и выводит на экран
@@ -505,7 +520,7 @@ cta0001, для обозначения гласных фонем русског�
 <li>класс <code>Seg</code> с методами для чтения и записи как одиночного
 файла .seg, так и группы файлов .seg_**</li>
 </ul>
-
+    
 </div>
 </body>
 </html>
