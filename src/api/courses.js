@@ -158,6 +158,7 @@ const coursesData = [
             { id: 4, title: "Циклы", filename: "python_genling_bac_3.html" },
             { id: 5, title: "List comprehension. Срезы", filename: "python_genling_bac_4.html" },
             { id: 6, title: "Работа с последовательностями", filename: "python_genling_bac_5.html" },
+            { id: 7, title: "Коллоквиум", filename: "python_genling_bac_midterm.html" },
         ]
     },
     {
