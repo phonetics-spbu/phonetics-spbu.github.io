@@ -105,6 +105,7 @@ const coursesData = [
             { id: 7, title: "Моделирование мелодического контура", filename: "signal_proc_mag_7.html" },
             { id: 8, title: "Темпоральные характеристики", filename: "signal_proc_mag_8.html" },
             { id: 9, title: "PSOLA", filename: "signal_proc_mag_9.html" },
+            { id: 10, title: "Автоматическая сегментация", filename: "signal_proc_mag_10.html" },
         ]
     },
     {
@@ -176,6 +177,7 @@ const coursesData = [
             { id: 2, title: "Чтение и запись файлов разметки Wave Assistant", filename: "ling_programming_2.html" },
             { id: 3, title: "Файловые системы и работа с многоуровневой разметкой", filename: "ling_programming_3.html" },
             { id: 4, title: "Работа с метками периодов основного тона", filename: "ling_programming_4.html" },
+            { id: 5, title: "Работа с файлами аннотации TextGrid", filename: "ling_programming_5.html" },
         ]
     },
     {
@@ -191,6 +193,7 @@ const coursesData = [
             { id: 2, title: "Чтение и запись файлов разметки Wave Assistant", filename: "seg_reading.html" },
             { id: 3, title: "Файловые системы и работа с многоуровневой разметкой", filename: "multi_seg.html" },
             { id: 4, title: "Работа с метками периодов основного тона", filename: "pitchmarks.html" },
+            { id: 5, title: "Работа с файлами аннотации TextGrid", filename: "textgrid.html" },
         ]
     },
     
