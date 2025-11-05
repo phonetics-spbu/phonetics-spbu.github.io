@@ -143,7 +143,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a hr
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>grid <span class="op">=</span> tgt.read_textgrid(<span class="st">&quot;cta0001.TextGrid&quot;</span>)</span></code></pre></div>
 <p>Эта функция возвращает объект класса <code>TextGrid</code>, в котором
 определён ряд полезных атрибутов и методов. В атрибуте
-<code>tiers</code> хранится все уровни:</p>
+<code>tiers</code> хранится список всех уровней:</p>
 <div class="sourceCode" id="cb7"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grid.tiers)</span></code></pre></div>
 <p>(вывод сокращён)</p>
@@ -252,7 +252,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a h
 <ol type="1">
 <li>Читает из файла метки и параметры (вызывая отдельную функцию
 <code>read_seg()</code>);</li>
-<li>создаёт новый <code>TextGrid</code> и уровень Inte`rvalTier;</li>
+<li>создаёт новый <code>TextGrid</code> и уровень <code>IntervalTier</code>;</li>
 <li>Добавляет новый уровень в новый <code>TextGrid</code>;</li>
 <li>Перебирает циклом все пары соседних меток;</li>
 <li>Добавляет в уровень все интервалы, полученные таким образом

@@ -1,0 +1,168 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.74762 
+tiers? <exists> 
+size = 5 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "phonetic real" 
+        xmin = 0 
+        xmax = 1.747619047619047 
+        intervals: size = 13 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.192562358276644 
+            text = "j" 
+        intervals [2]:
+            xmin = 0.192562358276644 
+            xmax = 0.288163265306122 
+            text = "u0" 
+        intervals [3]:
+            xmin = 0.288163265306122 
+            xmax = 0.310839002267573 
+            text = "r'" 
+        intervals [4]:
+            xmin = 0.310839002267573 
+            xmax = 0.412244897959183 
+            text = "i4" 
+        intervals [5]:
+            xmin = 0.412244897959183 
+            xmax = 0.564716553287981 
+            text = "t" 
+        intervals [6]:
+            xmin = 0.564716553287981 
+            xmax = 0.588208616780045 
+            text = "r'" 
+        intervals [7]:
+            xmin = 0.588208616780045 
+            xmax = 0.715283446712018 
+            text = "i0" 
+        intervals [8]:
+            xmin = 0.715283446712018 
+            xmax = 0.834603174603174 
+            text = "f" 
+        intervals [9]:
+            xmin = 0.834603174603174 
+            xmax = 0.875374149659863 
+            text = "a4" 
+        intervals [10]:
+            xmin = 0.875374149659863 
+            xmax = 0.943718820861677 
+            text = "n" 
+        intervals [11]:
+            xmin = 0.943718820861677 
+            xmax = 1.009251700680272 
+            text = "a4" 
+        intervals [12]:
+            xmin = 1.009251700680272 
+            xmax = 1.239501133786848 
+            text = "f" 
+        intervals [13]:
+            xmin = 1.239501133786848 
+            xmax = 1.747573696145124 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "words" 
+        xmin = 0 
+        xmax = 1.747619047619047 
+        intervals: size = 3 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.412244897959183 
+            text = "юрий" 
+        intervals [2]:
+            xmin = 0.412244897959183 
+            xmax = 1.239501133786848 
+            text = "трифонов" 
+        intervals [3]:
+            xmin = 1.239501133786848 
+            xmax = 1.747573696145124 
+            text = "" 
+    item [3]:
+        class = "IntervalTier" 
+        name = "phonetic ideal" 
+        xmin = 0 
+        xmax = 1.747619047619047 
+        intervals: size = 13 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.192562358276644 
+            text = "j" 
+        intervals [2]:
+            xmin = 0.192562358276644 
+            xmax = 0.288163265306122 
+            text = "u0" 
+        intervals [3]:
+            xmin = 0.288163265306122 
+            xmax = 0.310839002267573 
+            text = "r'" 
+        intervals [4]:
+            xmin = 0.310839002267573 
+            xmax = 0.412244897959183 
+            text = "i4 j" 
+        intervals [5]:
+            xmin = 0.412244897959183 
+            xmax = 0.564716553287981 
+            text = "t" 
+        intervals [6]:
+            xmin = 0.564716553287981 
+            xmax = 0.588208616780045 
+            text = "r'" 
+        intervals [7]:
+            xmin = 0.588208616780045 
+            xmax = 0.715283446712018 
+            text = "i0" 
+        intervals [8]:
+            xmin = 0.715283446712018 
+            xmax = 0.834603174603174 
+            text = "f" 
+        intervals [9]:
+            xmin = 0.834603174603174 
+            xmax = 0.875374149659863 
+            text = "a4" 
+        intervals [10]:
+            xmin = 0.875374149659863 
+            xmax = 0.943718820861677 
+            text = "n" 
+        intervals [11]:
+            xmin = 0.943718820861677 
+            xmax = 1.009251700680272 
+            text = "a4" 
+        intervals [12]:
+            xmin = 1.009251700680272 
+            xmax = 1.239501133786848 
+            text = "f" 
+        intervals [13]:
+            xmin = 1.239501133786848 
+            xmax = 1.747573696145124 
+            text = "" 
+    item [4]:
+        class = "IntervalTier" 
+        name = "prosody" 
+        xmin = 0 
+        xmax = 1.747619047619047 
+        intervals: size = 2 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.239501133786848 
+            text = "01" 
+        intervals [2]:
+            xmin = 1.239501133786848 
+            xmax = 1.747573696145124 
+            text = "p6" 
+    item [5]:
+        class = "TextTier" 
+        name = "word boundaries" 
+        xmin = 0 
+        xmax = 1.74762 
+        points: size = 2 
+        points [1]:
+            number = 0.412244897959183 
+            mark = "1" 
+        points [2]:
+            number = 1.239501133786848 
+            mark = "2" 
