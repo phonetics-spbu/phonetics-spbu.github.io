@@ -47,6 +47,7 @@ const coursesData = [
             { id: 2, title: "Дискретное косинусное преобразование", filename: "dsp_2.html" },
             { id: 3, title: "Гомоморфные системы: кепстр", filename: "dsp_3.html" },
             { id: 4, title: "Мел-кепстральные коэффициенты (MFCC)", filename: "dsp_4.html" },
+            { id: 5, title: "Коэффициенты линейного предсказания (LPC)", filename: "dsp_5.html" },
         ]
     },
     {
