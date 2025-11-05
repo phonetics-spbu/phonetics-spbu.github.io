@@ -39,10 +39,9 @@ Colab).</p>
 текстовых файлах, доступные кодировки для чтения и записи указаны на
 рисунках (обратите внимание, что кириллические кодировки не
 поддерживаются).</p>
-<img src="courses/python_textbook/images/praat_text_reading_settings.png" width="600">
+<img src="courses/python_textbook/images/praat_text_reading_settings.png" width="50%">
 
-<p></p>
-<img src="courses/python_textbook/images/praat_text_writing_settings.png" width="600">
+<img src="courses/python_textbook/images/praat_text_writing_settings.png" width="50%">
 
 <p>Кроме этого, у Praat есть собственный стандарт для кодирования
 специальных символов — т. н. триграфы (см. ниже).</p>
@@ -229,7 +228,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a h
 можно с помощью методов <code>.delete_tier()</code> и
 <code>.delete_tiers()</code> соответственно.</p>
 <p>Добавим в уровень новый интервал, который начинается в 0 с,
-заканчивается в 1 с и называется "some text":</p>
+заканчивается в 1 с и называется «some text»:</p>
 <div class="sourceCode" id="cb24"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>new_tier.add_interval(tgt.Interval(<span class="dv">0</span>, <span class="fl">1.0</span>, <span class="st">&quot;some text&quot;</span>))</span></code></pre></div>
 <p>Добавим новый <code>PointTier</code>:</p>
@@ -247,12 +246,13 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a h
 <code>"phonetic real"</code> и выводит на экран название каждого
 интервала и его серединную точку.</p>
 <h4 id="задание-2">Задание 2</h4>
-<p>Напишите функцию, которая принимает на вход имя файла .seg и делает
-следующее:</p>
+<p>а) Напишите функцию, которая принимает на вход имя файла .seg и
+делает следующее:</p>
 <ol type="1">
 <li>Читает из файла метки и параметры (вызывая отдельную функцию
 <code>read_seg()</code>);</li>
-<li>создаёт новый <code>TextGrid</code> и уровень <code>IntervalTier</code>;</li>
+<li>Cоздаёт новый <code>TextGrid</code> и уровень
+<code>IntervalTier</code>;</li>
 <li>Добавляет новый уровень в новый <code>TextGrid</code>;</li>
 <li>Перебирает циклом все пары соседних меток;</li>
 <li>Добавляет в уровень все интервалы, полученные таким образом
@@ -262,6 +262,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a h
 .TextGrid.</li>
 </ol>
 <p>Откройте полученный файл в Praat и посмотрите на него.</p>
+<p>б) Дополните функцию так, чтобы метки разных цветов записывались в
+разные уровни. Сделайте название каждого уровня буквенно-цифровым
+сочетанием (например, <code>B1</code>).</p>
 <h4 id="задание-3">Задание 3</h4>
 <p>Напишите без использования сторонних библиотек функцию, которая
 получает на вход имя файла .TextGrid (на ваш выбор — короткого или
@@ -282,14 +285,14 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a h
 <h4 id="задание-4">Задание 4</h4>
 <p>Написать программу, которая:</p>
 <ol type="1">
-<li>Обрабатывает все файлы .seg в архиве cta_seg;</li>
+<li>Обрабатывает все файлы .seg в архиве <em>cta_seg</em>;</li>
 <li>Для каждого аллофона вычисляет его среднюю длительность (в секундах)
 и стандартное отклонение;</li>
-<li>Для файла cta0001 генерирует файл .TextGrid с двумя уровнями. Первый
-должен содержать информацию из .seg_B1 (границы звуков и их названия), а
-второй должен совпадать с первым, но имя каждого интервала должно
-содержать не название звука, а его длительность, нормализованную путём
-<a
+<li>Для файла <em>cta0001</em> генерирует файл .TextGrid с двумя
+уровнями. Первый должен содержать информацию из .seg_B1 (границы звуков
+и их названия), а второй должен совпадать с первым, но имя каждого
+интервала должно содержать не название звука, а его длительность,
+нормализованную путём <a
 href="https://en.wikipedia.org/wiki/Standard_score">z-нормализации</a> и
 округлённую до 3 знаков после запятой.</li>
 </ol>
@@ -297,10 +300,10 @@ href="https://en.wikipedia.org/wiki/Standard_score">z-нормализации</
 физической длительности (в секундах) вычесть среднее значение
 длительности этого аллофона <strong>по всему корпусу</strong> и
 разделить на стандартное отклонение.</p>
-<p>Т.е. чтобы сделать это для, например, звука [u0] из слова "юрий",
-нужно определить среднее и ст. отклонение по всем звукам [u0] из всего
-корпуса и использовать эти значения. Для звука [r'] эти значения уже
-будут другими.</p>
+<p>Т.е. чтобы сделать это для, например, звука [u0] из слова
+<em>юрий</em>, нужно определить среднее и ст. отклонение по всем звукам
+[u0] из всего корпуса и использовать эти значения. Для звука [r'] эти
+значения уже будут другими.</p>
 <p>В качестве иллюстрации: сгенерируем массив из 100 случайных чисел и
 вычислим его среднее значение и стандартное отклонение.</p>
 <div class="sourceCode" id="cb28"><pre
@@ -311,12 +314,14 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a h
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>mean_value <span class="op">=</span> np.mean(nums)</span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>st_dev <span class="op">=</span> np.std(nums)</span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mean_value, st_dev)</span></code></pre></div>
+<pre><code>3.179129928894265 1.5264234172254023</code></pre>
 <p>Сгенерируем ещё одно случайное число из того же распределения и
 нормализуем его:</p>
-<div class="sourceCode" id="cb30"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>new_num <span class="op">=</span> rng.normal(loc<span class="op">=</span><span class="dv">3</span>, scale<span class="op">=</span><span class="fl">1.5</span>)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>norm_num <span class="op">=</span> (new_num <span class="op">-</span> mean_value) <span class="op">/</span> st_dev</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(new_num, norm_num)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>new_num <span class="op">=</span> rng.normal(loc<span class="op">=</span><span class="dv">3</span>, scale<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>norm_num <span class="op">=</span> (new_num <span class="op">-</span> mean_value) <span class="op">/</span> st_dev</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(new_num, norm_num)</span></code></pre></div>
+<pre><code>2.8445746470246758 -0.21917593643689928</code></pre>
 <p>Не забудьте открыть полученный файл в Praat, чтобы убедиться в том,
 что он:</p>
 <ol type="1">
@@ -337,9 +342,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a h
 тоны (%). Тональные акценты ассоциируются с ударными слогами, фразовые
 акценты — с границей <em>ip</em>, а граничные тоны — с границей
 <em>IP</em>.</p>
-<p>В приведённом файле TextGrid (h1r1.TextGrid) дана разметка по системе
-ToBI (точечные уровни). Приведите её в соответствие стандартам. Для
-этого:</p>
+<p>В приведённом файле TextGrid (<em>h1r1.TextGrid</em>) дана разметка
+по системе ToBI (точечные уровни). Приведите её в соответствие
+стандартам. Для этого:</p>
 <ol type="1">
 <li>Слейте в одну точку фразовый акцент и следующий непосредственно за
 ним граничный тон.</li>
@@ -352,7 +357,7 @@ id="дополнительный-материал-конвертация-из-т
 материал: конвертация из триграфов Praat в символы Unicode</h3>
 <p>Для хранения символов, не входящих в таблицу ASCII (символов МФА,
 кириллицы и других алфавитов), Praat пользуется своей собственной
-системой: каждому символу, не входящему в ASCII, сопоставляется т.н.
+системой: каждому символу, не входящему в ASCII, сопоставляется т. н.
 триграф. Под триграфом понимается последовательность из обратного слеша
 \ и двух символов ASCII. Например, символу ɨ соответствует триграф
 \i-.</p>
@@ -370,54 +375,55 @@ Unicode).</p>
 Однако можно заняться конвертацией самостоятельно, если очень хочется.
 Для этого посмотрим на ту часть исходного кода Praat, которая отвечает
 за конвертацию.</p>
-<div class="sourceCode" id="cb31"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># скачаем файлы исходного кода</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget https:<span class="op">//</span>raw.githubusercontent.com<span class="op">/</span>praat<span class="op">/</span>praat<span class="op">/</span>master<span class="op">/</span>kar<span class="op">/</span>longchar.cpp</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget https:<span class="op">//</span>raw.githubusercontent.com<span class="op">/</span>praat<span class="op">/</span>praat<span class="op">/</span>master<span class="op">/</span>kar<span class="op">/</span>UnicodeData.h</span></code></pre></div>
-<div class="sourceCode" id="cb32"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;UnicodeData.h&quot;</span>) <span class="im">as</span> f:</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    lines <span class="op">=</span> f.readlines()</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co"># здесь хранятся коды символов Unicode в шестнадцатеричном представлении</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>unicode_vals <span class="op">=</span> {}</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> line <span class="kw">in</span> lines:</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> line.startswith(<span class="st">&quot;#define&quot;</span>):</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    _, name, val <span class="op">=</span> line.strip().split()</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> name.startswith(<span class="st">&quot;UNICODE&quot;</span>):</span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    unicode_vals[name] <span class="op">=</span> <span class="bu">chr</span>(<span class="bu">int</span>(val, <span class="dv">16</span>))</span></code></pre></div>
 <div class="sourceCode" id="cb33"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;longchar.cpp&quot;</span>) <span class="im">as</span> f:</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    lines <span class="op">=</span> f.readlines()</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>trigraph2unicode <span class="op">=</span> {}</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="co"># здесь хранится таблица соответствий</span></span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> line <span class="kw">in</span> lines:</span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    line <span class="op">=</span> line.replace(<span class="st">&quot;</span><span class="ch">\\</span><span class="st">&#39;&quot;</span>, <span class="st">&quot;&#39;&quot;</span>)</span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>    line <span class="op">=</span> line.replace(<span class="st">&#39;</span><span class="ch">\\</span><span class="st">&quot;&#39;</span>, <span class="st">&#39;&quot;&#39;</span>)</span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># напишем регулярное выражение, которое ищет в строке таблицы символы, входящие в триграф, и название символа Unicode</span></span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> re.search(<span class="st">&quot;(&#39;[^,]+&#39;), ?(&#39;[^,]+&#39;),.+(UNICODE_</span><span class="er">\</span><span class="st">w+)&quot;</span>, line)</span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> m <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>    ch1, ch2, name <span class="op">=</span> m[<span class="dv">1</span>][<span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>], m[<span class="dv">2</span>][<span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>], m[<span class="dv">3</span>]</span>
-<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ch2 <span class="op">==</span> <span class="st">&quot; &quot;</span>:</span>
-<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
-<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>    trigraph2unicode[<span class="st">&quot;</span><span class="ch">\\</span><span class="st">&quot;</span> <span class="op">+</span> ch1 <span class="op">+</span> ch2] <span class="op">=</span> unicode_vals[name]</span></code></pre></div>
+class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># скачаем файлы исходного кода</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget https:<span class="op">//</span>raw.githubusercontent.com<span class="op">/</span>praat<span class="op">/</span>praat<span class="op">/</span>master<span class="op">/</span>kar<span class="op">/</span>longchar.cpp</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget https:<span class="op">//</span>raw.githubusercontent.com<span class="op">/</span>praat<span class="op">/</span>praat<span class="op">/</span>master<span class="op">/</span>kar<span class="op">/</span>UnicodeData.h</span></code></pre></div>
 <div class="sourceCode" id="cb34"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># сделаем словарь для обратной конвертации</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>unicode2trigraph <span class="op">=</span> {j: i <span class="cf">for</span> i, j <span class="kw">in</span> trigraph2unicode.items()}</span></code></pre></div>
+class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;UnicodeData.h&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    lines <span class="op">=</span> f.readlines()</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># здесь хранятся коды символов Unicode в шестнадцатеричном представлении</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>unicode_vals <span class="op">=</span> {}</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> line <span class="kw">in</span> lines:</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> line.startswith(<span class="st">&quot;#define&quot;</span>):</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    _, name, val <span class="op">=</span> line.strip().split()</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> name.startswith(<span class="st">&quot;UNICODE&quot;</span>):</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    unicode_vals[name] <span class="op">=</span> <span class="bu">chr</span>(<span class="bu">int</span>(val, <span class="dv">16</span>))</span></code></pre></div>
 <div class="sourceCode" id="cb35"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># проверим:</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>trigraph2unicode[<span class="st">&quot;</span><span class="ch">\\</span><span class="st">O</span><span class="ch">\&quot;</span><span class="st">&quot;</span>]</span></code></pre></div>
-<pre><code>&#39;Ö&#39;</code></pre>
+class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;longchar.cpp&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    lines <span class="op">=</span> f.readlines()</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>trigraph2unicode <span class="op">=</span> {}</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="co"># здесь хранится таблица соответствий</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> line <span class="kw">in</span> lines:</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    line <span class="op">=</span> line.replace(<span class="st">&quot;</span><span class="ch">\\</span><span class="st">&#39;&quot;</span>, <span class="st">&quot;&#39;&quot;</span>)</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    line <span class="op">=</span> line.replace(<span class="st">&#39;</span><span class="ch">\\</span><span class="st">&quot;&#39;</span>, <span class="st">&#39;&quot;&#39;</span>)</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># напишем регулярное выражение, которое ищет в строке таблицы символы, входящие в триграф, и название символа Unicode</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> re.search(<span class="vs">r&quot;</span><span class="kw">(</span><span class="vs">&#39;</span><span class="pp">[^,]</span><span class="op">+</span><span class="vs">&#39;</span><span class="kw">)</span><span class="vs">, </span><span class="op">?</span><span class="kw">(</span><span class="vs">&#39;</span><span class="pp">[^,]</span><span class="op">+</span><span class="vs">&#39;</span><span class="kw">)</span><span class="vs">,</span><span class="dv">.</span><span class="op">+</span><span class="kw">(</span><span class="vs">UNICODE_</span><span class="dv">\w</span><span class="op">+</span><span class="kw">)</span><span class="vs">&quot;</span>, line)</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> m <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    ch1, ch2, name <span class="op">=</span> m[<span class="dv">1</span>][<span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>], m[<span class="dv">2</span>][<span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>], m[<span class="dv">3</span>]</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ch2 <span class="op">==</span> <span class="st">&quot; &quot;</span>:</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>    trigraph2unicode[<span class="st">&quot;</span><span class="ch">\\</span><span class="st">&quot;</span> <span class="op">+</span> ch1 <span class="op">+</span> ch2] <span class="op">=</span> unicode_vals[name]</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># сделаем словарь для обратной конвертации</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>unicode2trigraph <span class="op">=</span> {j: i <span class="cf">for</span> i, j <span class="kw">in</span> trigraph2unicode.items()}</span></code></pre></div>
 <div class="sourceCode" id="cb37"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>unicode_string <span class="op">=</span> <span class="st">&quot;bɨl tʲixʲij sʲerɨj vʲet͡ʃʲir&quot;</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>trigraph_string <span class="op">=</span> unicode_string.translate(<span class="bu">str</span>.maketrans(unicode2trigraph))</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(trigraph_string)</span></code></pre></div>
+class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># проверим:</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>trigraph2unicode[<span class="st">&quot;</span><span class="ch">\\</span><span class="st">O</span><span class="ch">\&quot;</span><span class="st">&quot;</span>]</span></code></pre></div>
+<pre><code>&#39;Ö&#39;</code></pre>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>unicode_string <span class="op">=</span> <span class="st">&quot;bɨl tʲixʲij sʲerɨj vʲet͡ʃʲir&quot;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>trigraph_string <span class="op">=</span> unicode_string.translate(<span class="bu">str</span>.maketrans(unicode2trigraph))</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(trigraph_string)</span></code></pre></div>
+<pre><code>b\i-l t\^jix\^jij s\^jer\i-j v\^jet\li\sh\^jir</code></pre>
 
 
 </div>
