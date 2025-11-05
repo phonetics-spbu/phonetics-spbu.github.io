@@ -39,9 +39,10 @@ Colab).</p>
 текстовых файлах, доступные кодировки для чтения и записи указаны на
 рисунках (обратите внимание, что кириллические кодировки не
 поддерживаются).</p>
-<img src="courses/python_textbook/images/praat_text_reading_settings.png" width="50%">
+<img src="courses/python_textbook/images/praat_text_reading_settings.png" width="600">
 
-<img src="courses/python_textbook/images/praat_text_writing_settings.png" width="50%">
+<p></p>
+<img src="courses/python_textbook/images/praat_text_writing_settings.png" width="600">
 
 <p>Кроме этого, у Praat есть собственный стандарт для кодирования
 специальных символов — т. н. триграфы (см. ниже).</p>
@@ -178,14 +179,21 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a h
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(interval)</span></code></pre></div>
 <pre><code>Interval(0.0, 0.412244897959183, &quot;юрий&quot;)
 Interval(0.412244897959183, 1.239501133786848, &quot;трифонов&quot;)</code></pre>
-<p>Некоторые полезные атрибуты объектов <code>IntervalTier</code>:</p>
+<p>Некоторые полезные атрибуты объектов <code>IntervalTier</code> и
+<code>PointTier</code>:</p>
 <div class="sourceCode" id="cb16"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(word_tier.name)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(word_tier.start_time)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(word_tier.end_time)</span></code></pre></div>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(word_tier.end_time)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(word_tier.tier_type())</span></code></pre></div>
 <pre><code>words
 0.0
-1.747619047619047</code></pre>
+1.747619047619047
+IntervalTier</code></pre>
+<p>Ознакомьтесь со списком методов уровней в <a
+href="https://textgridtools.readthedocs.io/en/stable/api.html#tgt.core.Tier">документации</a>.
+Обратите внимание на методы для удаления и получения элементов аннотации
+по времени, тексту и т. п.</p>
 <p>Атрибуты объектов <code>Interval</code>:</p>
 <div class="sourceCode" id="cb18"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>one_word <span class="op">=</span> word_tier[<span class="dv">0</span>]</span>
@@ -193,9 +201,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a h
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(one_word.start_time)</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(one_word.end_time)</span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(one_word.text)</span></code></pre></div>
-<pre><code>    0.0
-    0.412244897959183
-    юрий</code></pre>
+<pre><code>0.0
+0.412244897959183
+юрий</code></pre>
 <p>Атрибуты объектов <code>Point</code>:</p>
 <div class="sourceCode" id="cb20"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>point <span class="op">=</span> grid.get_tier_by_name(<span class="st">&quot;word boundaries&quot;</span>)[<span class="dv">0</span>]</span>
@@ -217,7 +225,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a h
 методом <code>.add_tiers()</code>. Чтобы добавить уровень не в конец
 списка, а в заданную позицию, можно воспользоваться методом
 <code>.insert_tier()</code>, который вторым аргументом принимает на вход
-необходимую позицию в виде целого числа.</p>
+необходимую позицию в виде целого числа. Удалить уровень или уровни
+можно с помощью методов <code>.delete_tier()</code> и
+<code>.delete_tiers()</code> соответственно.</p>
 <p>Добавим в уровень новый интервал, который начинается в 0 с,
 заканчивается в 1 с и называется "some text":</p>
 <div class="sourceCode" id="cb24"><pre
@@ -312,11 +322,31 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a h
 <ol type="1">
 <li>Открывается</li>
 <li>Содержит нужные данные</li>
-<li>Полученные значения адекватны &mdash; получиться должно примерно следующее
+<li>Полученные значения адекватны — получиться должно примерно следующее
 (точные значения могут отличаться):</li>
 </ol>
 <img src="courses/python_textbook/images/result_example.png" width="80%">
 
+<h4 id="задание-5">Задание 5</h4>
+<p>В системе просодической разметки ToBI есть два уровня аннотации:
+уровень тонов (<em>tones</em>) и уровень границ (<em>breaks</em>).
+Границы классифицируются по силе от 0 до 4, где 3 — граница
+промежуточной интонационной фразы (<em>intermediate phrase, ip</em>), 4
+— граница полной интонационной фразы (<em>intonational phrase, IP</em>).
+Тоны делятся на тональные акценты (*), фразовые акценты (-) и граничные
+тоны (%). Тональные акценты ассоциируются с ударными слогами, фразовые
+акценты — с границей <em>ip</em>, а граничные тоны — с границей
+<em>IP</em>.</p>
+<p>В приведённом файле TextGrid (h1r1.TextGrid) дана разметка по системе
+ToBI (точечные уровни). Приведите её в соответствие стандартам. Для
+этого:</p>
+<ol type="1">
+<li>Слейте в одну точку фразовый акцент и следующий непосредственно за
+ним граничный тон.</li>
+<li>Измените положение фразовых акцентов и граничных тонов так, чтобы
+они приходились точно на ближайшие границы индексов 3 и 4
+соответственно.</li>
+</ol>
 <h3
 id="дополнительный-материал-конвертация-из-триграфов-praat-в-символы-unicode">Дополнительный
 материал: конвертация из триграфов Praat в символы Unicode</h3>
