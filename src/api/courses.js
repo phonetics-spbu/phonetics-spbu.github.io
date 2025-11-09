@@ -164,6 +164,7 @@ const coursesData = [
             { id: 6, title: "Работа с последовательностями", filename: "python_genling_bac_5.html" },
             { id: 7, title: "Коллоквиум", filename: "python_genling_bac_midterm.html" },
             { id: 8, title: "Строковые методы", filename: "python_genling_bac_6.html" },
+            { id: 9, title: "Множества и словари", filename: "python_genling_bac_7.html" },
         ]
     },
     {
