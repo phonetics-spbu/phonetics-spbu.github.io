@@ -108,6 +108,7 @@ const coursesData = [
             { id: 8, title: "Темпоральные характеристики", filename: "signal_proc_mag_8.html" },
             { id: 9, title: "PSOLA", filename: "signal_proc_mag_9.html" },
             { id: 10, title: "Автоматическая сегментация", filename: "signal_proc_mag_10.html" },
+            { id: 11, title: "Производные F0", filename: "signal_proc_mag_11.html" },
         ]
     },
     {
@@ -181,6 +182,7 @@ const coursesData = [
             { id: 3, title: "Файловые системы и работа с многоуровневой разметкой", filename: "ling_programming_3.html" },
             { id: 4, title: "Работа с метками периодов основного тона", filename: "ling_programming_4.html" },
             { id: 5, title: "Работа с файлами аннотации TextGrid", filename: "ling_programming_5.html" },
+            { id: 6, title: "Библиотека Parselmouth. Часть 1", filename: "ling_programming_6.html" },
         ]
     },
     {
@@ -197,6 +199,7 @@ const coursesData = [
             { id: 3, title: "Файловые системы и работа с многоуровневой разметкой", filename: "multi_seg.html" },
             { id: 4, title: "Работа с метками периодов основного тона", filename: "pitchmarks.html" },
             { id: 5, title: "Работа с файлами аннотации TextGrid", filename: "textgrid.html" },
+            { id: 6, title: "Библиотека Parselmouth. Часть 1", filename: "parselmouth_1.html" },
         ]
     },
     
