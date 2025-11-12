@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Библиотека Parselmouth. Часть 1</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+    <link href="styles/syntax_highlight.css" rel="stylesheet">
+    <base target="_blank">
+</head>
+
+<body>
+<div class="chapter-content">
+
+<p>Библиотека <code>parselmouth</code> позволяет работать с функционалом
+Praat в Python. В отличие от других аналогичных библиотек, например,
+<code>praatio</code>, она представляет собой интерфейс, через который
+можно обращаться напрямую к коду Praat, а не обёртку над существующим
+исполняемым файлом Praat или переписанный на Python код Praat. Это
+позволяет легко получать доступ ко всему функционалу Praat и
+гарантирует, что результат будет идентичным работе самого Praat.</p>
+<p>К недостаткам <code>parselmouth</code> относится тот факт, что
+обновления Praat далеко не сразу появляются в <code>parselmouth</code>.
+По состоянию на 12.11.2025, <code>parselmouth</code> пользуется версией
+Praat 6.1.38, тогда как текущая версия Praat — 6.4.47. В частности,
+<code>parselmouth</code> не поддерживает введённые в Praat 6.4.0 новые
+методы анализа частоты основного тона <em>filtered autocorrelation</em>
+и <em>filtered cross-correlation</em>.</p>
+<p>В связи с этим рекомендуется следить за обновлениями
+<code>parselmouth</code> в его репозитории GitHub: <a
+href="https://github.com/YannickJadoul/Parselmouth">https://github.com/YannickJadoul/Parselmouth</a>.</p>
+<p>Чтобы установить <code>parselmouth</code>, можно воспользоваться
+пакетным менеджером <code>pip</code> (напомним, что в Google Colab нужно
+перед такой строчкой поставить восклицательный знак <code>!</code>).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install praat-parselmouth</span></code></pre></div>
+<p>В <code>parselmouth</code> реализованы классы и методы для большого
+количества типов объектов и функций, поддерживаемых Praat. Все они
+перечислены в документации: <a
+href="https://parselmouth.readthedocs.io/en/stable/api_reference.html">https://parselmouth.readthedocs.io/en/stable/api_reference.html</a>.</p>
+<h3 id="чтение-звуковых-файлов">Чтение звуковых файлов</h3>
+<p>Чтобы прочитать аудиофайл, инициализируем новый экземпляр класса
+<code>parselmouth.Sound</code>, а в качестве аргумента передадим путь к
+файлу.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> parselmouth</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sound <span class="op">=</span> parselmouth.Sound(<span class="st">&quot;cta0001_stereo.wav&quot;</span>)</span></code></pre></div>
+<p>Класс <code>Sound</code> обладает большим количеством методов для
+реализации различных команд Praat: вычисление интенсивности, контура
+основного тона, построение спектрограмм и многое другое.</p>
+<p>Например, получим объект, содержащий данные об интенсивности:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>intensity <span class="op">=</span> sound.to_intensity()</span></code></pre></div>
+<h3 id="работа-с-временными-последовательностями-в-parselmouth">Работа с
+временными последовательностями в <code>parselmouth</code></h3>
+<p>У объектов, которые представляют собой данные о некоторой величине,
+изменяющейся со временем, есть общие методы. Например, если мы хотим
+узнать значение величины в определённый момент времени, можем
+воспользоваться методом <code>get_value()</code>. Он принимает на вход
+одно вещественное число — время, выраженное в секундах.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sound.get_value(<span class="dv">1</span>))</span></code></pre></div>
+<pre><code>-0.076171875</code></pre>
+<p>Обратите внимание, что для аудиосигнала метод вернул вещественное
+число. Амплитуды в Praat проходят нормализацию путём деления на
+максимально возможное значение (см. главу «<a
+href="#/course/python_textbook/chapter/1">Чтение и запись звуковых
+данных</a>»).</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(intensity.get_value(<span class="dv">1</span>))</span></code></pre></div>
+<pre><code>65.74934066321481</code></pre>
+<p>Весь массив значений хранится в атрибуте <code>values</code>, который
+является двумерным массивом <code>numpy</code>. Количество столбцов
+будет соответствовать длине сигнала (количеству отсчётов или окон
+измерения), а количество строк будет зависеть от характера содержащихся
+в объекте данных. Например, моноканальный аудиосигнал или контур
+интенсивности будут содержать одну строчку; стереосигнал будет содержать
+две строчки — по одной на каждый канал; а комплексный спектр будет
+содержать также две строчки — в первой будет храниться вещественная
+часть, во второй — мнимая.</p>
+<p>Чтобы перевести двумерный массив со вторым измерением, равным 1, в
+одномерный, можно воспользоваться методами <code>reshape()</code> или
+<code>flatten()</code>.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>intens_values <span class="op">=</span> intensity.values.flatten()</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>intens_values <span class="op">=</span> intensity.values.reshape(<span class="op">-</span><span class="dv">1</span>)</span></code></pre></div>
+<p>Используем эти данные, чтобы построить осциллограмму из объекта
+<code>Sound</code>:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.plot(sound.values.flatten())</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Samples&quot;</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Normalized amplitude&quot;</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="courses/python_textbook/images/parselmouth_1_18_0.png" alt="png" /></p>
+<p>Сейчас по оси <em>x</em> у нас отложен номер отсчёта. Но из объектов
+<code>Sound</code> и <code>Intensity</code> (и других, предназначенных
+для хранения временных рядов), есть специальные атрибуты, указывающие на
+время каждой точки: <code>dt</code> — временной шаг (т. е. шаг между
+двумя соседними точками; для сигналов он соответствует периоду
+дискретизации); <code>xmin</code> — время начала; <code>xmax</code> —
+время конца; <code>centre_time</code> — время середины.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    intensity.dt,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    intensity.xmin,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    intensity.xmax,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    intensity.centre_time</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>0.008 0.0 1.7476190476190476 0.8738095238095238</code></pre>
+<h3
+id="построение-объекта-класса-sound-из-последовательности-отсчётов">Построение
+объекта класса <code>Sound</code> из последовательности отсчётов</h3>
+<p>Объект Sound можно создать, не только прочитав из файла, но и другими
+методами. Передадим <code>numpy</code>-массив, полученный с помощью
+<code>scipy.io.wavfile</code>, в новый объект <code>Sound</code> через
+аргумент <code>values</code>. Также необходимо передать и частоту
+дискретизации через аргумент <code>sampling_frequency</code>.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.io.wavfile <span class="im">import</span> read, write</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fs, data <span class="op">=</span> read(<span class="st">&quot;cta0001.wav&quot;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>new_sound <span class="op">=</span> parselmouth.Sound(values<span class="op">=</span>data, sampling_frequency<span class="op">=</span>fs)</span></code></pre></div>
+<p>Обратите внимание, что при этом нормализации амплитуды не
+происходит!</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>plt.plot(new_sound.values.flatten())</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Samples&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Raw amplitude&quot;</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="courses/python_textbook/images/parselmouth_1_26_0.png" alt="png" /></p>
+<p>Нормализацию можно провести и вручную: определим, на сколько нужно
+поделить, опираясь на тип данных полученного массива.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>norm_factor <span class="op">=</span> np.iinfo(data.dtype).<span class="bu">max</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>plt.plot(new_sound.values.reshape(<span class="op">-</span><span class="dv">1</span>) <span class="op">/</span> norm_factor)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Samples&quot;</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Normalized amplitude&quot;</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="courses/python_textbook/images/parselmouth_1_27_0.png" alt="png" /></p>
+<h3 id="работа-с-частотой-основного-тона">Работа с частотой основного
+тона</h3>
+<p>Получим объект <code>Pitch</code>, который хранит данные о частоте
+основного тона:</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pitch <span class="op">=</span> sound.to_pitch(pitch_floor<span class="op">=</span><span class="dv">75</span>, pitch_ceiling<span class="op">=</span><span class="dv">400</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pitch.get_value_at_time(<span class="fl">0.1</span>)  <span class="co"># это звонкий участок</span></span></code></pre></div>
+<pre><code>147.01101260109877</code></pre>
+<p>В глухих участках частота основного тона равна <code>nan</code>.</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pitch.get_value_at_time(<span class="fl">1.5</span>)  <span class="co"># это глухой участок</span></span></code></pre></div>
+<pre><code>nan</code></pre>
+<h3 id="работа-со-спектрограммами">Работа со спектрограммами</h3>
+<p>Получим объект <code>Spectrogram</code>, который хранит данные
+динамической спектрограммы:</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>spectrogram <span class="op">=</span> sound.to_spectrogram()</span></code></pre></div>
+<p>Метод <code>get_power_at()</code> принимает на вход два аргумента:
+время в секундах и частоту в герцах.</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>spectrogram.get_power_at(<span class="fl">0.23</span>, <span class="dv">100</span>)</span></code></pre></div>
+<pre><code>0.16936169893034922</code></pre>
+<p>Посмотрим на мгновенную спектрограмму. Получим количество её отсчётов
+с помощью метода <code>get_number_of_bins()</code>. Определим, каким
+частотам соответствует какой отсчёт, вызвав метод
+<code>get_frequency_from_bin_number()</code>, и интенсивность этого
+отсчёта, вызвав метод <code>get_value_in_bin()</code>.</p>
+<p>Построим соответствующие массивы, переведём значения интенсивности в
+децибелы относительно максимального и выведем график на экран.</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="bu">slice</span> <span class="op">=</span> spectrogram.to_spectrum_slice(<span class="fl">0.23</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>num_bins <span class="op">=</span> <span class="bu">slice</span>.get_number_of_bins()</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>freqs <span class="op">=</span> [<span class="bu">slice</span>.get_frequency_from_bin_number(i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, num_bins <span class="op">+</span> <span class="dv">1</span>)]</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>abs_vals <span class="op">=</span> [np.<span class="bu">abs</span>(<span class="bu">slice</span>.get_value_in_bin(i)) <span class="op">**</span> <span class="dv">2</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, num_bins <span class="op">+</span> <span class="dv">1</span>)]</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>abs_vals <span class="op">=</span> np.asarray(abs_vals)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>vals <span class="op">=</span> <span class="dv">10</span> <span class="op">*</span> np.log10(abs_vals <span class="op">/</span> np.<span class="bu">max</span>(abs_vals))</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>plt.plot(freqs, vals)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="courses/python_textbook/images/parselmouth_1_43_0.png" alt="png" /></p>
+<h3 id="работа-с-формантами">Работа с формантами</h3>
+<p>Получим объект <code>Formant</code>, который хранит данные о
+значениях формант:</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>formants <span class="op">=</span> sound.to_formant_burg()</span></code></pre></div>
+<p>У него метод <code>get_value_at_time()</code> принимает два
+аргумента: номер форманты (от 1 до 4) и время. Найдём форманты гласного
+[u0] в слове «Юрий» (заранее определим вручную, что середина гласного
+находится на временной отметке около 230 мс):</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> <span class="fl">0.23</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">5</span>):</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;F</span><span class="sc">{</span>f<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>formants<span class="sc">.</span>get_value_at_time(f, <span class="fl">0.23</span>)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>F1: 306.112558013102
+F2: 1248.789979714556
+F3: 2835.0831701064194
+F4: 3564.4930225805565</code></pre>
+<h3 id="практические-задания">Практические задания</h3>
+<h4 id="задание-1">Задание 1</h4>
+<p>Построить два списка, в одном из которых будут значения времени от 0
+до <code>intensity.xmax</code> с шагом 10 мс, а в другом — значения
+интенсивности в этих точках. Построить график с помощью
+<code>matplotlib</code>.</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>times, intens_values <span class="op">=</span> [], []</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>plt.plot(times, intens_values)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<h4 id="задание-2">Задание 2</h4>
+<p>а) Прочитайте файл <em>cta0001.seg_B1</em>, определите место середины
+каждого звука, найдите значение ЧОТ в этом месте и постройте график, где
+на оси X по порядку будут отложены звуки, а на оси Y — ЧОТ в герцах.</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>sounds <span class="op">=</span> []</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>f0_values <span class="op">=</span> []</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>plt.plot(f0_values)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>plt.xticks(<span class="bu">range</span>(<span class="bu">len</span>(sounds)), labels<span class="op">=</span>sounds)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># отложим названия звуков на оси X</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p>б) Вычислите медианное значение ЧОТ во всём файле. Воспользуйтесь
+функцией <code>np.nanmedian()</code>, которая, в отличие от
+<code>np.median()</code>, перед вычислением медианы отфильтрует все
+значения <code>nan</code>. Постройте соответствующий массив с помощью
+<code>get_number_of_frames()</code> и <code>get_value_in_frame()</code>
+(в связи со сложным устройством объектов Pitch в Praat класс
+<code>Pitch</code> не поддерживает атрибут <code>values</code>).</p>
+<p>Переведите все значения из герцев в октавно-медианную шкалу:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mrow><mi>O</mi><mi>M</mi><mi>e</mi></mrow></msub><mo>=</mo><msub><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mn>2</mn></msub><mfrac><msub><mi>f</mi><mn>0</mn></msub><msub><mi>f</mi><mrow><mi>m</mi><mi>e</mi><mi>d</mi><mi>i</mi><mi>a</mi><mi>n</mi></mrow></msub></mfrac></mrow><annotation encoding="application/x-tex"> f_{OMe} = \log_2{\frac{f_0}{f_{median}}} </annotation></semantics></math></p>
+<p>Постройте график.</p>
+<h4 id="задание-3">Задание 3</h4>
+<p>Модифицировать код из предыдущего задания так, чтобы в трёх точках
+каждого гласного (1/4, 1/2 и 3/4 длины) вычислялись первая и вторая
+форманты. Нарисовать график.</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>x_ticks <span class="op">=</span> []</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>f1_values <span class="op">=</span> []</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>f2_values <span class="op">=</span> []</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>plt.plot(f1_values)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>plt.plot(f2_values)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>plt.xticks(<span class="bu">range</span>(<span class="bu">len</span>(f1_values)), labels<span class="op">=</span>x_ticks)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<h4 id="задание-4">Задание 4</h4>
+<p>Прочитать файлы из архива <em>fpt</em>. Взять уровень <em>ideal</em>
+из каждого TextGrid. Вычислить значения формант в серединке каждого
+гласного. Построить точечный график зависимости второй форманты от
+первой (каждый гласный своим цветом).</p>
+<p>Как оформить такой график:</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>plt.scatter([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>], [<span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">8</span>], label<span class="op">=</span><span class="st">&quot;vowel 1&quot;</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># первый список - F1 разных экземпляров гласного, второй список - их же F2</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>plt.scatter([<span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>], [<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="op">-</span><span class="dv">4</span>, <span class="op">-</span><span class="dv">3</span>], label<span class="op">=</span><span class="st">&quot;vowel 2&quot;</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p>Обратите внимание, что в файлах некоторые символы переданы в виде
+т. н. триграфов (см. главу «<a
+href="#/course/python_textbook/chapter/5">Работа с файлами аннотации
+TextGrid</a>»). Для конвертации воспользуйтесь предложенным
+словарём.</p>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>trigraph2unicode <span class="op">=</span> {</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;</span><span class="ch">\\</span><span class="st">as&quot;</span>: <span class="st">&quot;ɑ&quot;</span>,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;</span><span class="ch">\\</span><span class="st">i-&quot;</span>: <span class="st">&quot;ɨ&quot;</span>,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+
+</div>
+</body>
+</html>
