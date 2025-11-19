@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Библиотека Parselmouth. Часть 2</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+    <link href="styles/syntax_highlight.css" rel="stylesheet">
+    <base target="_blank">
+</head>
+
+<body>
+<div class="chapter-content">
+
+<p>Не для всех объектов Praat в Parselmouth есть специальные классы.
+Также не для всех объектов, для которых классы есть, реализованы все
+необходимые методы. Для таких случаев в Parselmouth есть специальные
+функции, которые позволяют выполнять команды Praat напрямую.</p>
+<h3 id="работа-с-textgrid-в-parselmouth">Работа с TextGrid в
+Parselmouth</h3>
+<p>Для чтения файлов существует функция <code>parselmouth.read()</code>.
+Она соответствует команде Praat "Read object from file". Например,
+прочитаем .TextGrid:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> parselmouth</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>tg <span class="op">=</span> parselmouth.read(<span class="st">&quot;av1fpt1.TextGrid&quot;</span>)</span></code></pre></div>
+<p>Мы получили объект класса <code>TextGrid</code>: <a
+href="https://parselmouth.readthedocs.io/en/stable/api_reference.html#parselmouth.TextGrid">https://parselmouth.readthedocs.io/en/stable/api_reference.html#parselmouth.TextGrid</a>.
+У класса <code>TextGrid</code> есть и альтернативный метод-конструктор
+<code>.from_tgt()</code>, который позволяет конвертацию из формата
+TextGridTools. Для обратного преобразования можно воспользоваться
+методом <code>.to_tgt()</code>:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tgt_grid <span class="op">=</span> tg.to_tgt()</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot; &quot;</span>.join([i.text <span class="cf">for</span> i <span class="kw">in</span> tgt_grid.get_tier_by_name(<span class="st">&quot;ideal&quot;</span>)]))</span></code></pre></div>
+<pre><code>b \i- l t&#39; i x&#39; ij s&#39; e r \i-j v&#39; e t\li\sh&#39; i r pause</code></pre>
+<p>Для того, чтобы записать TextGrid в файл, есть методы
+<code>.save_as_text_file()</code> (запишет в «длинном» формате),
+<code>.save_as_short_text_file()</code> (запишет в «коротком» формате) и
+<code>.save_as_binary_file()</code> (запишет в бинарном виде). Каждый
+метод принимает на вход один аргумент — путь к файлу.</p>
+<p>Поля <code>.xmin</code> и <code>.xmax</code> содержат информацию о
+времени начала и конца соответственно, поле <code>.xrange()</code> —
+кортеж из этих двух значений.</p>
+<p>Для выполнения команд Praat, для которых в Parselmouth не было
+реализовано специальных методов, существует функция
+<code>parselmouth.praat.call()</code>. Она в качестве первого аргумента
+принимает объект, над которым совершается операция, а вторым — название
+соответствующей команды Praat.</p>
+<p>Например, для перевода текста разметки из триграфов Praat в символы
+Unicode в Praat команда "Convert to Unicode" (обратите внимание, что
+команда должна быть передана в точности так, как она отображается в
+Praat; регистр важен!):</p>
+<img src="courses/python_textbook/images/tg_to_unicode.png" width="500">
+
+<p>Вызовем команду и переведём результат в формат TextGridTools:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>parselmouth.praat.call(tg, <span class="st">&quot;Convert to Unicode&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>tgt_grid_uni <span class="op">=</span> tg.to_tgt()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot; &quot;</span>.join([i.text <span class="cf">for</span> i <span class="kw">in</span> tgt_grid_uni.get_tier_by_name(<span class="st">&quot;ideal&quot;</span>)]))</span></code></pre></div>
+<pre><code>b ɨ l t&#39; i x&#39; ij s&#39; e r ɨj v&#39; e t͡ʃ&#39; i r pause</code></pre>
+<p>Сохраним результат:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tg.save(<span class="st">&quot;av1fpt1_unicode.TextGrid&quot;</span>)</span></code></pre></div>
+<p>Если для выполнения операции необходимо задать какие-то параметры, их
+нужно передать как дальнейшие аргументы. Например, для извлечения части
+TextGrid предусмотрена команда "Extract part". Она требует три
+аргумента: время начала, время конца (в секундах) и чекбокс, который
+определяет, нужно ли сохранять изначальные значения времени. Время
+начала и конца передаются как числа, а значение чекбокса — как
+логическое значение (<code>True</code> или <code>False</code>).</p>
+<p>Обратите внимание, что предыдущая команда изменяла объект, над
+которым проводилась операция. Эта команда генерирует уже новый объект;
+соответственно, функция <code>call()</code> возвращает его, и можно
+присвоить его в какую-то переменную.</p>
+<img src="courses/python_textbook/images/extract_part.png" width="500">
+
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>start_time, end_time <span class="op">=</span> <span class="fl">0.0</span>, <span class="fl">1.0</span>  <span class="co"># s</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pres_times <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>new_tg <span class="op">=</span> parselmouth.praat.call(tg, <span class="st">&quot;Extract part&quot;</span>, start_time, end_time, pres_times)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>tgt_grid_part <span class="op">=</span> new_tg.to_tgt()</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot; &quot;</span>.join([i.text <span class="cf">for</span> i <span class="kw">in</span> tgt_grid_part.get_tier_by_name(<span class="st">&quot;ideal&quot;</span>)]))</span></code></pre></div>
+<pre><code>b ɨ l t&#39; i x&#39; ij s&#39; e r ɨj v&#39; e</code></pre>
+<p>Для того, чтобы понять, как формулируются команды и каких аргументов
+они требуют, можно ознакомиться с пользовательским руководством Praat,
+доступным на сайте Praat (<a
+href="https://praat.org/">https://praat.org/</a>) или в меню Help
+программы Praat. Также можно самостоятельно найти команду в меню Praat и
+изучить её диалоговое окно.</p>
+<p>В документации к функции <code>call()</code> можно прочитать, в каком
+формате необходимо передавать параметры команд: <a
+href="https://parselmouth.readthedocs.io/en/stable/api_reference.html#parselmouth.praat.call">https://parselmouth.readthedocs.io/en/stable/api_reference.html#parselmouth.praat.call</a></p>
+<h3 id="чтение-файлов-без-заголовка-с-помощью-parselmouth">Чтение файлов
+без заголовка с помощью Parselmouth</h3>
+<p>Функция <code>call()</code> позволяет работать и с командами, которые
+не работают с существующими объектами, а создают новые. Например, для
+чтения файлов без заголовка существует команда "Read Sound from raw
+16-bit Little Endian file" (существует и парная ей команда для чтения
+файлов с порядком байт от старшего к младшему, но она редко будет
+использоваться). При этом функция <code>call()</code> возвращает объект
+класса <code>Sound</code>.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sound_sbl <span class="op">=</span> parselmouth.praat.call(<span class="st">&quot;Read Sound from raw 16-bit Little Endian file&quot;</span>, <span class="st">&quot;cta0001.sbl&quot;</span>)</span></code></pre></div>
+<p>Частота дискретизации по умолчанию задаётся 16 кГц, поэтому
+необходимо восстановить истинное значение с помощью метода
+<code>override_sampling_frequency()</code>.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sound_sbl.override_sampling_frequency(<span class="dv">22050</span>)</span></code></pre></div>
+<h3 id="манипуляция-звуком-в-parselmouth">Манипуляция звуком в
+Parselmouth</h3>
+<p>Ещё одна возможность Praat, для которой не реализована прямая
+поддержка в <code>parselmouth</code>, — это манипуляция звуком (то есть
+изменение контура частоты основного тона и темпа с помощью алгоритма
+PSOLA или линейного предсказания). Для этого в Praat существует команда
+"To Manipulation". Внутри Praat она возвращает объект Manipulation,
+однако в Parselmouth получившийся объект будет принадлежать к общему
+типу <code>parselmouth.Data</code>.</p>
+<img src="courses/python_textbook/images/to_manipulation.png" width="500">
+
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>step, min_f0, max_f0 <span class="op">=</span> <span class="fl">0.01</span>, <span class="dv">75</span>, <span class="dv">350</span>  <span class="co"># s, Hz, Hz</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>manip <span class="op">=</span> parselmouth.praat.call(sound_sbl, <span class="st">&quot;To Manipulation&quot;</span>, step, min_f0, max_f0)</span></code></pre></div>
+<p>Для хранения данных о конкретных значениях частоты основного тона
+Praat использует объект PitchTier. Каждый PitchTier — это
+последовательность точек, которые описываются двумя параметрами: время
+(в секундах) и значение ЧОТ (в герцах).</p>
+<img src="courses/python_textbook/images/pitch_tier.png" width="800">
+
+<p>Его можно получить из объекта Manipulation с помощью команды "Extract
+pitch tier" (или из объекта Pitch командой "Down to PitchTier"). Praat
+поддерживает ряд команд для изменения данных PitchTier. Например,
+умножим все значения ЧОТ на некоторый коэффициент с помощью команды
+"Multiply frequencies":</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pitch_tier <span class="op">=</span> parselmouth.praat.call(manip, <span class="st">&quot;Extract pitch tier&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>factor <span class="op">=</span> <span class="fl">1.2</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>parselmouth.praat.call(pitch_tier, <span class="st">&quot;Multiply frequencies&quot;</span>, sound_sbl.xmin, sound_sbl.xmax, factor)</span></code></pre></div>
+<p>Теперь можно воспользоваться командой "Replace pitch tier", чтобы
+наложить изменённый PitchTier на объект Manipulation. Обратите внимание,
+что, поскольку эта команда оперирует сразу двумя объектами, теперь
+первым аргументом необходимо передать <em>список</em>, содержащий эти
+объекты. Это эквивалентно выделению нескольких объектов в Praat для
+выполнения общей команды:</p>
+<img src="courses/python_textbook/images/replace_pitch_tier.png" width="500">
+
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>parselmouth.praat.call([manip, pitch_tier], <span class="st">&quot;Replace pitch tier&quot;</span>)</span></code></pre></div>
+<p>Проведём ресинтез с помощью алгоритма PSOLA и запишем результат в
+файл:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>snd_new <span class="op">=</span> parselmouth.praat.call(manip, <span class="st">&quot;Get resynthesis (overlap-add)&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>snd_new.save(<span class="st">&quot;cta0001_mod.wav&quot;</span>, <span class="st">&quot;WAV&quot;</span>)</span></code></pre></div>
+<p>Если вы работаете в тетрадке Jupyter Notebook (например, в Google
+Colab), можно воспользоваться библиотекой <code>IPython.display</code>,
+чтобы послушать результат. В класс <code>Audio</code> необходимо
+передать массив значений и частоту дискретизации параметром
+<code>rate</code>.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Audio</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>Audio(snd_new.values, rate<span class="op">=</span>snd_new.sampling_frequency)</span></code></pre></div>
+<p>С помощью функции <code>call()</code> можно также выполнять команды,
+которые не меняют объекты, а возвращают какую-то информацию о них.
+Например, можно узнать, сколько точек в объекте PitchTier:</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>num_points <span class="op">=</span> parselmouth.praat.call(pitch_tier, <span class="st">&quot;Get number of points&quot;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(num_points)</span></code></pre></div>
+<pre><code>87</code></pre>
+<p>Посмотрим, какая ЧОТ задана в первой точке (обратите внимание, что
+нумерация начинается с единицы):</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(parselmouth.praat.call(pitch_tier, <span class="st">&quot;Get value at index&quot;</span>, <span class="dv">1</span>))</span></code></pre></div>
+<pre><code>189.51592534298274</code></pre>
+<p>И посмотрим, на какой временной отметке (в секундах) располагается
+эта точка:</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(parselmouth.praat.call(pitch_tier, <span class="st">&quot;Get time from index&quot;</span>, <span class="dv">1</span>))</span></code></pre></div>
+<pre><code>0.023809523809523832</code></pre>
+<p>Если необходимо задать мелодический контур «с нуля», можно создать
+пустой PitchTier с нужными параметрами, в который можно будет затем
+добавлять произвольные точки:</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>start_time <span class="op">=</span> sound_sbl.xmin</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>end_time <span class="op">=</span> sound_sbl.xmax</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>new_pitch_tier <span class="op">=</span> parselmouth.praat.call(<span class="st">&quot;Create PitchTier&quot;</span>, <span class="st">&quot;new_pitch_tier&quot;</span>, start_time, end_time)</span></code></pre></div>
+<p>Добавим в новый PitchTier две точки: одну с частотой 150 Гц на 1/4
+длины файла, а другую — с частотой 300 Гц на 3/4 длины файла. Для этого
+воспользуемся командой "Add point".</p>
+<img src="courses/python_textbook/images/add_point.png" width="500">
+
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>parselmouth.praat.call(new_pitch_tier, <span class="st">&quot;Add point&quot;</span>, end_time <span class="op">*</span> <span class="fl">0.25</span>, <span class="dv">150</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>parselmouth.praat.call(new_pitch_tier, <span class="st">&quot;Add point&quot;</span>, end_time <span class="op">*</span> <span class="fl">0.75</span>, <span class="dv">300</span>)</span></code></pre></div>
+<p>Наложим его на объект Manipulation:</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>parselmouth.praat.call([manip, new_pitch_tier], <span class="st">&quot;Replace pitch tier&quot;</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>simple_sound <span class="op">=</span> parselmouth.praat.call(manip, <span class="st">&quot;Get resynthesis (overlap-add)&quot;</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>Audio(simple_sound.values, rate<span class="op">=</span>simple_sound.sampling_frequency)</span></code></pre></div>
+<h3 id="практические-задания">Практические задания</h3>
+<h4 id="задание-1">Задание 1</h4>
+<ol type="1">
+<li>Используя команду "Insert interval tier", добавьте в конец
+<em>av1fpt1.TextGrid</em> (на позицию 5) новый уровень. Придумайте для
+него название.</li>
+</ol>
+<img src="courses/python_textbook/images/add_interval_tier.png" width="500">
+
+<ol start="2" type="1">
+<li>Используя команду "Insert boundary", разделите его на пять равных
+интервалов. Воспользуйтесь атрибутом <code>xmax</code> класса
+<code>TextGrid</code>, чтобы найти длину файла.</li>
+</ol>
+<img src="courses/python_textbook/images/insert_boundary.png" width="500">
+
+<ol start="3" type="1">
+<li>Используя команду "Set interval text", назовите каждый интервал
+буквой латинского алфавита от A до E.</li>
+</ol>
+<img src="courses/python_textbook/images/set_interval_text.png" width="500">
+
+<h4 id="задание-2">Задание 2</h4>
+<p>Напишите программу, которая получает информацию о всех точках в
+PitchTier'е и строит график зависимости ЧОТ от времени. Для этого
+сделайте два списка, каждый длиной <code>num_points</code>, в одном из
+которых будут значения времени, а во втором — значения ЧОТ.</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>python</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>time_values <span class="op">=</span> []</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>f0_values <span class="op">=</span> []</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># нарисуем график отдельными точками</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>plt.plot(time_values, f0_values, linestyle<span class="op">=</span><span class="st">&quot;&quot;</span>, marker<span class="op">=</span><span class="st">&quot;o&quot;</span>)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;Time, s&quot;</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;F0, Hz&quot;</span>)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<h4 id="задание-3">Задание 3</h4>
+<p>Похулиганим! Создайте копию изначального объекта PitchTier, где
+значение каждой точки будет случайным (от минимального до максимального
+в изначальном PitchTier'е) и синтезируйте звук. Воспользуйтесь функцией
+<code>random.uniform()</code>.</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>random.uniform(<span class="dv">1</span>, <span class="dv">10</span>)</span></code></pre></div>
+<pre><code>8.3208097508537</code></pre>
+<h4 id="задание-4">Задание 4</h4>
+<p>Пересадить мелодический контур из файла <em>cta0001.wav</em> (донор)
+в файл <em>kta0001.wav</em> (акцептор) по следующему алгоритму:</p>
+<ol type="1">
+<li>Сгенерировать PitchTier для файла <em>cta0001.wav</em></li>
+<li>Перебрать все точки в нём</li>
+<li>Для каждой точки определить, внутри какого звука она находится (по
+файлу <em>cta0001.seg_B1</em>), и на какой доле его длины она находится
+(e.g. 0.5, если она находится в самой середине, или 0.25, если она
+находится в конце первой четверти)</li>
+<li>На основании этой информации и файла <em>kta0001.seg_B1</em>
+определить, где эта точка лежала бы в новом файле</li>
+<li>Создать новый (пустой) PitchTier под звук <em>kta0001.wav</em></li>
+<li>По очереди добавить в него точки из старого, исправляя их временные
+позиции так, чтобы в новом файле они лежали в тех же местах тех же
+звуков, что и в старом</li>
+<li>Ресинтезировать <em>kta0001</em> с новым PitchTier</li>
+<li>При желании повторить всё то же самое в обратную сторону</li>
+</ol>
+<p>Примечание: внимательно отнеситесь к выбору <code>min_f0</code> и
+<code>max_f0</code> при создании объекта манипуляции для каждого из
+файлов! Проверьте (можно вручную через Praat), не возникает ли грубых
+ошибок.</p>
+<img src="courses/python_textbook/images/transfer.png" width="800">
+
+</div>
+</body>
+</html>
