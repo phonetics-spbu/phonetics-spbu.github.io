@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Классификация мелодических контуров</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+<div class="chapter-content">
+<p class="note">
+        <a target="_blank"
+                       href="https://phonetics.spbu.ru/images/AR3_2009.pdf#page=42">Статья</a>
+    </p>
+    <p>
+        <b>Задание:</b>
+    </p>
+    <p>
+        Построить классификатор для китайских тонов на материале датасета Tone Perfect. Используйте любые из перечисленных признаков и/или их комбинации.
+        <ol>
+            <li>вектор из N значений F0, выраженных в Гц, пт, эрбах, ...</li>
+            <li>вектор из N значений первой, второй, третьей производной F0</li>
+            <li>любые признаки, описанные в статье "Автоматическая обработка просодического оформления высказывания"</li>
+        </ol>
+        Конечная задача &mdash; сравнить эффективность признаков и построить сводную таблицу. Архитектура классификатора определяется совместно.
+    </p>
+</div>
+</body>
+</html>

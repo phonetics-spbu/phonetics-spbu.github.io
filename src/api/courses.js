@@ -110,6 +110,7 @@ const coursesData = [
             { id: 9, title: "PSOLA", filename: "signal_proc_mag_9.html" },
             { id: 10, title: "Автоматическая сегментация", filename: "signal_proc_mag_10.html" },
             { id: 11, title: "Производные F0", filename: "signal_proc_mag_11.html" },
+            { id: 12, title: "Классификация мелодических контуров", filename: "signal_proc_mag_12.html" },
         ]
     },
     {
