@@ -49,6 +49,7 @@ const coursesData = [
             { id: 4, title: "Мел-кепстральные коэффициенты (MFCC)", filename: "dsp_4.html" },
             { id: 5, title: "Коэффициенты линейного предсказания (LPC)", filename: "dsp_5.html" },
             { id: 6, title: "Введение в машинное обучение: линейная регрессия", filename: "dsp_6.html" },
+            { id: 7, title: "Введение в машинное обучение: задача классификации", filename: "dsp_7.html" },
         ]
     },
     {
