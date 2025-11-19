@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Введение в машинное обучение: задача классификации</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+<p>Обучить классификатор — значит добиться того, чтобы модель как можно реже ошибалась при классификации
+    объектов. В качестве меры того, насколько хорошо модель решает поставленную задачу, можно взять долю объектов
+    выборки, которую модель классифицировала неправильно. Чем меньше эта доля, тем лучше работает модель:
+    $$ Q = \frac{1}{n}\sum_{i=1}^{n} I[y_i \neq sign(\langle\omega, x_i \rangle)]$$
+    I - функция индикатор
+    $$ I = \left\{ \begin{array}{rcl}
+    1, & x = True\\
+    0, & x = False
+    \end{array}\right. $$
+    Тогда,
+    $$ Q = \frac{1}{n}\sum_{i=1}^{n} I[y_i \neq sign(\langle\omega, x_i \rangle)] = \frac{1}{n}\sum_{i=1}^{n} I[y_i
+    \langle\omega, x_i \rangle < 0]$$
+    Величина y⟨&omega;, x⟩ называется отступом и обозначается M(y, x, &omega;). Отступ меньше нуля, если объект
+    классифицирован неверно, и больше нуля в противном случае. Модуль отступа |M(y, x, &omega;)| = |⟨&omega;, x⟩|
+    показывает «уверенность» модели в предсказании, которое она делает для объекта.
+
+
+</p>
+
+
+<p class="note">
+    <b>Колаб: логистическая регрессия</b>
+    <br/>
+    <a
+            target="_blank"
+            href="https://colab.research.google.com/github/phonetics-spbu/phonetics-spbu.github.io/blob/main/public/courses/dsp/ipynb/ML_log_regression.ipynb"
+    >
+        Открыть в Colab
+    </a>
+    <br/>
+
+    <a
+            target="_blank"
+            href="https://github.com/phonetics-spbu/phonetics-spbu.github.io/blob/main/public/courses/dsp/ipynb/ML_log_regression.ipynb"
+    >
+        Открыть на Github
+    </a>
+    <br/>
+    <a
+            href="courses/dsp/ipynb/ML_log_regression.ipynb"
+            download
+    >
+        Скачать на устройство
+    </a>
+</p>
+
+
+</body>
+</html>
