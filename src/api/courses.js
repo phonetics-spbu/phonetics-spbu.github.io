@@ -186,6 +186,7 @@ const coursesData = [
             { id: 4, title: "Работа с метками периодов основного тона", filename: "ling_programming_4.html" },
             { id: 5, title: "Работа с файлами аннотации TextGrid", filename: "ling_programming_5.html" },
             { id: 6, title: "Библиотека Parselmouth. Часть 1", filename: "ling_programming_6.html" },
+            { id: 7, title: "Библиотека Parselmouth. Часть 2", filename: "ling_programming_7.html" },
         ]
     },
     {
@@ -203,6 +204,7 @@ const coursesData = [
             { id: 4, title: "Работа с метками периодов основного тона", filename: "pitchmarks.html" },
             { id: 5, title: "Работа с файлами аннотации TextGrid", filename: "textgrid.html" },
             { id: 6, title: "Библиотека Parselmouth. Часть 1", filename: "parselmouth_1.html" },
+            { id: 7, title: "Библиотека Parselmouth. Часть 2", filename: "parselmouth_2.html" },
         ]
     },
     
