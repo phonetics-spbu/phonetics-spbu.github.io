@@ -170,6 +170,7 @@ const coursesData = [
             { id: 8, title: "Строковые методы", filename: "python_genling_bac_6.html" },
             { id: 9, title: "Множества и словари", filename: "python_genling_bac_7.html" },
             { id: 10, title: "Кортежи. Счётчики. JSON", filename: "python_genling_bac_8.html" },
+            { id: 11, title: "Работа с табличными данными", filename: "python_genling_bac_9.html" },
 
         ]
     },
