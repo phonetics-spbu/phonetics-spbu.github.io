@@ -112,6 +112,7 @@ const coursesData = [
             { id: 10, title: "Автоматическая сегментация", filename: "signal_proc_mag_10.html" },
             { id: 11, title: "Производные F0", filename: "signal_proc_mag_11.html" },
             { id: 12, title: "Классификация мелодических контуров", filename: "signal_proc_mag_12.html" },
+            { id: 13, title: "Обработка микропросодических явлений", filename: "signal_proc_mag_13.html" },
         ]
     },
     {
@@ -190,6 +191,7 @@ const coursesData = [
             { id: 5, title: "Работа с файлами аннотации TextGrid", filename: "ling_programming_5.html" },
             { id: 6, title: "Библиотека Parselmouth. Часть 1", filename: "ling_programming_6.html" },
             { id: 7, title: "Библиотека Parselmouth. Часть 2", filename: "ling_programming_7.html" },
+            { id: 8, title: "Автокорреляция", filename: "ling_programming_8.html" },
         ]
     },
     {
