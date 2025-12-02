@@ -284,6 +284,29 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a h
 ошибок.</p>
 <img src="courses/python_textbook/images/transfer.png" width="800">
 
+
+<h4 id="задание-5">Задание 5</h4>
+<p>Используя команды "Extract intervals where", "Create Sound from
+formula" и "Concatenate", разбейте файл <em>av1fpt1.wav</em> на
+отдельные звуки, между которыми вставьте паузы длиной 1.5 от длины
+предшествующего звука. Паузы в корпусе INTAS, откуда взят файл,
+обозначены меткой "pause".</p>
+<img src="courses/python_textbook/images/extract_intervals_where.png" width="800">
+
+<img src="courses/python_textbook/images/create_sound_from_formula.png" width="800">
+
+<p>Команда "Concatenate" принимает на вход несколько объектов Sound с
+одинаковой частотой дискретизации и количеством каналов.</p>
+<h4 id="задание-6">Задание 6</h4>
+<p>Используя команду "Set part to zero" или метод класса
+<code>parselmouth.Sound</code> <a
+href="https://parselmouth.readthedocs.io/en/stable/api_reference.html#parselmouth.Sound.set_to_zero"><code>.set_to_zero()</code></a>,
+превратите все согласные звуки файла <em>av1fpt1.wav</em> в паузы.
+Гласные на уровне "ideal" обозначены символами <em>i, e, ɑ, o, u, ɨ</em>
+(не забудьте о триграфах). Считайте гласным любой интервал, в котором
+есть хотя бы один из перечисленных символов.</p>
+<img src="courses/python_textbook/images/set_part_to_zero.png" width="800">
+
 </div>
 </body>
 </html>
