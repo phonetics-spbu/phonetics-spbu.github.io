@@ -114,6 +114,7 @@ const coursesData = [
             { id: 11, title: "Производные F0", filename: "signal_proc_mag_11.html" },
             { id: 12, title: "Классификация мелодических контуров", filename: "signal_proc_mag_12.html" },
             { id: 13, title: "Обработка микропросодических явлений", filename: "signal_proc_mag_13.html" },
+            { id: 14, title: "Практикум по прикладным задачам", filename: "signal_proc_mag_14.html" },
         ]
     },
     {
