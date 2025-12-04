@@ -91,6 +91,7 @@ const coursesData = [
             { id: 5, title: "Pymorphy3", filename: "python_2_mag_5.html" },
             { id: 6, title: "Статистика в Python", filename: "python_2_mag_6.html" },
             { id: 7, title: "JSON, csv", filename: "python_2_mag_7.html" },
+            { id: 8, title: "Задачи к зачёту", filename: "python_2_mag_8.html" },
         ]
     },
     {
