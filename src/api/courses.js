@@ -198,6 +198,7 @@ const coursesData = [
             { id: 6, title: "Библиотека Parselmouth. Часть 1", filename: "ling_programming_6.html" },
             { id: 7, title: "Библиотека Parselmouth. Часть 2", filename: "ling_programming_7.html" },
             { id: 8, title: "Автокорреляция", filename: "ling_programming_8.html" },
+            { id: 9, title: "Практика: определение интонационных характеристик высказывания", filename: "ling_programming_9.html" },
         ]
     },
     {
