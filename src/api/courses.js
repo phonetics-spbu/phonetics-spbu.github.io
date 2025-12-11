@@ -31,7 +31,7 @@ const coursesData = [
             { id: 19, title: "Параметрический синтез", filename: "lm_18.html" },
             { id: 97, title: "Домашние задания", filename: "homework.html" },
             { id: 98, title: "Список литературы", filename: "lit.html" },
-            { id: 99, title: "Вопросы к экзамену", filename: "exam_questions.html" },
+            { id: 99, title: "Аттестация по курсу", filename: "exam_questions.html" },
         ]
     },
     {
