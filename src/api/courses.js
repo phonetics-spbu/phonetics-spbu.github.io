@@ -178,6 +178,7 @@ const coursesData = [
             { id: 11, title: "Работа с табличными данными", filename: "python_genling_bac_9.html" },
             { id: 12, title: "Функции", filename: "python_genling_bac_10.html" },
             { id: 13, title: "Функции II", filename: "python_genling_bac_11.html" },
+            { id: 14, title: "Отладка и тестирование", filename: "python_genling_bac_12.html" },
 
         ]
     },
