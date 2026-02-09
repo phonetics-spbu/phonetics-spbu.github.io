@@ -204,6 +204,31 @@ const coursesData = [
             { id: 9, title: "Практика: определение интонационных характеристик высказывания", filename: "ling_programming_9.html" },
         ]
     },
+    
+    {
+        id: 'python_ai_mag',
+        title: 'Программирование на языке Python',
+        description: 'Искусственный интеллект в моделировании речевой деятельности',
+        long_description: 'Искусственный интеллект в моделировании речевой деятельности, 1 курс магистратуры',
+        level: "mag",
+        year: 1,
+        author: "kholyavin",
+        chapters: [
+            { id: 1, title: "Повторение", filename: "python_ai_mag_1.html" },
+        ]
+    },
+    {
+        id: 'asr',
+        title: 'Автоматическое распознавание речи',
+        description: 'Искусственный интеллект в моделировании речевой деятельности',
+        long_description: 'Искусственный интеллект в моделировании речевой деятельности, 1 курс магистратуры',
+        level: "mag",
+        year: 1,
+        author: "kholyavin",
+        chapters: [
+            { id: 1, title: "АРР. Введение", filename: "asr_1.html" },
+        ]
+    },
     {
         id: 'python_textbook',
         title: 'Python для фонетистов',
