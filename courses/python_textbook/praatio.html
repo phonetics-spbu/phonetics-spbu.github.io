@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Библиотека PraatIO</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+    <link href="styles/syntax_highlight.css" rel="stylesheet">
+    <base target="_blank">
+</head>
+
+<body>
+<div class="chapter-content">
+
+<p>Ключевым недостатком <code>parselmouth</code>, как указывалось выше,
+является тот факт, что эта библиотека основана на устаревшей версии
+Praat (6.1.38 на момент написания пособия). С тех пор в Praat было
+внесено множество изменений, некоторые из которых значительно расширяют
+функционал. К таким относятся, например, новые методы вычисления частоты
+основного тона с фильтрацией (<em>filtered autocorrelation</em> и
+<em>filtered cross-correlation</em>) и расширение поддерживаемых
+аудиоформатов (FLAC 1.5.0, OGG Vorbis, OGG Opus). Кроме того, были
+исправлены ошибки в реализациях различных алгоритмов. С полным списком
+изменений можно ознакомиться на сайте Praat: <a
+href="https://www.fon.hum.uva.nl/praat/manual/What_s_new_.html">https://www.fon.hum.uva.nl/praat/manual/What_s_new_.html</a>.</p>
+<p>Одной из полезных функций Praat является возможность создавать и
+запускать скрипты, позволяющие выполнять последовательности команд Praat
+на произвольном количестве объектов. Написание таких скриптов не входит
+в рамки данного пособия, однако такие руководства можно найти как на
+сайте Praat (<a
+href="https://www.fon.hum.uva.nl/praat/manual/Scripting.html">https://www.fon.hum.uva.nl/praat/manual/Scripting.html</a>),
+так и в сторонних источниках (<a
+href="https://praatscriptingtutorial.com/default">https://praatscriptingtutorial.com/default</a>).
+Скрипт Praat может быть запущен как через его графический интерфейс, так
+и через командную строку, что позволяет программам на Python запускать
+скрипты Praat, если он установлен на компьютере.</p>
+<h3 id="библиотека-praatio">Библиотека PraatIO</h3>
+<p>Библиотека <code>praatio</code> представляет собой обёртку вокруг
+Praat и содержит ряд скриптов Praat для вычисления частоты основного
+тона, интенсивности, формант, спектров, ресинтеза и манипуляции звуком,
+а также работы с файлами TextGrid. С полным функционалом можно
+ознакомиться в официальном руководстве: <a
+href="https://colab.research.google.com/github/timmahrt/praatIO/blob/main/tutorials/tutorial1_intro_to_praatio.ipynb">https://colab.research.google.com/github/timmahrt/praatIO/blob/main/tutorials/tutorial1_intro_to_praatio.ipynb</a>
+и в документации: <a
+href="https://timmahrt.github.io/praatIO/praatio.html">https://timmahrt.github.io/praatIO/praatio.html</a>.</p>
+<p>Для работы <code>praatio</code> на машине должен быть установлен
+Praat, и путь к исполняемому файлу передаётся в качестве параметра в
+функции библиотеки. Если вы работаете в среде Google Colab, то можно
+установить Praat через командную строку:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!curl</span> <span class="at">-L</span> <span class="dt">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Accept: application/vnd.github+json&quot;</span> <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;X-GitHub-Api-Version: 2022-11-28&quot;</span> <span class="dt">\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  https://api.github.com/repos/praat/praat/releases/latest <span class="dt">\</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="ex">jq</span> <span class="st">&#39;.assets[] | select(.browser_download_url | contains(&quot;linux-intel64.tar.gz&quot;)) | .browser_download_url&#39;</span> <span class="dt">\</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="fu">xargs</span> wget  <span class="at">-qO-</span> <span class="kw">|</span> <span class="fu">tar</span> <span class="at">-xzf</span> <span class="at">-</span></span></code></pre></div>
+<p>Приведённый выше код обращается к API GitHub и скачивает последнюю
+версию Praat, совместимую с Google Colab. Далее нужно установить
+необходимые библиотеки:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!sudo</span> apt install libgtk-3-0</span></code></pre></div>
+<p>После чего исполняемый файл Praat будет находиться в текущей
+директории (по умолчанию <code>/content</code>):</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>praat_path <span class="op">=</span> <span class="st">&quot;/content/praat&quot;</span></span></code></pre></div>
+<p>Поскольку <code>praatio</code> не использует внутри себя команды для
+вычисления частоты основного тона новыми методами, можно написать
+специальный патч, модифицирующий исходный код библиотеки. Код определяет
+место, где установлена библиотека, и производит замену команд в скриптах
+Praat. Кроме того, обновляется значение одного из параметров в
+соответствии с новым алгоритмом.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> glob</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>old_command <span class="op">=</span> (</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;To Pitch (ac): sample_step, min_pitch, 15, &quot;no&quot;, silence_threshold, 0.45,&#39;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39; 0.01, 0.35, 0.14, max_pitch&#39;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>new_command <span class="op">=</span> (</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;To Pitch (filtered autocorrelation): sample_step, min_pitch, max_pitch,&#39;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39; 15, &quot;no&quot;, 0.03, silence_threshold, 0.50, 0.055, 0.35, 0.14&#39;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>package_info <span class="op">=</span> subprocess.check_output([<span class="st">&quot;pip&quot;</span>, <span class="st">&quot;show&quot;</span>, <span class="st">&quot;praatio&quot;</span>]).decode(<span class="st">&quot;utf-8&quot;</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>loc <span class="op">=</span> re.search(<span class="st">&quot;(?&lt;=Location: ).+(?=</span><span class="ch">\n</span><span class="st">)&quot;</span>, package_info).group()</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>files <span class="op">=</span> glob.glob(loc <span class="op">+</span> <span class="st">&quot;/praatio/praatScripts/*.praat&quot;</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> files:</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="bu">file</span>, <span class="st">&quot;r&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        text <span class="op">=</span> f.read()</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> old_command <span class="kw">in</span> text:</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Replacing </span><span class="sc">{</span>old_command<span class="sc">}</span><span class="ss"> with </span><span class="sc">{</span>new_command<span class="sc">}</span><span class="ss"> in </span><span class="sc">{</span><span class="bu">file</span><span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        text <span class="op">=</span> text.replace(old_command, new_command)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(<span class="bu">file</span>, <span class="st">&quot;w&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>            f.write(text)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>old_default <span class="op">=</span> <span class="st">&quot;silenceThreshold: float = 0.03&quot;</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>new_default <span class="op">=</span> <span class="st">&quot;silenceThreshold: float = 0.09&quot;</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(loc <span class="op">+</span> <span class="st">&quot;/praatio/pitch_and_intensity.py&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> f.read()</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> text.replace(old_default, new_default)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(loc <span class="op">+</span> <span class="st">&quot;/praatio/pitch_and_intensity.py&quot;</span>, <span class="st">&quot;w&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>        f.write(text)</span></code></pre></div>
+<p>После этого библиотека <code>praatio</code> может быть импортирована.
+Вычислим значения ЧОТ в звуковом файле:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> praatio <span class="im">import</span> pitch_and_intensity</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>pitch <span class="op">=</span> pitch_and_intensity.extractPitch(<span class="st">&quot;/content/cta0001.wav&quot;</span>, <span class="st">&quot;/content/cta0001.txt&quot;</span>, praat_path, <span class="dv">50</span>, <span class="dv">800</span>)</span></code></pre></div>
+<p>Функция <code>extractPitch()</code> принимает на вход путь к
+обрабатываемому файлу, путь к текстовому файлу для записи результатов,
+путь к исполняемому файлу Praat, минимальное и максимальное значение
+ЧОТ, а также ряд необязательных аргументов, с которыми можно
+ознакомиться в документации. Функция возвращает список кортежей, в
+которых первое значение — время в секундах, а второе — частота основного
+тона в герцах.</p>
+<h3 id="работа-с-praat-напрямую-через-командную-строку">Работа с Praat
+напрямую через командную строку</h3>
+<p>Если у вас есть собственные скрипты Praat, вы можете запускать их из
+программ Python. Для этого можно воспользоваться средствами модуля
+<code>subprocess</code>.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>subprocess.call([praat_path, <span class="st">&quot;--run&quot;</span>, <span class="st">&quot;my_script.Praat&quot;</span>])</span></code></pre></div>
+<p>Если вы неуверенно себя чувствуете при использовании скриптового
+языка Praat, можно внутри скрипта оставлять лишь самое необходимое
+(открытие файлов, вычисление необходимых характеристик и их запись d
+файлы), а остальную логику кода (условия, циклы и т. д.) оставить в
+вашей программе на Python.</p>
+<p>Напишем код на Python, который будет генерировать временный скрипт
+Praat для вычисления частоты основного тона заданного аудиофайла (с
+использованием модуля <code>tempfile</code> для создания временных
+файлов) и записывать объект Pitch в бинарный файл.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tempfile <span class="im">import</span> NamedTemporaryFile</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">&quot;/content/cta0001.wav&quot;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>out_filename <span class="op">=</span> filename.replace(<span class="st">&quot;.wav&quot;</span>, <span class="st">&quot;.Pitch&quot;</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>sample_step <span class="op">=</span> <span class="fl">0.0</span>  <span class="co"># (= auto)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>min_pitch <span class="op">=</span> <span class="dv">50</span>  <span class="co"># Hz</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>max_pitch <span class="op">=</span> <span class="dv">800</span>  <span class="co"># Hz</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>max_number_of_candidates <span class="op">=</span> <span class="dv">15</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>very_accurate <span class="op">=</span> <span class="st">&quot;no&quot;</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>attenuation_at_top <span class="op">=</span> <span class="fl">0.03</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>silence_threshold <span class="op">=</span> <span class="fl">0.09</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>voicing_threshold <span class="op">=</span> <span class="fl">0.50</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>octave_cost <span class="op">=</span> <span class="fl">0.055</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>octave_jump_cost <span class="op">=</span> <span class="fl">0.35</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>voiced_unvoiced_cost <span class="op">=</span> <span class="fl">0.14</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>script <span class="op">=</span> <span class="ss">f&quot;&quot;&quot;</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="ss">sound = Read from file: &quot;</span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="ss">selectObject: sound</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="ss">pitch = To Pitch (filtered autocorrelation): </span><span class="sc">{</span>sample_step<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>min_pitch<span class="sc">}</span><span class="ss">,</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="ss">... </span><span class="sc">{</span>max_pitch<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>max_number_of_candidates<span class="sc">}</span><span class="ss">, &quot;</span><span class="sc">{</span>very_accurate<span class="sc">}</span><span class="ss">&quot;,</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="ss">... </span><span class="sc">{</span>attenuation_at_top<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>silence_threshold<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>voicing_threshold<span class="sc">}</span><span class="ss">,</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="ss">... </span><span class="sc">{</span>octave_cost<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>octave_jump_cost<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>voiced_unvoiced_cost<span class="sc">}</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="ss">selectObject: pitch</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="ss">Save as binary file: &quot;</span><span class="sc">{</span>out_filename<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="ss">&quot;&quot;&quot;</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> NamedTemporaryFile(mode<span class="op">=</span><span class="st">&quot;w+&quot;</span>, delete_on_close<span class="op">=</span><span class="va">False</span>) <span class="im">as</span> tmp:</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    tmp.write(script)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    tmp.close()</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    subprocess.call([praat_path, <span class="st">&quot;--run&quot;</span>, tmp.name])</span></code></pre></div>
+<p>Так данные о частоте основного тона сохранятся в бинарный файл,
+который можно будет открыть с помощью <code>parselmouth</code>, получив
+объект класса <code>Pitch</code>.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> parselmouth</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>pitch <span class="op">=</span> parselmouth.read(<span class="st">&quot;cta0001.Pitch&quot;</span>)</span></code></pre></div>
+
+
+</div>
+</body>
+</html>
