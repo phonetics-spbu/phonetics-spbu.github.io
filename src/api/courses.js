@@ -245,6 +245,7 @@ const coursesData = [
             { id: 5, title: "Работа с файлами аннотации TextGrid", filename: "textgrid.html" },
             { id: 6, title: "Библиотека Parselmouth. Часть 1", filename: "parselmouth_1.html" },
             { id: 7, title: "Библиотека Parselmouth. Часть 2", filename: "parselmouth_2.html" },
+            { id: 8, title: "Библиотека PraatIO", filename: "praatio.html" },
         ]
     },
     
