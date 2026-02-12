@@ -181,6 +181,7 @@ const coursesData = [
             { id: 14, title: "Отладка и тестирование", filename: "python_genling_bac_12.html" },
             { id: 15, title: "Практика по первому семестру", filename: "python_genling_bac_13.html" },
             { id: 16, title: "Материалы к зачёту", filename: "python_genling_bac_14.html" },
+            { id: 17, title: "Построение графиков в Matplotlib", filename: "python_genling_bac_15.html" },
 
         ]
     },
