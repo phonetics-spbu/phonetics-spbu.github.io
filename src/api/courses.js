@@ -217,7 +217,7 @@ const coursesData = [
         year: 1,
         author: "kholyavin",
         chapters: [
-            { id: 1, title: "Повторение", filename: "python_ai_mag_1.html" },
+            { id: 1, title: "Повторение: кортежи, счётчики, JSON", filename: "python_ai_mag_1.html" },
         ]
     },
     {
