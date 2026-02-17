@@ -218,6 +218,7 @@ const coursesData = [
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Повторение: кортежи, счётчики, JSON", filename: "python_ai_mag_1.html" },
+            { id: 2, title: "Повторение: текстовые файлы, таблицы", filename: "python_ai_mag_2.html" },
         ]
     },
     {
@@ -230,6 +231,7 @@ const coursesData = [
         author: "kholyavin",
         chapters: [
             { id: 1, title: "АРР. Введение", filename: "asr_1.html" },
+            { id: 2, title: "Акустические признаки", filename: "asr_2.html" },
         ]
     },
     {
