@@ -57,8 +57,8 @@ const coursesData = [
     {
         id: 'python_1_mag',
         title: "Основы программирования на языке Python",
-        description: "Теория и история языка и языки народов Европы",
-        long_description: "Теория и история языка и языки народов Европы, 1 курс магистратуры",
+        description: "Византийская и новогреческая филология",
+        long_description: "Византийская и новогреческая филология, 1 курс магистратуры",
         level: "mag",
         year: 1,
         author: "tityushina",
