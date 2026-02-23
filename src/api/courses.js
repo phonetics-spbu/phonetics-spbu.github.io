@@ -52,6 +52,7 @@ const coursesData = [
             { id: 7, title: "Введение в машинное обучение: задача классификации", filename: "dsp_7.html" },
             { id: 8, title: "Введение в машинное обучение: задача кластеризации", filename: "dsp_8.html" },
             { id: 9, title: "Вычисление ЧОТ методами во временной области", filename: "dsp_9.html" },
+            { id: 10, title: "Вычисление ЧОТ методами в частотной области", filename: "dsp_10.html" },
         ]
     },
     {
@@ -65,7 +66,7 @@ const coursesData = [
         chapters: [
             { id: 1, title: "Переменные и типы данных", filename: "python_1_mag_1.html" },
             { id: 2, title: "Целочисленная арифметика, конструкция if", filename: "python_1_mag_2.html" },
-//            { id: 3, title: "Циклы", filename: "python_1_mag_3.html" },
+            { id: 3, title: "Циклы", filename: "python_1_mag_3.html" },
 //            { id: 4, title: "Строки", filename: "python_1_mag_4.html" },
 //            { id: 5, title: "Списки", filename: "python_1_mag_5.html" },
 //            { id: 6, title: "Коллекции в Python", filename: "python_1_mag_6.html" },
