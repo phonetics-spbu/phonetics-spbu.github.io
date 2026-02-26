@@ -186,6 +186,7 @@ const coursesData = [
             { id: 16, title: "Материалы к зачёту", filename: "python_genling_bac_14.html" },
             { id: 17, title: "Построение графиков в Matplotlib", filename: "python_genling_bac_15.html" },
             { id: 18, title: "Регулярные выражения", filename: "python_genling_bac_16.html" },
+            { id: 19, title: "Морфологический анализ", filename: "python_genling_bac_17.html" },
 
         ]
     },
@@ -209,6 +210,7 @@ const coursesData = [
             { id: 9, title: "Практика: определение интонационных характеристик высказывания", filename: "ling_programming_9.html" },
             { id: 10, title: "Токенизация и лемматизация. Морфологический анализ", filename: "ling_programming_10.html" },
             { id: 11, title: "Регулярные выражения", filename: "ling_programming_11.html" },
+            { id: 12, title: "Расстояние Левенштейна", filename: "ling_programming_12.html" },
         ]
     },
     
