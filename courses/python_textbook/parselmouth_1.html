@@ -77,7 +77,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a hr
 <p>Обратите внимание, что для аудиосигнала метод вернул вещественное
 число. Амплитуды в Praat проходят нормализацию путём деления на
 максимально возможное значение (см. главу «<a
-href="#/course/python_textbook/chapter/1">Чтение и запись звуковых
+href="course/python_textbook/chapter/1">Чтение и запись звуковых
 данных</a>»).</p>
 <div class="sourceCode" id="cb6"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(intensity.get_value(<span class="dv">1</span>))</span></code></pre></div>
@@ -212,7 +212,7 @@ F2: 1248.789979714556
 F3: 2835.0831701064194
 F4: 3564.4930225805565</code></pre>
 <h3 id="практические-задания">Практические задания</h3>
-<h4 id="задание-1">Задание 1</h4>
+<h4 id="num1">6.1</h4>
 <p>Построить два списка, в одном из которых будут значения времени от 0
 до <code>intensity.xmax</code> с шагом 10 мс, а в другом — значения
 интенсивности в этих точках. Построить график с помощью
@@ -221,7 +221,7 @@ F4: 3564.4930225805565</code></pre>
 class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>times, intens_values <span class="op">=</span> [], []</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>plt.plot(times, intens_values)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
-<h4 id="задание-2">Задание 2</h4>
+<h4 id="num2">6.2</h4>
 <p>а) Прочитайте файл <em>cta0001.seg_B1</em>, определите место середины
 каждого звука, найдите значение ЧОТ в этом месте и постройте график, где
 на оси X по порядку будут отложены звуки, а на оси Y — ЧОТ в герцах.</p>
@@ -242,7 +242,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a h
 <p>Переведите все значения из герцев в октавно-медианную шкалу:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mrow><mi>O</mi><mi>M</mi><mi>e</mi></mrow></msub><mo>=</mo><msub><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mn>2</mn></msub><mfrac><msub><mi>f</mi><mn>0</mn></msub><msub><mi>f</mi><mrow><mi>m</mi><mi>e</mi><mi>d</mi><mi>i</mi><mi>a</mi><mi>n</mi></mrow></msub></mfrac></mrow><annotation encoding="application/x-tex"> f_{OMe} = \log_2{\frac{f_0}{f_{median}}} </annotation></semantics></math></p>
 <p>Постройте график.</p>
-<h4 id="задание-3">Задание 3</h4>
+<h4 id="num3">6.3</h4>
 <p>Модифицировать код из предыдущего задания так, чтобы в трёх точках
 каждого гласного (1/4, 1/2 и 3/4 длины) вычислялись первая и вторая
 форманты. Нарисовать график.</p>
@@ -255,7 +255,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a h
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>plt.plot(f2_values)</span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>plt.xticks(<span class="bu">range</span>(<span class="bu">len</span>(f1_values)), labels<span class="op">=</span>x_ticks)</span>
 <span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
-<h4 id="задание-4">Задание 4</h4>
+<h4 id="num4">6.4</h4>
 <p>Прочитать файлы из архива <em>fpt</em>. Взять уровень <em>ideal</em>
 из каждого TextGrid. Вычислить значения формант в серединке каждого
 гласного. Построить точечный график зависимости второй форманты от
@@ -269,7 +269,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a h
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <p>Обратите внимание, что в файлах некоторые символы переданы в виде
 т. н. триграфов (см. главу «<a
-href="#/course/python_textbook/chapter/5">Работа с файлами аннотации
+href="course/python_textbook/chapter/5">Работа с файлами аннотации
 TextGrid</a>»). Для конвертации воспользуйтесь предложенным
 словарём.</p>
 <div class="sourceCode" id="cb32"><pre
@@ -277,6 +277,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a h
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;</span><span class="ch">\\</span><span class="st">as&quot;</span>: <span class="st">&quot;ɑ&quot;</span>,</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;</span><span class="ch">\\</span><span class="st">i-&quot;</span>: <span class="st">&quot;ɨ&quot;</span>,</span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+
 
 </div>
 </body>
