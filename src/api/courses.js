@@ -250,6 +250,7 @@ const coursesData = [
         year: 2,
         author: "kholyavin",
         chapters: [
+            { id: 0, title: "Введение", filename: "preface.html" },
             { id: 1, title: "Чтение и запись звуковых данных", filename: "wav_reading.html" },
             { id: 2, title: "Чтение и запись файлов разметки Wave Assistant", filename: "seg_reading.html" },
             { id: 3, title: "Файловые системы и работа с многоуровневой разметкой", filename: "multi_seg.html" },
@@ -258,6 +259,10 @@ const coursesData = [
             { id: 6, title: "Библиотека Parselmouth. Часть 1", filename: "parselmouth_1.html" },
             { id: 7, title: "Библиотека Parselmouth. Часть 2", filename: "parselmouth_2.html" },
             { id: 8, title: "Библиотека PraatIO", filename: "praatio.html" },
+            { id: 9, title: "Библиотека SciPy", filename: "scipy.html" },
+            { id: 10, title: "Работа с фонетической транскрипцией", filename: "transcription_processing.html" },
+            { id: 99, title: "Список литературы", filename: "sources.html" },
+            { id: 100, title: "Документация к упомянутым библиотекам", filename: "packages.html" },
         ]
     },
     

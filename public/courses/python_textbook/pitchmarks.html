@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Файловые системы и работа с многоуровневой разметкой</title>
+    <title>Работа с метками периодов основного тона</title>
     <style>
         .chapter-content {
             font-family: Arial, sans-serif;
@@ -25,6 +25,7 @@
 
 <body>
 <div class="chapter-content">
+
 <p>Часто (но не всегда) информация о частоте основного тона (ЧОТ) в
 сигнале хранится в виде меток, которые обозначают границы периодов
 основного тона (ОТ). Заметьте, что принципы расставления границ могут
@@ -172,8 +173,8 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a h
 <img src="courses/python_textbook/images/nan_plot.png" width="40%">
 
 <h3 id="практические-задания">Практические задания</h3>
-<h4 id="1-построение-графика-чот-из-файла-seg_g1">1. Построение графика
-ЧОТ из файла SEG_G1</h4>
+<h4 id="num1-построение-графика-чот-из-файла-seg_g1">4.1.
+Построение графика ЧОТ из файла SEG_G1</h4>
 <p>Напишите функцию, которая принимает на вход имя файла SEG и
 минимальное значение ЧОТ, а возвращает пару из двух списков: список
 позиций каждого периода (за позицию периода возьмите его середину) и
@@ -197,8 +198,8 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a h
 class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>times, f0_values <span class="op">=</span> get_f0(<span class="st">&quot;cta0001.seg_G1&quot;</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>plt.plot(times, f0_values)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
-<h4 id="2-определение-границ-звонких-участков">2. Определение границ
-звонких участков</h4>
+<h4 id="num2-определение-границ-звонких-участков">4.2. Определение
+границ звонких участков</h4>
 <p>Напишите программу, которая определяет границы каждого звонкого
 участка в файле по меткам ОТ и записывает их в файл SEG_G2. Названием
 каждого метки сделайте число, которое показывает разницу между
@@ -243,6 +244,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a h
 <span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># запишем все созданные метки в файл с необходимыми параметрами</span></span>
 <span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span></code></pre></div>
+
 
 </div>
 </body>
