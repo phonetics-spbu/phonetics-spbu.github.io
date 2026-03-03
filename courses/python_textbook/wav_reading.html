@@ -770,6 +770,31 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a h
 дискретизации:</p>
 <div class="sourceCode" id="cb46"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>data, samplerate <span class="op">=</span> librosa.load(<span class="st">&quot;cta0001.wav&quot;</span>, sr<span class="op">=</span><span class="dv">44100</span>)</span></code></pre></div>
+<h4
+id="прослушивание-сигнала-в-jupyter-notebook-и-google-colab">Прослушивание
+сигнала в Jupyter Notebook и Google Colab</h4>
+<p>В среде Jupyter Notebook (и, следовательно, Google Colab) возможно
+прослушивание аудиосигнала без его записи в аудиофайл. Для этого можно
+воспользоваться классом <code>Audio</code> из модуля
+<code>IPython.display</code>. Аргументом класса может служить:</p>
+<ul>
+<li>список или <code>numpy</code>-массив отсчётов (тогда нужно передать
+частоту дискретизации в аргумент <code>rate</code>);</li>
+<li>имя файла или ссылка на файл в интернете;</li>
+<li>аудиоданные в виде «сырых» байт (в этом случае также нужно передать
+частоту дискретизации).</li>
+</ul>
+<div class="sourceCode" id="cb47"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Audio</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>samplerate, signal <span class="op">=</span> wavfile.read(<span class="st">&quot;cta0001.wav&quot;</span>)</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>Audio(signal, rate<span class="op">=</span>samplerate)</span></code></pre></div>
+<audio controls>
+        <source src="courses/python_textbook/files/cta0001.wav" type="audio/wav">
+        Your browser does not support the audio tag.
+</audio>
+
+<p>Объект создаст под ячейкой плеер для прослушивания аудиофайла.</p>
 <h3 id="практические-задания">Практические задания</h3>
 <h4 id="num1-деление-файла-пополам">1.1. Деление файла
 пополам</h4>
