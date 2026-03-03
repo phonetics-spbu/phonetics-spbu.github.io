@@ -17,7 +17,7 @@ def detect_encoding(file_path: str) -> str:
         try:
             open(file_path, 'r', encoding="utf-16").read()
             encoding = "utf-16"
-        except UnicodeError:
+        except UnicodeDecodeError:
             encoding = "cp1251"
     else:
         if text.startswith("\ufeff"):  # т.н. byte order mark
