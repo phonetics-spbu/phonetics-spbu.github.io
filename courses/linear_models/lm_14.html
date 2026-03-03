@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>z-преобразование</title>
+    <title>Z-преобразование</title>
     <style>
         .chapter-content {
             font-family: Arial, sans-serif;
@@ -108,9 +108,16 @@
         Y[z]\sum_{k=0}^{N}z^{-k}a_k = X[z]\sum_{m=0}^{M}e^{-m}b_m
         $$
         $$
-        \frac{Y(z)}{X(z)} = \frac{\sum_{m=0}^{M}e^{-m}b_m}{\sum_{k=0}^{N}z^{-k}a_k} = \frac{b_0 + b_1z^{-1} + b_2z^{-2} + ... + b_Nz^{-N}}{a_0 + a_1z^{-1} + a_2z^{-2} + ... + a_Mz^{-M}}
+        H(z) = \frac{Y(z)}{X(z)} = \frac{\sum_{m=0}^{M}e^{-m}b_m}{\sum_{k=0}^{N}z^{-k}a_k} = \frac{b_0 + b_1z^{-1} + b_2z^{-2} + ... + b_Nz^{-N}}{a_0 + a_1z^{-1} + a_2z^{-2} + ... + a_Mz^{-M}}
         $$
         Это формула БИХ-фильтра в общем виде (его передаточная характеристика). Если знаменатель равен 1, то фильтр является КИХ-фильтром (он нерекурсивный).
+    </p>
+    <p>
+        Если числитель и знаменатель передаточной характеристики разложить на множители:
+        $$
+        H(z) = k\frac{(z - z_1)(z - z_2)...(z-z_n)}{(z - p_1)(z - p_2)...(z-p_m)}
+        $$
+        Нули числителя называются нулями передаточной характеристики, знаменателя - её полюсами.
     </p>
     <p>
         Для устойчивости КИХ-фильтра нужно, чтобы все полюса передаточной характеристики были по модулю строго меньше 1, то есть лежали внутри единичной окружности на z-плоскости.
@@ -124,6 +131,33 @@
     </p>
     <p>
         <b>Порядком фильтра</b> является максимальная степень в выражении H(z) (наибольшая среди M и N).
+    </p>
+        </p>
+        <p class="note">
+        <b>Ноутбук: передаточная харакетристика скользящего среднего</b>
+        <br/>
+        <a
+                target="_blank"
+                href="https://colab.research.google.com/github/phonetics-spbu/phonetics-spbu.github.io/blob/main/public/courses/linear_models/ipynb/moving_average_filter_char.ipynb"
+        >
+            Открыть в Colab
+        </a>
+        <br/>
+
+        <a
+                target="_blank"
+                href="https://github.com/phonetics-spbu/phonetics-spbu.github.io/blob/main/public/courses/linear_models/ipynb/moving_average_filter_char.ipynb"
+        >
+            Открыть на Github
+        </a>
+        <br/>
+        <a
+                href="courses/linear_models/ipynb/moving_average_filter_char.ipynb"
+                download
+        >
+            Скачать на устройство
+        </a>
+
     </p>
 </div>
 
