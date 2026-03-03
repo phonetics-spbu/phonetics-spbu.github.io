@@ -309,7 +309,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a hr
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            <span class="bu">open</span>(file_path, <span class="st">&#39;r&#39;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-16&quot;</span>).read()</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>            encoding <span class="op">=</span> <span class="st">&quot;utf-16&quot;</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">UnicodeError</span>:</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">UnicodeDecodeError</span>:</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            encoding <span class="op">=</span> <span class="st">&quot;cp1251&quot;</span></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> text.startswith(<span class="st">&quot;</span><span class="ch">\ufeff</span><span class="st">&quot;</span>):  <span class="co"># т.н. byte order mark</span></span>
@@ -318,7 +318,8 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a hr
 <p>Функция считает по умолчанию, что файл закодирован в UTF-8. Если при
 попытке открыть файл возникло исключение
 <code>UnicodeDecodeError</code>, то в нём присутствуют недопустимые
-последовательности байт для выбранной кодировки. Если же первый символ
+последовательности байт для выбранной кодировки. Дальше делается
+аналогичная попытка для кодировки UTF-16. Если же первый символ
 раскодированной последовательности — <code>U+FEFF</code>
 (<code>"\ufeff"</code> в формате записи символов Unicode, используемом в
 Python), то кодировка — UTF-8-SIG.</p>
@@ -338,8 +339,17 @@ Windows-1251 байтами <code>CF</code> и <code>BF</code>, что
 реальной практике не встречаются: вероятность того, что файл
 Windows-1251 будет содержать только допустимые в UTF-8
 последовательности байт, близка к нулю.</p>
-<p>Если набор возможных кодировок шире, можно воспользоваться
-специализированной библиотекой <a
+<p>Для полноты описания также стоит заметить, что описанная выше функция
+ошибочно определит кодировку файла Windows-1251 как UTF-16, если этот
+файл содержит чётное количество символов (т. к. в этой кодировке на
+каждый символ отводится либо 2, либо 4 байта) и первые два — <em>юя</em>
+или <em>яю</em> (что соответстует кодам символа BOM в двух
+разновидностях UTF-16 — с порядком байт от старшего к младшему и от
+младшего к старшему соответственно). Однако ясно, что файлы SEG никогда
+не будут удовлетворять этому условию, т. к. обязательно начинаются со
+строки <code>[PARAMETERS]</code>.</p>
+<p>Если набор возможных кодировок шире, чем перечисленные выше, можно
+воспользоваться специализированной библиотекой <a
 href="https://pypi.org/project/chardet/"><code>chardet</code></a>. Она
 использует различные средства, в том числе статистические, чтобы с
 высокой точностью определить кодировку текста, а также язык, на котором
