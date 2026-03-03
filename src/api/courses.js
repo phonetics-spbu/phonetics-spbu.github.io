@@ -23,7 +23,7 @@ const coursesData = [
             { id: 11, title: "БИХ и КИХ фильтры", filename: "lm_11.html" },
             { id: 12, title: "Разностные уравнения для линейных систем", filename: "lm_12.html" },
             { id: 13, title: "Представление систем в частотной области", filename: "lm_13.html" },
-            { id: 14, title: "z-преобразование", filename: "lm_14.html" },
+            { id: 14, title: "Z-преобразование", filename: "lm_14.html" },
             { id: 15, title: "Дискретное преобразование Фурье и круговая свёртка", filename: "lm_15.html" },
             { id: 16, title: "Проектирование фильтров", filename: "lm_16.html" },
             { id: 17, title: "Модуляция и демодуляция", filename: "lm_17.html" },
