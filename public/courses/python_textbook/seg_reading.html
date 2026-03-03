@@ -18,6 +18,11 @@
             padding: 10px;
             border-left: 3px solid #3498db;
         }
+
+        img {
+            width: 80%;
+            max-width: 800px;
+        }
     </style>
     <link href="styles/syntax_highlight.css" rel="stylesheet">
     <base target="_blank">
@@ -151,8 +156,8 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <h4 id="структура-файла-seg">Структура файла SEG</h4>
 <p>Метки Wave Assistant хранятся в специальных файлах SEG. Метки разных
 уровней могут быть записаны в одном файле (тогда используется расширение
-.seg) или в разных (тогда используются расширения вида .seg_G1, где
-после подчёркивания идёт название уровня).</p>
+<em>.seg</em>) или в разных (тогда используются расширения вида
+<em>.seg_G1</em>, где после подчёркивания идёт название уровня).</p>
 <p>Файл SEG представляет собой текстовый файл, состоящий из нескольких
 секций. Название каждой секции пишется заглавными буквами на отдельной
 строке и заключается в квадратные скобки.</p>
@@ -333,6 +338,80 @@ Windows-1251 байтами <code>CF</code> и <code>BF</code>, что
 реальной практике не встречаются: вероятность того, что файл
 Windows-1251 будет содержать только допустимые в UTF-8
 последовательности байт, близка к нулю.</p>
+<p>Если набор возможных кодировок шире, можно воспользоваться
+специализированной библиотекой <a
+href="https://pypi.org/project/chardet/"><code>chardet</code></a>. Она
+использует различные средства, в том числе статистические, чтобы с
+высокой точностью определить кодировку текста, а также язык, на котором
+он написан. По <a
+href="https://chardet.readthedocs.io/en/latest/">ссылке</a> можно
+ознакомиться с документацией.</p>
+<p>Откроем текстовый файл в бинарном режиме, чтобы считать оттуда
+«сырые» байты, которые передадим на вход функции <code>detect()</code>.
+Функция вернёт нам словарь, в котором в поле <code>"encoding"</code>
+будет лежать название кодировки, в поле <code>"confidence"</code> — её
+вероятность, а в поле <code>"language"</code> — язык, на котором написан
+текст.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> chardet</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;cta0001.seg_B1&quot;</span>, <span class="st">&quot;rb&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>     <span class="bu">print</span>(chardet.detect(f.read()))</span></code></pre></div>
+<pre><code>{&#39;encoding&#39;: &#39;UTF-8-SIG&#39;, &#39;confidence&#39;: 1.0, &#39;language&#39;: &#39;&#39;}</code></pre>
+<p>Обратите внимание, что для правильной интерпретации однобайтных
+кодировок частоты символов (а точнее, их сочетаний) в тексте должны
+примерно совпадать с общеязыковыми. Очевидно, что в файле SEG,
+названиями меток которого служат отдельные кириллические буквы, этого не
+произойдёт, и <code>chardet</code>, вероятно, допустит ошибку.</p>
+<p>Например, создадим версию файла <code>cta0001.seg_B1</code> с
+кириллической транскрипцией (здесь и далее приведена только секция
+<code>[LABELS]</code>):</p>
+<pre><code>[LABELS]
+0,2,й
+8492,2,у0
+12708,2,р&#39;
+13708,2,и4
+18180,2,т
+24904,2,р&#39;
+25940,2,и0
+31544,2,ф
+36806,2,а4
+38604,2,н
+41618,2,а4
+44508,2,ф
+54662,2,</code></pre>
+<p>Запишем её в файл с кодировкой Windows-1251 и попробуем определить её
+с помощью <code>chardet</code>:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;cta0001_cyr_1251.seg_B1&quot;</span>, <span class="st">&quot;rb&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(chardet.detect(f.read()))</span></code></pre></div>
+<pre><code>{&#39;encoding&#39;: &#39;ISO-8859-1&#39;, &#39;confidence&#39;: 0.73, &#39;language&#39;: &#39;&#39;}</code></pre>
+<p>Как видно, алгоритм определил кодировку как ISO-8859-1 (кодировка для
+западноевропейских языков, близкая к Windows-1252). Если мы попытаемся
+прочитать файл в этой кодировке, то убедимся, что кириллические символы
+считались неверно:</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;cta0001_cyr_1251.seg_B1&quot;</span>, <span class="st">&quot;r&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;iso-8859-1&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f.read())</span></code></pre></div>
+<pre><code>[LABELS]
+0,2,é
+8492,2,ó0
+12708,2,ð&#39;
+13708,2,è4
+18180,2,ò
+24904,2,ð&#39;
+25940,2,è0
+31544,2,ô
+36806,2,à4
+38604,2,í
+41618,2,à4
+44508,2,ô
+54662,2,</code></pre>
+<p>Если названиями меток служат целые слова, то вероятность правильного
+определения выше, но всё равно не гарантирована. Статистическим
+алгоритмам могут мешать как служебные части файла (параметры, позиции
+меток и т. п.), так и особенности аннотации (например, цифры, которыми в
+некоторых корпусах отмечается ударение).</p>
 <h3 id="чтение-и-запись-файлов-seg">Чтение и запись файлов SEG</h3>
 <h4 id="чтение-файлов-seg">Чтение файлов SEG</h4>
 <p>Напишем функцию для чтения файла SEG. Она будет принимать на вход
@@ -341,37 +420,37 @@ Windows-1251 будет содержать только допустимые в 
 <code>"position"</code> — индекс соответствующего отсчёта,
 <code>"level"</code> — буквенно-цифровое представление уровня и
 "<code>name</code>" — название (текст) метки.</p>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_seg(filename: <span class="bu">str</span>, encoding: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;utf-8-sig&quot;</span>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">dict</span>, <span class="bu">list</span>[<span class="bu">dict</span>]]:</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(filename, encoding<span class="op">=</span>encoding) <span class="im">as</span> f:</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        lines <span class="op">=</span> [line.strip() <span class="cf">for</span> line <span class="kw">in</span> f.readlines()]</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># найдём границы секций в списке строк:</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    header_start <span class="op">=</span> lines.index(<span class="st">&quot;[PARAMETERS]&quot;</span>) <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    data_start <span class="op">=</span> lines.index(<span class="st">&quot;[LABELS]&quot;</span>) <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># прочитаем параметры</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    params <span class="op">=</span> {}</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> lines[header_start:data_start <span class="op">-</span> <span class="dv">1</span>]:</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        key, value <span class="op">=</span> line.split(<span class="st">&quot;=&quot;</span>)</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        params[key] <span class="op">=</span> <span class="bu">int</span>(value)</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># прочитаем метки</span></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    labels <span class="op">=</span> []</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> lines[data_start:]:</span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># если в строке нет запятых, значит, это не метка и метки закончились</span></span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> line.count(<span class="st">&quot;,&quot;</span>) <span class="op">&lt;</span> <span class="dv">2</span>:</span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>        pos, level, name <span class="op">=</span> line.split(<span class="st">&quot;,&quot;</span>, maxsplit<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>        label <span class="op">=</span> {</span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>            <span class="co"># чтобы перевести в отсчёты, разделим на кол-во байт на отсчёт</span></span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>            <span class="co"># и на количество каналов</span></span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;position&quot;</span>: <span class="bu">int</span>(pos) <span class="op">//</span> params[<span class="st">&quot;BYTE_PER_SAMPLE&quot;</span>] <span class="op">//</span> params[<span class="st">&quot;N_CHANNEL&quot;</span>],</span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;level&quot;</span>: code2level[<span class="bu">int</span>(level)],</span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;name&quot;</span>: name,</span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>        labels.append(label)</span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> params, labels</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_seg(filename: <span class="bu">str</span>, encoding: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;utf-8-sig&quot;</span>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">dict</span>, <span class="bu">list</span>[<span class="bu">dict</span>]]:</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(filename, encoding<span class="op">=</span>encoding) <span class="im">as</span> f:</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>        lines <span class="op">=</span> [line.strip() <span class="cf">for</span> line <span class="kw">in</span> f.readlines()]</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># найдём границы секций в списке строк:</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    header_start <span class="op">=</span> lines.index(<span class="st">&quot;[PARAMETERS]&quot;</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    data_start <span class="op">=</span> lines.index(<span class="st">&quot;[LABELS]&quot;</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># прочитаем параметры</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    params <span class="op">=</span> {}</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> lines[header_start:data_start <span class="op">-</span> <span class="dv">1</span>]:</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>        key, value <span class="op">=</span> line.split(<span class="st">&quot;=&quot;</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        params[key] <span class="op">=</span> <span class="bu">int</span>(value)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># прочитаем метки</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    labels <span class="op">=</span> []</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> lines[data_start:]:</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># если в строке нет запятых, значит, это не метка и метки закончились</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> line.count(<span class="st">&quot;,&quot;</span>) <span class="op">&lt;</span> <span class="dv">2</span>:</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>        pos, level, name <span class="op">=</span> line.split(<span class="st">&quot;,&quot;</span>, maxsplit<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>        label <span class="op">=</span> {</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>            <span class="co"># чтобы перевести в отсчёты, разделим на кол-во байт на отсчёт</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>            <span class="co"># и на количество каналов</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;position&quot;</span>: <span class="bu">int</span>(pos) <span class="op">//</span> params[<span class="st">&quot;BYTE_PER_SAMPLE&quot;</span>] <span class="op">//</span> params[<span class="st">&quot;N_CHANNEL&quot;</span>],</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;level&quot;</span>: code2level[<span class="bu">int</span>(level)],</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;name&quot;</span>: name,</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>        labels.append(label)</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> params, labels</span></code></pre></div>
 <p>Обратите внимание на использование параметра <code>maxsplit</code> в
 методе <code>.split()</code>. Поскольку в названиях меток могут
 содержаться запятые, вызов метода без этого параметра приведёт к
@@ -383,34 +462,34 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a h
 вход словарь с параметрами и список меток в том же формате, который
 возвращает функция <code>read_seg()</code>, а также имя целевого файла и
 кодировка, в которой необходимо его записать.</p>
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> write_seg(params: <span class="bu">dict</span>, labels: <span class="bu">list</span>, filename: <span class="bu">str</span>, encoding: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;utf-8-sig&quot;</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># зададим значения параметров по умолчанию</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># вы можете изменить функцию так, чтобы параметры можно было передавать как ключевые слова</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    param_defaults <span class="op">=</span> {</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;SAMPLING_FREQ&quot;</span>: <span class="dv">44100</span>,</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;BYTE_PER_SAMPLE&quot;</span>: <span class="dv">2</span>,</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;CODE&quot;</span>: <span class="dv">0</span>,</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;N_CHANNEL&quot;</span>: <span class="dv">1</span>,</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;N_LABEL&quot;</span>: <span class="dv">0</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># запишем в словарь переданные в функцию значения параметров</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    params <span class="op">=</span> param_defaults <span class="op">|</span> params</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># количество меток определим как длину списка labels</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    params[<span class="st">&quot;N_LABEL&quot;</span>] <span class="op">=</span> <span class="bu">len</span>(labels)</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(filename, <span class="st">&quot;w&quot;</span>, encoding<span class="op">=</span>encoding) <span class="im">as</span> f:</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>        f.write(<span class="st">&quot;[PARAMETERS]</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> key, value <span class="kw">in</span> params.items():</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">=</span><span class="sc">{</span>value<span class="sc">}</span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        f.write(<span class="st">&quot;[LABELS]</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> label <span class="kw">in</span> labels:</span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>            label_byte <span class="op">=</span> (</span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>                params[<span class="st">&#39;BYTE_PER_SAMPLE&#39;</span>] <span class="op">*</span> </span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>                params[<span class="st">&#39;N_CHANNEL&#39;</span>] <span class="op">*</span> label[<span class="st">&#39;position&#39;</span>]</span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>            )</span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>label_byte<span class="sc">}</span><span class="ss">,&quot;</span>)</span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>level2code[label[<span class="st">&#39;level&#39;</span>]]<span class="sc">}</span><span class="ss">,&quot;</span>)</span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>label[<span class="st">&#39;name&#39;</span>]<span class="sc">}</span><span class="ch">\n</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> write_seg(params: <span class="bu">dict</span>, labels: <span class="bu">list</span>, filename: <span class="bu">str</span>, encoding: <span class="bu">str</span> <span class="op">=</span> <span class="st">&quot;utf-8-sig&quot;</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># зададим значения параметров по умолчанию</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># вы можете изменить функцию так, чтобы параметры можно было передавать как ключевые слова</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    param_defaults <span class="op">=</span> {</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;SAMPLING_FREQ&quot;</span>: <span class="dv">44100</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;BYTE_PER_SAMPLE&quot;</span>: <span class="dv">2</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;CODE&quot;</span>: <span class="dv">0</span>,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;N_CHANNEL&quot;</span>: <span class="dv">1</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;N_LABEL&quot;</span>: <span class="dv">0</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># запишем в словарь переданные в функцию значения параметров</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    params <span class="op">=</span> param_defaults <span class="op">|</span> params</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># количество меток определим как длину списка labels</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    params[<span class="st">&quot;N_LABEL&quot;</span>] <span class="op">=</span> <span class="bu">len</span>(labels)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(filename, <span class="st">&quot;w&quot;</span>, encoding<span class="op">=</span>encoding) <span class="im">as</span> f:</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>        f.write(<span class="st">&quot;[PARAMETERS]</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> key, value <span class="kw">in</span> params.items():</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">=</span><span class="sc">{</span>value<span class="sc">}</span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>        f.write(<span class="st">&quot;[LABELS]</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> label <span class="kw">in</span> labels:</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>            label_byte <span class="op">=</span> (</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>                params[<span class="st">&#39;BYTE_PER_SAMPLE&#39;</span>] <span class="op">*</span> </span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>                params[<span class="st">&#39;N_CHANNEL&#39;</span>] <span class="op">*</span> label[<span class="st">&#39;position&#39;</span>]</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>label_byte<span class="sc">}</span><span class="ss">,&quot;</span>)</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>level2code[label[<span class="st">&#39;level&#39;</span>]]<span class="sc">}</span><span class="ss">,&quot;</span>)</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="ss">f&quot;</span><span class="sc">{</span>label[<span class="st">&#39;name&#39;</span>]<span class="sc">}</span><span class="ch">\n</span><span class="ss">&quot;</span>)</span></code></pre></div>
 <h4 id="попарная-обработка-меток">Попарная обработка меток</h4>
 <p>Каждая метка обозначает единственную точку в сигнале — чаще всего
 границу между двумя линейными участками (например, двумя фонами или
@@ -423,10 +502,10 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a h
 мы можем передать в <code>zip()</code> список меток и новый список,
 который будет содержать все метки, кроме первой (для создания такого
 списка воспользуемся срезами).</p>
-<div class="sourceCode" id="cb13"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>params, labels <span class="op">=</span> read_seg(<span class="st">&quot;cta0001.seg_B1&quot;</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> start, end <span class="kw">in</span> <span class="bu">zip</span>(labels, labels[<span class="dv">1</span>:]):</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(start[<span class="st">&quot;name&quot;</span>], start[<span class="st">&quot;position&quot;</span>], end[<span class="st">&quot;position&quot;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>params, labels <span class="op">=</span> read_seg(<span class="st">&quot;cta0001.seg_B1&quot;</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> start, end <span class="kw">in</span> <span class="bu">zip</span>(labels, labels[<span class="dv">1</span>:]):</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(start[<span class="st">&quot;name&quot;</span>], start[<span class="st">&quot;position&quot;</span>], end[<span class="st">&quot;position&quot;</span>])</span></code></pre></div>
 <pre><code>j 0 4246
 u0 4246 6354
 r&#39; 6354 6854
@@ -442,12 +521,12 @@ f 22254 27331</code></pre>
 <p>Аналогичного эффекта можно добиться с помощью функции
 <code>pairwise()</code> из модуля <code>itertools</code> (Python 3.10 и
 новее):</p>
-<div class="sourceCode" id="cb15"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> pairwise</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>params, labels <span class="op">=</span> read_seg(<span class="st">&quot;cta0001.seg_B1&quot;</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> start, end <span class="kw">in</span> pairwise(labels):</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(start[<span class="st">&quot;name&quot;</span>], start[<span class="st">&quot;position&quot;</span>], end[<span class="st">&quot;position&quot;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> pairwise</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>params, labels <span class="op">=</span> read_seg(<span class="st">&quot;cta0001.seg_B1&quot;</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> start, end <span class="kw">in</span> pairwise(labels):</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(start[<span class="st">&quot;name&quot;</span>], start[<span class="st">&quot;position&quot;</span>], end[<span class="st">&quot;position&quot;</span>])</span></code></pre></div>
 <h3 id="практические-задания">Практические задания</h3>
 <h4 id="num1-визуализация-разметки">2.1. Визуализация
 разметки</h4>
@@ -469,61 +548,60 @@ href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.text.html"><co
 <h4
 id="num3-поиск-самого-длинного-и-самого-короткого-интервала">2.3.
 Поиск самого длинного и самого короткого интервала</h4>
-<p>Напишите программу, которая считывает файл .seg и выводит на экран
+<p>Напишите программу, которая считывает файл SEG и выводит на экран
 самый длинный и самый короткий интервал в нём, не считая тех, у которых
 пустое имя. Для каждого интервала нужно вывести его начало, конец, длину
 (всё в секундах с точностью до 1 мс) и название.</p>
 <h4 id="num4-перенос-разметки-из-текстового-файла-в-файл-seg">2.4.
 Перенос разметки из текстового файла в файл SEG</h4>
-<p>Файл d01_s01_cards.seg_R1 содержит границы реплик, каждая из которых
-называется turn_XXX, где XXX — её порядковый номер. Параллельный ему
-файл d01_s01_cards.txt содержит орфографическую расшифровку этих реплик.
-Каждая строка файла выглядит так:</p>
+<p>Файл <em>d01_s01_cards.seg_R1</em> содержит границы реплик, каждая из
+которых называется turn_XXX, где XXX — её порядковый номер. Параллельный
+ему файл <em>d01_s01_cards.txt</em> содержит орфографическую расшифровку
+этих реплик. Каждая строка файла выглядит так:</p>
 <pre><code>XXX    текст реплики</code></pre>
 <p>Номер и текст реплики разделены знаком табуляции (<code>\t</code>).
-Создайте файл d01_s01_cards.seg_R2, где метка, обозначающая начало
-каждой реплики, будет содержать её текст (без номера). Не забудьте
-изменить уровень меток с R1 на R2.</p>
+Создайте файл <em>d01_s01_cards.seg_R2</em>, где метка, обозначающая
+начало каждой реплики, будет содержать её текст (без номера). Не
+забудьте изменить уровень меток с R1 на R2.</p>
 <h4
 id="num5-изменение-позиций-меток-под-новую-частоту-дискретизации">2.5.
 Изменение позиций меток под новую частоту дискретизации</h4>
-<p>Файл cta0001_new_fs.wav содержит тот же звук, что и cta0001.wav, но с
-другой частотой дискретизации. Напишите программу, которая определяет
-новую частоту дискретизации и создаёт файл cta0001_new_fs.seg_B1,
-подходящий к новой версии файла.</p>
+<p>Файл <em>cta0001_new_fs.wav</em> содержит тот же звук, что и
+<em>cta0001.wav</em>, но с другой частотой дискретизации. Напишите
+программу, которая определяет новую частоту дискретизации и создаёт файл
+<em>cta0001_new_fs.seg_B1</em>, подходящий к новой версии файла.</p>
 <h4 id="num6-сдвиг-меток-на-заданный-промежуток">2.6. Сдвиг меток
 на заданный промежуток</h4>
 <p>Напишите функцию, которая принимает на вход список меток и заданный
 интервал, выраженный в отсчётах (положительный или отрицательный), а
 возвращает список меток, где позиция каждой сдвинута на этот интервал.
 Позиция метки после сдвига не должна стать отрицательной. Проверьте
-функцию на файле cta0001.seg_B1 и сдвиге 441 отсчёт.</p>
+функцию на файле <em>cta0001.seg_B1</em> и сдвиге 441 отсчёт.</p>
 <h4 id="num7-деление-файла-wav-по-меткам">2.7. Деление файла WAV
 по меткам</h4>
-<p>Напишите программу, которая считывает файл .wav и параллельный ему
-файл .seg, делит файл .wav на интервалы, разграниченные метками из файла
-.seg, и записывает каждый фрагмент в отдельный файл, названный
-порядковым номером интервала и именем метки, открывающей соответствующий
-фрагмент. Если имя метки пустое, этот интервал необходимо
-пропустить.</p>
+<p>Напишите программу, которая считывает файл WAV и параллельный ему
+файл SEG, делит файл WAV на интервалы, разграниченные метками из файла
+SEG, и записывает каждый фрагмент в отдельный файл, названный порядковым
+номером интервала и именем метки, открывающей соответствующий фрагмент.
+Если имя метки пустое, этот интервал необходимо пропустить.</p>
 <h4 id="num8-удаление-согласных">2.8. Удаление согласных</h4>
-<p>Напишите программу, которая считывает файл .wav и параллельный ему
-файл .seg, содержащий разметку на звуки. Любой интервал, который не
+<p>Напишите программу, которая считывает файл WAV и параллельный ему
+файл SEG, содержащий разметку на звуки. Любой интервал, который не
 содержит гласные звуки, должен стать паузой. Для этого амплитуду всех
 отсчётов в нём нужно сделать нулём. В корпусе CORPRES, откуда взят файл
-cta0001, для обозначения гласных фонем русского языка используются
-латинские буквы <em>i, e, a, o, u, y</em> и цифры от 1 до 4,
-показывающие степень редукции, например: <em>a4</em>.</p>
+<em>cta0001</em>, для обозначения гласных фонем русского языка
+используются латинские буквы <em>i, e, a, o, u, y</em> и цифры от 1 до
+4, показывающие степень редукции, например: <em>a4</em>.</p>
 <h4 id="num9--создание-класса-seg">2.9. (*) Создание класса
 <code>Seg</code></h4>
-<p>Напишите модуль для чтения и записи файлов .seg. В модуле должны быть
+<p>Напишите модуль для чтения и записи файлов SEG. В модуле должны быть
 реализованы два класса:</p>
 <ul>
 <li>класс <code>Label</code> с полями <code>position</code> (целое
 число, положение метки в отсчётах), <code>level</code> (строка, формат
-"буква-цифра"), <code>name</code> (строка)</li>
+"буква-цифра"), <code>name</code> (строка);</li>
 <li>класс <code>Seg</code> с методами для чтения и записи как одиночного
-файла .seg, так и группы файлов .seg_**</li>
+файла <em>.seg</em>, так и группы файлов <em>.seg_**</em>.</li>
 </ul>
 
 
