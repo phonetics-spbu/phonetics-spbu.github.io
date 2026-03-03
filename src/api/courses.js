@@ -227,6 +227,7 @@ const coursesData = [
             { id: 1, title: "Повторение: кортежи, счётчики, JSON", filename: "python_ai_mag_1.html" },
             { id: 2, title: "Повторение: текстовые файлы, таблицы", filename: "python_ai_mag_2.html" },
             { id: 3, title: "Чтение и запись звуковых данных", filename: "python_ai_mag_3.html" },
+            { id: 4, title: "Чтение и запись файлов разметки Wave Assistant", filename: "python_ai_mag_4.html" },
         ]
     },
     {
