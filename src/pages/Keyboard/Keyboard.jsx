@@ -158,6 +158,19 @@ function Keyboard() {
         }
     };
 
+    const handleSaveToFile = () => {
+        const content = inputRef.current?.value || '';
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `transcription_${new Date().toISOString().slice(0, 10)}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
+
     return (
         <div className="chapter-page">
             <div className="chapter-page-content">
@@ -172,17 +185,16 @@ function Keyboard() {
                                 <span className="font-size-display">{fontSize}px</span>
                                 <button onClick={increaseFontSize} className="font-size-btn" title="Увеличить шрифт">+</button>
                             </div>
-                            <div className="toggle-controls">
-                                <button 
-                                    onClick={toggleLetterReplace} 
-                                    className={`toggle-btn ${letterReplaceEnabled ? 'active' : 'inactive'}`}
-                                    title={letterReplaceEnabled ? "Отключить замену букв" : "Включить замену букв"}
-                                >
-                                    <span className="toggle-text">
-                                        {letterReplaceEnabled ? 'Замена букв: ВКЛ' : 'Замена букв: ВЫКЛ'}
-                                    </span>
-                                </button>
-                            </div>
+
+                            <button
+                                onClick={toggleLetterReplace}
+                                className={`toggle-btn ${letterReplaceEnabled ? 'active' : 'inactive'}`}
+                                title={letterReplaceEnabled ? "Отключить замену букв" : "Включить замену букв"}>
+                                <span className="toggle-text">
+                                    {letterReplaceEnabled ? 'Замена букв: ВКЛ' : 'Замена букв: ВЫКЛ'}
+                                </span>
+                            </button>
+
                         </div>
 
                         <textarea
@@ -237,6 +249,9 @@ function Keyboard() {
                         <div className="action-buttons">
                             <button className="clear-btn" onClick={handleClear}>
                                 Очистить всё
+                            </button>
+                            <button className="save-btn" onClick={handleSaveToFile}>
+                                Сохранить в файл
                             </button>
                         </div>
 
