@@ -202,7 +202,7 @@ function Keyboard() {
 
                         <div className="button-grid_7">
                             <span className="button-grid_5">
-                                {['ʒ', 'ʃ', 'ŋ', 'ɪ', 'ʊ', 'θ', 'ð', 'ə', 'ɜː', 'ɔː', 'ɔ', 'æ', 'ʌ', 'ɑː', 'ɒ'].map(char => (
+                                {['ʒ', 'ʃ', 'ŋ', 'ɪ', 'ʊ', 'θ', 'ð', 'ə', 'ɜ', 'ɔ', 'ː', 'æ', 'ʌ', 'ɑ', 'ɒ'].map(char => (
                                     <button
                                         key={char}
                                         className="special-btn"
