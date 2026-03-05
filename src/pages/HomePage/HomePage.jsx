@@ -48,6 +48,13 @@ function HomePage({author}) {
                             </button>
                         </Link> : <div></div>
             }
+                             {author === 'all' ?
+                        <Link to={`/keyboard`} className="keyboard">
+                            <button className="select-button">
+                                <div>Клавиатура</div>
+                            </button>
+                        </Link> : <div></div>
+            }
             </nav>
             <div className="home-page-header">Доступные курсы:</div>
             {loading ? (

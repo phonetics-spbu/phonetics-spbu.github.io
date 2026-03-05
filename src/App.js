@@ -3,6 +3,7 @@ import HomePage from './pages/HomePage/HomePage';
 import CoursePage from './pages/CoursePage/CoursePage';
 import ChapterPage from './pages/ChapterPage/ChapterPage';
 import UsefulLinks from './pages/UsefulLinks/UsefulLinks';
+import Keyboard from './pages/Keyboard/Keyboard';
 import Header from './components/Header/Header';
 import './App.css';
 
@@ -17,6 +18,7 @@ function App() {
                             <Route path="/course/:courseId/chapter/:chapterId" element={<ChapterPage/>}/>
                             <Route path="/course/:courseId" element={<CoursePage/>}/>
                             <Route path="/useful_links" element={<UsefulLinks/>}/>
+                            <Route path="/keyboard" element={<Keyboard/>}/>
                             <Route path="/kholyavin" element={<HomePage author="kholyavin"/>}/>
                             <Route path="/tityushina" element={<HomePage author="tityushina"/>}/>
                             <Route path="/" element={<HomePage author="all"/>}/>
