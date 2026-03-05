@@ -7,7 +7,6 @@ function Keyboard() {
     const inputRef = useRef(null);
     const [loading, setLoading] = useState(true);
     const [fontSize, setFontSize] = useState(16); // Начальный размер шрифта
-    const [letterReplaceEnabled, setLetterReplaceEnabled] = useState(true); // Toggle state for letter replacements
 
     // Маппинг для цифр в спец символы
     const digitToSuperscript = {
@@ -87,8 +86,7 @@ function Keyboard() {
                 replacement = digitToSuperscript[e.key];
             } else if (punctuationMap.hasOwnProperty(e.key)) {
                 replacement = punctuationMap[e.key];
-            } else if (letterReplaceEnabled && letterMap.hasOwnProperty(e.key)) {
-                // Only replace letters if the toggle is enabled
+            } else if (letterMap.hasOwnProperty(e.key)) {
                 replacement = letterMap[e.key];
             }
 
@@ -105,7 +103,7 @@ function Keyboard() {
             }
 
             // Trigger input event
-            const event = new Event('input', { bubbles: true });
+            const event = new Event('textarea', { bubbles: true });
             inputRef.current.dispatchEvent(event);
         }
     };
@@ -120,9 +118,6 @@ function Keyboard() {
                 processedText += digitToSuperscript[char];
             } else if (punctuationMap.hasOwnProperty(char)) {
                 processedText += punctuationMap[char];
-            } else if (letterReplaceEnabled && letterMap.hasOwnProperty(char)) {
-                // Only replace letters if the toggle is enabled
-                processedText += letterMap[char];
             } else {
                 processedText += char;
             }
@@ -150,14 +145,6 @@ function Keyboard() {
         setFontSize(prevSize => Math.max(10, prevSize - 2)); // Уменьшаем, но не меньше 10px
     };
 
-    const toggleLetterReplace = () => {
-        setLetterReplaceEnabled(prev => !prev);
-        // Keep focus on textarea after toggling
-        if (inputRef.current) {
-            inputRef.current.focus();
-        }
-    };
-
     return (
         <div className="chapter-page">
             <div className="chapter-page-content">
@@ -172,27 +159,16 @@ function Keyboard() {
                                 <span className="font-size-display">{fontSize}px</span>
                                 <button onClick={increaseFontSize} className="font-size-btn" title="Увеличить шрифт">A+</button>
                             </div>
-                            <div className="toggle-controls">
-                                <button 
-                                    onClick={toggleLetterReplace} 
-                                    className={`toggle-btn ${letterReplaceEnabled ? 'active' : 'inactive'}`}
-                                    title={letterReplaceEnabled ? "Отключить замену букв" : "Включить замену букв"}
-                                >
-                                    <span className="toggle-icon">{letterReplaceEnabled ? '🔊' : '🔇'}</span>
-                                    <span className="toggle-text">
-                                        {letterReplaceEnabled ? 'Замена букв: ВКЛ' : 'Замена букв: ВЫКЛ'}
-                                    </span>
-                                </button>
-                            </div>
                         </div>
 
                         <textarea
                             ref={inputRef}
+                            type="text"
                             id="textInput"
                             placeholder="Введите текст или нажмите кнопки для вставки специальных символов..."
                             onKeyDown={handleKeyDown}
                             onPaste={handlePaste}
-                            className={`special-input ${letterReplaceEnabled ? 'letter-replace-on' : ''}`}
+                            className="special-input"
                             style={{ fontSize: `${fontSize}px` }}
                         />
 
@@ -241,34 +217,18 @@ function Keyboard() {
 
                         <div className="info">
                             <h3>Информация о клавиатуре:</h3>
-                            <p><strong>Замена букв:</strong> <span className={letterReplaceEnabled ? 'status-on' : 'status-off'}>
-                                {letterReplaceEnabled ? 'ВКЛЮЧЕНА' : 'ВЫКЛЮЧЕНА'}
-                            </span></p>
-                            <p><strong>Когда включена:</strong> Следующие буквы заменяются на фонетические символы:</p>
-                            <div className="mapping-preview">
-                                {Object.entries(letterMap).map(([key, value]) => (
-                                    <div key={key} className="mapping-item">
-                                        {key} → {value}
-                                    </div>
-                                ))}
-                            </div>
-                            <p><strong>Цифры:</strong> Заменяются на знаки тонов (1→ˎ, 2→ˋ, 3→ˏ, 4→ˊ, 5→ˇ, 6→ˆ, 7→˃)</p>
+                            <p><strong>Цифры (0-9):</strong> Заменяются на верхний индекс (⁰-⁹)</p>
                             <p><strong>Пунктуация:</strong> Заменяется специальными символами:</p>
                             <ul>
-                                <li><strong>'</strong> → ˈ (ударение)</li>
-                                <li><strong>"</strong> → ˌ (второстепенное ударение)</li>
-                                <li><strong>*</strong> → ˚ (кружок)</li>
-                                <li><strong>%</strong> → ˳ (подстрочный кружок)</li>
-                                <li><strong>_</strong> → ˉ (высокая предшкала)</li>
-                                <li><strong>&lt;</strong> → ↗ (восходящая шкала)</li>
-                                <li><strong>&gt;</strong> → ↘ (нисходящая шкала)</li>
-                                <li><strong>!</strong> → ↑ (ресеттинг деклинации)</li>
-                                <li><strong>\</strong> → ‖ (фразовая граница)</li>
-                                <li><strong>#</strong> → ┆ (пунктирная граница)</li>
-                                <li><strong>$</strong> → ⌇ (волнистая граница)</li>
-                                <li><strong>:</strong> → ː (долгота)</li>
+                                <li><strong>!</strong> → ¡ (перевернутый восклицательный знак)</li>
+                                <li><strong>?</strong> → ¿ (перевернутый вопросительный знак)</li>
+                                <li><strong>.</strong> → · (средняя точка)</li>
+                                <li><strong>,</strong> → ‚ (нижняя запятая)</li>
+                                <li><strong>;</strong> → ; (греческий вопросительный знак)</li>
+                                <li><strong>:</strong> → ː (треугольное двоеточие)</li>
+                                <li><strong>&</strong> → ⅋ (перевернутый амперсанд)</li>
                             </ul>
-                            <p><em>Примечание: Кнопки со специальными символами всегда работают независимо от переключателя.</em></p>
+                            <p><strong>Все остальные клавиши:</strong> Работают обычно</p>
                         </div>
                     </div>
                 )}
