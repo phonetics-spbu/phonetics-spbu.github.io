@@ -6,6 +6,7 @@ import './Keyboard.css'; // Создайте этот файл для стиле
 function Keyboard() {
     const inputRef = useRef(null);
     const [loading, setLoading] = useState(true);
+    const [fontSize, setFontSize] = useState(16); // Начальный размер шрифта
 
     // Маппинг для цифр в спец символы
     const digitToSuperscript = {
@@ -112,6 +113,14 @@ function Keyboard() {
         insertAtCursor(char);
     };
 
+    const increaseFontSize = () => {
+        setFontSize(prevSize => prevSize + 2); // Увеличиваем на 2px
+    };
+
+    const decreaseFontSize = () => {
+        setFontSize(prevSize => Math.max(10, prevSize - 2)); // Уменьшаем, но не меньше 10px
+    };
+
     return (
         <div className="chapter-page">
             <div className="chapter-page-content">
@@ -119,6 +128,14 @@ function Keyboard() {
                 {!loading && (
                     <div className="container">
                         <h2>Клавиатура для транскрипции и интонационной разметки</h2>
+
+                        <div className="textarea-controls">
+                            <div className="font-size-controls">
+                                <button onClick={decreaseFontSize} className="font-size-btn" title="Уменьшить шрифт">A-</button>
+                                <span className="font-size-display">{fontSize}px</span>
+                                <button onClick={increaseFontSize} className="font-size-btn" title="Увеличить шрифт">A+</button>
+                            </div>
+                        </div>
 
                         <textarea
                             ref={inputRef}
@@ -128,6 +145,7 @@ function Keyboard() {
                             onKeyDown={handleKeyDown}
                             onPaste={handlePaste}
                             className="special-input"
+                            style={{ fontSize: `${fontSize}px` }}
                         />
 
                         <div className="button-grid_7">
@@ -167,7 +185,7 @@ function Keyboard() {
                             </span>
                         </div>
 
-                        <div>
+                        <div className="action-buttons">
                             <button className="clear-btn" onClick={handleClear}>
                                 Очистить всё
                             </button>

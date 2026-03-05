@@ -96,6 +96,70 @@
     color: #666;
 }
 
+.textarea-controls {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.font-size-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+.font-size-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.font-size-btn:hover {
+    background-color: #0056b3;
+}
+
+.font-size-btn:active {
+    transform: scale(0.95);
+}
+
+.font-size-display {
+    min-width: 50px;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+}
+
+.special-input {
+    width: 100%;
+    min-height: 150px;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.5;
+    resize: vertical;
+    transition: font-size 0.2s ease;
+}
+
+.action-buttons {
+    margin: 15px 0;
+    display: flex;
+    justify-content: center;
+}
+
 /* Стили для мобильной версии */
 @media (max-width: 600px) {
     .button-grid_7 {
