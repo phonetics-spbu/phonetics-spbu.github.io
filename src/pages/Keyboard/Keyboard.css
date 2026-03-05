@@ -80,6 +80,7 @@
 }
 
 .info {
+    width: 100%;
     background-color: #e9ecef;
     padding: 15px;
     border-radius: 5px;
@@ -244,30 +245,19 @@
     border-radius: 4px;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .tables-container {
-        flex-direction: column;
-    }
-    
-    .table-wrapper {
-        width: 100%;
-    }
-}
-
 /* Стили для мобильной версии */
 @media (max-width: 600px) {
     .button-grid_7 {
-        width: 400px;
+        width: 350px;
         grid-template-columns: repeat(4, 1fr);
     }
 
     .button-grid_5 {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .button-grid_4 {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
