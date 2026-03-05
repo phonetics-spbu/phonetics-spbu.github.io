@@ -4,24 +4,6 @@
     padding: 20px;
 }
 
-.special-input {
-    font-family: Gentium, sans-serif;
-    width: 100%;
-    height: 400px;
-    padding: 10px;
-    font-size: 16px;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    box-sizing: border-box;
-    font-family: inherit;
-}
-
-.special-input:focus {
-    outline: none;
-    border-color: #007bff;
-}
-
 .button-grid_7 {
     width: 570px;
     display: grid;
@@ -59,7 +41,7 @@
 }
 
 .special-btn:hover {
-    background-color: #0056b3;
+    background-color: #6195ac;
     color: white;
 }
 
@@ -110,18 +92,17 @@
     gap: 8px;
     background-color: #f0f0f0;
     padding: 5px 10px;
-    border-radius: 20px;
+    border-radius: 3px;
 }
 
 .font-size-btn {
     width: 36px;
     height: 36px;
-    border: none;
-    background-color: #007bff;
-    color: white;
+    border: 2px;
+    color: black;
     font-size: 18px;
     font-weight: bold;
-    border-radius: 50%;
+    border-radius: 3px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -130,7 +111,8 @@
 }
 
 .font-size-btn:hover {
-    background-color: #0056b3;
+    background-color: #6195ac;
+    color: white;
 }
 
 .font-size-btn:active {
@@ -145,15 +127,22 @@
 }
 
 .special-input {
+    font-family: Gentium, sans-serif;
+    src: url(https://site/fonts/Gentium-Regular.woff2);
     width: 100%;
-    min-height: 150px;
-    padding: 12px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    font-family: 'Arial', sans-serif;
-    line-height: 1.5;
-    resize: vertical;
-    transition: font-size 0.2s ease;
+    height: 400px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+
+.special-input:focus {
+    outline: none;
+    border-color: #007bff;
 }
 
 .action-buttons {
@@ -165,6 +154,7 @@
 /* Стили для мобильной версии */
 @media (max-width: 600px) {
     .button-grid_7 {
+        width: 400px;
         grid-template-columns: repeat(4, 1fr);
     }
 

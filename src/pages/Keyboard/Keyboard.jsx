@@ -6,7 +6,7 @@ import './Keyboard.css'; // Создайте этот файл для стиле
 function Keyboard() {
     const inputRef = useRef(null);
     const [loading, setLoading] = useState(true);
-    const [fontSize, setFontSize] = useState(16); // Начальный размер шрифта
+    const [fontSize, setFontSize] = useState(32); // Начальный размер шрифта
     const [letterReplaceEnabled, setLetterReplaceEnabled] = useState(true); // Toggle state for letter replacements
 
     // Маппинг для цифр в спец символы
@@ -168,9 +168,9 @@ function Keyboard() {
 
                         <div className="textarea-controls">
                             <div className="font-size-controls">
-                                <button onClick={decreaseFontSize} className="font-size-btn" title="Уменьшить шрифт">A-</button>
+                                <button onClick={decreaseFontSize} className="font-size-btn" title="Уменьшить шрифт">-</button>
                                 <span className="font-size-display">{fontSize}px</span>
-                                <button onClick={increaseFontSize} className="font-size-btn" title="Увеличить шрифт">A+</button>
+                                <button onClick={increaseFontSize} className="font-size-btn" title="Увеличить шрифт">+</button>
                             </div>
                             <div className="toggle-controls">
                                 <button 
@@ -198,13 +198,15 @@ function Keyboard() {
 
                         <div className="button-grid_7">
                             {['ˎ', 'ˋ', 'ˏ', 'ˊ', 'ˇ', 'ˆ', '˃'].map(char => (
-                                <button
-                                    key={char}
-                                    className="special-btn"
-                                    onClick={() => handleSpecialCharClick(char)}
-                                >
-                                    {char}
-                                </button>
+                                <div>
+                                    <button
+                                        key={char}
+                                        className="special-btn"
+                                        onClick={() => handleSpecialCharClick(char)}
+                                    >
+                                        {char}
+                                    </button>
+                                </div>
                             ))}
                         </div>
 
