@@ -188,7 +188,7 @@ function Keyboard() {
                         <textarea
                             ref={inputRef}
                             id="textInput"
-                            placeholder="Введите текст или нажмите кнопки для вставки специальных символов..."
+                            placeholder="Введите текст"
                             onKeyDown={handleKeyDown}
                             onPaste={handlePaste}
                             className={`special-input ${letterReplaceEnabled ? 'letter-replace-on' : ''}`}
