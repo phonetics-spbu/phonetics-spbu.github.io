@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import './Keyboard.css';
 import SideMenu from "../../components/SideMenu/SideMenu";
-import './Keyboard.css'; // Создайте этот файл для стилей
+import './Keyboard.css'; 
 
 function Keyboard() {
     const inputRef = useRef(null);
@@ -9,8 +9,7 @@ function Keyboard() {
     const [fontSize, setFontSize] = useState(32); // Начальный размер шрифта
     const [letterReplaceEnabled, setLetterReplaceEnabled] = useState(true); // Toggle state for letter replacements
 
-    // Маппинг для цифр в спец символы
-    const digitToSuperscript = {
+    const digitMap = {
         '1': 'ˎ',
         '2': 'ˋ',
         '3': 'ˏ',
@@ -20,20 +19,18 @@ function Keyboard() {
         '7': '˃',
     };
 
-    // Маппинг для пунктуации
     const punctuationMap = {
         '\'': 'ˈ',
         '"': 'ˌ',
         '*': '˚',
         '%': '˳',
-        '_': 'ˉ',
+        '=': 'ˉ',
         '<': '↗',
         '>': '↘',
         '!': '↑',
         '\\': '‖',
         '#': '┆',
         '$': '⌇',
-        ':': 'ː',
     };
 
     const letterMap = {
@@ -51,6 +48,9 @@ function Keyboard() {
         'V': 'ʌ',
         'Q': 'ɒ',
         '{': 'æ',
+        'G': 'ɡ',
+        ':': 'ː',
+        '+': '͡',
     };
 
     useEffect(() => {
@@ -83,8 +83,8 @@ function Keyboard() {
 
             let replacement = null;
 
-            if (digitToSuperscript.hasOwnProperty(e.key)) {
-                replacement = digitToSuperscript[e.key];
+            if (digitMap.hasOwnProperty(e.key)) {
+                replacement = digitMap[e.key];
             } else if (punctuationMap.hasOwnProperty(e.key)) {
                 replacement = punctuationMap[e.key];
             } else if (letterReplaceEnabled && letterMap.hasOwnProperty(e.key)) {
@@ -108,27 +108,6 @@ function Keyboard() {
             const event = new Event('input', { bubbles: true });
             inputRef.current.dispatchEvent(event);
         }
-    };
-
-    const handlePaste = (e) => {
-        e.preventDefault();
-        const pastedText = e.clipboardData.getData('text');
-        let processedText = '';
-
-        for (let char of pastedText) {
-            if (digitToSuperscript.hasOwnProperty(char)) {
-                processedText += digitToSuperscript[char];
-            } else if (punctuationMap.hasOwnProperty(char)) {
-                processedText += punctuationMap[char];
-            } else if (letterReplaceEnabled && letterMap.hasOwnProperty(char)) {
-                // Only replace letters if the toggle is enabled
-                processedText += letterMap[char];
-            } else {
-                processedText += char;
-            }
-        }
-
-        insertAtCursor(processedText);
     };
 
     const handleClear = () => {
@@ -189,9 +168,9 @@ function Keyboard() {
                             <button
                                 onClick={toggleLetterReplace}
                                 className={`toggle-btn ${letterReplaceEnabled ? 'active' : 'inactive'}`}
-                                title={letterReplaceEnabled ? "Отключить замену букв" : "Включить замену букв"}>
+                                title={letterReplaceEnabled ? "Выключить режим фонетического ввода" : "Включить режим фонетического ввода"}>
                                 <span className="toggle-text">
-                                    {letterReplaceEnabled ? 'Замена букв: ВКЛ' : 'Замена букв: ВЫКЛ'}
+                                    {letterReplaceEnabled ? 'Фонетический ввод: ВКЛ' : 'Фонетический ввод: ВЫКЛ'}
                                 </span>
                             </button>
 
@@ -202,7 +181,7 @@ function Keyboard() {
                             id="textInput"
                             placeholder="Введите текст"
                             onKeyDown={handleKeyDown}
-                            onPaste={handlePaste}
+                            // onPaste={handlePaste}
                             className={`special-input ${letterReplaceEnabled ? 'letter-replace-on' : ''}`}
                             style={{ fontSize: `${fontSize}px` }}
                         />
@@ -257,34 +236,81 @@ function Keyboard() {
 
                         <div className="info">
                             <h3>Информация о клавиатуре:</h3>
-                            <p><strong>Замена букв:</strong> <span className={letterReplaceEnabled ? 'status-on' : 'status-off'}>
-                                {letterReplaceEnabled ? 'ВКЛЮЧЕНА' : 'ВЫКЛЮЧЕНА'}
+                            <p><strong>Фонетический ввод:</strong> <span className={letterReplaceEnabled ? 'status-on' : 'status-off'}>
+                                {letterReplaceEnabled ? 'включён' : 'выключен'}
                             </span></p>
-                            <p><strong>Когда включена:</strong> Следующие буквы заменяются на фонетические символы:</p>
-                            <div className="mapping-preview">
-                                {Object.entries(letterMap).map(([key, value]) => (
-                                    <div key={key} className="mapping-item">
-                                        {key} → {value}
-                                    </div>
-                                ))}
+                            
+                            <div className="tables-container">
+                                {/* First Table - Intonation Marks */}
+                                <div className="table-wrapper">
+                                    <h4>Интонационные символы</h4>
+                                    <table className="symbol-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Символ</th>
+                                                <th>Описание</th>
+                                                <th>Что нажать</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>ˎyes</td><td>Low Fall</td><td>1</td></tr>
+                                            <tr><td>ˋyes</td><td>High Fall</td><td>2</td></tr>
+                                            <tr><td>ˏyes</td><td>Low Rise</td><td>3</td></tr>
+                                            <tr><td>ˊyes</td><td>High Rise</td><td>4</td></tr>
+                                            <tr><td>ˇyes</td><td>Fall-Rise</td><td>5</td></tr>
+                                            <tr><td>ˆyes</td><td>Rise-Fall</td><td>6</td></tr>
+                                            <tr><td>˃yes</td><td>Mid-Level</td><td>7</td></tr>
+                                            <tr><td>ˈyes</td><td>High Accent</td><td>'</td></tr>
+                                            <tr><td>ˌyes</td><td>Low Accent</td><td>"</td></tr>
+                                            <tr><td>˚yes</td><td>Non-Low Unaccented</td><td>*</td></tr>
+                                            <tr><td>˳yes</td><td>Low Unaccented</td><td>%</td></tr>
+                                            <tr><td>ˉyes</td><td>High Pre-head</td><td>=</td></tr>
+                                            <tr><td>↗</td><td>Rising Head</td><td>&lt;</td></tr>
+                                            <tr><td>↘</td><td>Falling Head</td><td>&gt;</td></tr>
+                                            <tr><td>↑</td><td>Declination Reset</td><td>!</td></tr>
+                                            <tr><td>|</td><td>Tone Group Boundary</td><td>|</td></tr>
+                                            <tr><td>‖</td><td>Phrase Boundary</td><td>\</td></tr>
+                                            <tr><td>┆</td><td>Dashed Boundary</td><td>#</td></tr>
+                                            <tr><td>⌇</td><td>Wavy Boundary</td><td>$</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                {/* Second Table - Phonetic Symbols */}
+                                <div className="table-wrapper">
+                                    <h4>Фонетические символы</h4>
+                                    <table className="symbol-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Символ</th>
+                                                <th>Описание</th>
+                                                <th>Что нажать</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>ɡ</td><td>Voiced Velar Plosive</td><td>G</td></tr>
+                                            <tr><td>θ</td><td>Voiceless Dental Fricative</td><td>T</td></tr>
+                                            <tr><td>ð</td><td>Voiced Dental Fricative</td><td>D</td></tr>
+                                            <tr><td>ʃ</td><td>Voiceless Postalveolar Fricative</td><td>S</td></tr>
+                                            <tr><td>ʒ</td><td>Voiced Postalveolar Fricative</td><td>Z</td></tr>
+                                            <tr><td>ŋ</td><td>Velar Nasal</td><td>N</td></tr>
+                                            <tr><td>ɪ</td><td>KIT Vowel</td><td>I</td></tr>
+                                            <tr><td>æ</td><td>TRAP Vowel</td><td>{'{'}</td></tr>
+                                            <tr><td>ɒ</td><td>LOT Vowel</td><td>Q</td></tr>
+                                            <tr><td>ʌ</td><td>STRUT Vowel</td><td>V</td></tr>
+                                            <tr><td>ʊ</td><td>FOOT Vowel</td><td>U</td></tr>
+                                            <tr><td>ɑ</td><td>PALM Vowel</td><td>A</td></tr>
+                                            <tr><td>ɔ</td><td>THOUGHT Vowel</td><td>O</td></tr>
+                                            <tr><td>ɜ</td><td>NURSE Vowel</td><td>E</td></tr>
+                                            <tr><td>ə</td><td>Schwa</td><td>@</td></tr>
+                                            <tr><td>ː</td><td>Length Mark</td><td>:</td></tr>
+                                            <tr><td>t͡ʃ</td><td>Affricate Tie Bar</td><td>+</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <p><strong>Цифры:</strong> Заменяются на знаки тонов (1→ˎ, 2→ˋ, 3→ˏ, 4→ˊ, 5→ˇ, 6→ˆ, 7→˃)</p>
-                            <p><strong>Пунктуация:</strong> Заменяется специальными символами:</p>
-                            <ul>
-                                <li><strong>'</strong> → ˈ (ударение)</li>
-                                <li><strong>"</strong> → ˌ (второстепенное ударение)</li>
-                                <li><strong>*</strong> → ˚ (кружок)</li>
-                                <li><strong>%</strong> → ˳ (подстрочный кружок)</li>
-                                <li><strong>_</strong> → ˉ (высокая предшкала)</li>
-                                <li><strong>&lt;</strong> → ↗ (восходящая шкала)</li>
-                                <li><strong>&gt;</strong> → ↘ (нисходящая шкала)</li>
-                                <li><strong>!</strong> → ↑ (ресеттинг деклинации)</li>
-                                <li><strong>\</strong> → ‖ (фразовая граница)</li>
-                                <li><strong>#</strong> → ┆ (пунктирная граница)</li>
-                                <li><strong>$</strong> → ⌇ (волнистая граница)</li>
-                                <li><strong>:</strong> → ː (долгота)</li>
-                            </ul>
-                            <p><em>Примечание: Кнопки со специальными символами всегда работают независимо от переключателя.</em></p>
+                            
+                            <p><em>Примечание: ввод интонационных символов работает всегда, независимо от переключателя.</em></p>
                         </div>
                     </div>
                 )}
