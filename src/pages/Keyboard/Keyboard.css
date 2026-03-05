@@ -11,7 +11,7 @@
 
 .button-grid_7 {
     font-family: Gentium, serif;
-    src: url(https://site/fonts/Gentium-Regular.woff2);
+    src: url('../../fonts/Gentium-Regular.woff2') format('woff2');
     width: 570px;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -21,7 +21,7 @@
 
 .button-grid_5 {
     font-family: Gentium, serif;
-    src: url(https://site/fonts/Gentium-Regular.woff2);
+    src: url('../../fonts/Gentium-Regular.woff2') format('woff2');
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 10px;
@@ -31,7 +31,7 @@
 
 .button-grid_4 {
     font-family: Gentium, serif;
-    src: url(https://site/fonts/Gentium-Regular.woff2);
+    src: url('../../fonts/Gentium-Regular.woff2') format('woff2');
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
@@ -165,7 +165,7 @@
 
 .special-input {
     font-family: Gentium, serif;
-    src: url(https://site/fonts/Gentium-Regular.woff2);
+    src: url('../../fonts/Gentium-Regular.woff2') format('woff2');
     width: 100%;
     height: 400px;
     padding: 10px;
@@ -190,7 +190,7 @@
 
 .tables-container {
     font-family: Gentium, serif;
-    src: url(https://site/fonts/Gentium-Regular.woff2);
+    src: url('../../fonts/Gentium-Regular.woff2') format('woff2');
     display: flex;
     gap: 20px;
     margin: 20px 0;

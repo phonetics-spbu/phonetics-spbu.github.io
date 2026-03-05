@@ -177,11 +177,11 @@ function Keyboard() {
                         </div>
 
                         <textarea
+                            spellcheck="false"
                             ref={inputRef}
                             id="textInput"
                             placeholder="Введите текст"
                             onKeyDown={handleKeyDown}
-                            // onPaste={handlePaste}
                             className={`special-input ${letterReplaceEnabled ? 'letter-replace-on' : ''}`}
                             style={{ fontSize: `${fontSize}px` }}
                         />
