@@ -188,6 +188,7 @@ const coursesData = [
             { id: 17, title: "Построение графиков в Matplotlib", filename: "python_genling_bac_15.html" },
             { id: 18, title: "Регулярные выражения", filename: "python_genling_bac_16.html" },
             { id: 19, title: "Морфологический анализ", filename: "python_genling_bac_17.html" },
+            { id: 20, title: "Корпус OpenCorpora", filename: "python_genling_bac_18.html" },
 
         ]
     },
@@ -212,6 +213,7 @@ const coursesData = [
             { id: 10, title: "Токенизация и лемматизация. Морфологический анализ", filename: "ling_programming_10.html" },
             { id: 11, title: "Регулярные выражения", filename: "ling_programming_11.html" },
             { id: 12, title: "Расстояние Левенштейна", filename: "ling_programming_12.html" },
+            { id: 13, title: "Наивный Байесовский классификатор", filename: "ling_programming_13.html" },
         ]
     },
     
