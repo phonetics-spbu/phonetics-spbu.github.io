@@ -178,7 +178,6 @@ function Keyboard() {
                                     className={`toggle-btn ${letterReplaceEnabled ? 'active' : 'inactive'}`}
                                     title={letterReplaceEnabled ? "Отключить замену букв" : "Включить замену букв"}
                                 >
-                                    <span className="toggle-icon">{letterReplaceEnabled ? '🔊' : '🔇'}</span>
                                     <span className="toggle-text">
                                         {letterReplaceEnabled ? 'Замена букв: ВКЛ' : 'Замена букв: ВЫКЛ'}
                                     </span>
