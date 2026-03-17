@@ -55,7 +55,8 @@ const coursesData = [
             { id: 9, title: "Вычисление ЧОТ методами во временной области", filename: "dsp_9.html" },
             { id: 10, title: "Вычисление ЧОТ методами в частотной области", filename: "dsp_10.html" },
             { id: 11, title: "Автоматическая сегментация периодов ОТ", filename: "dsp_11.html" },
-            { id: 12, title: "Вычисление спектра одного периода ОТ", filename: "dsp_12.html" },
+            { id: 12, title: "Психоакустические шкалы", filename: "dsp_12.html" },
+            { id: 13, title: "Вычисление спектра одного периода ОТ", filename: "dsp_13.html" },
         ]
     },
     {
