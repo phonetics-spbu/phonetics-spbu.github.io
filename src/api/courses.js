@@ -232,6 +232,8 @@ const coursesData = [
             { id: 2, title: "Повторение: текстовые файлы, таблицы", filename: "python_ai_mag_2.html" },
             { id: 3, title: "Чтение и запись звуковых данных", filename: "python_ai_mag_3.html" },
             { id: 4, title: "Чтение и запись файлов разметки Wave Assistant", filename: "python_ai_mag_4.html" },
+            { id: 5, title: "Файловые системы и работа с многоуровневой разметкой", filename: "python_ai_mag_5.html" },
+            { id: 6, title: "Работа с метками периодов основного тона", filename: "python_ai_mag_6.html" },
         ]
     },
     {
@@ -246,6 +248,19 @@ const coursesData = [
             { id: 1, title: "АРР. Введение", filename: "asr_1.html" },
             { id: 2, title: "Акустические признаки", filename: "asr_2.html" },
             { id: 3, title: "Акустические модели", filename: "asr_3.html" },
+            { id: 4, title: "Произносительные словари", filename: "asr_4.html" },
+        ]
+    },
+    {
+        id: 'tts',
+        title: 'Автоматический синтез речи',
+        description: 'Искусственный интеллект в моделировании речевой деятельности',
+        long_description: 'Искусственный интеллект в моделировании речевой деятельности, 1 курс магистратуры',
+        level: "mag",
+        year: 1,
+        author: "kholyavin",
+        chapters: [
+            { id: 1, title: "Компилятивный синтез: практикум", filename: "tts_1.html" },
         ]
     },
     {
