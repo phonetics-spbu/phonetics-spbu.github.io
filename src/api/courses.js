@@ -248,7 +248,8 @@ const coursesData = [
             { id: 1, title: "АРР. Введение", filename: "asr_1.html" },
             { id: 2, title: "Акустические признаки", filename: "asr_2.html" },
             { id: 3, title: "Акустические модели", filename: "asr_3.html" },
-            { id: 4, title: "Произносительные словари", filename: "asr_4.html" },
+            { id: 4, title: "Языковые модели", filename: "asr_4.html" },
+            { id: 5, title: "Произносительные словари", filename: "asr_5.html" },
         ]
     },
     {
