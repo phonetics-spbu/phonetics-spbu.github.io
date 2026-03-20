@@ -216,6 +216,7 @@ const coursesData = [
             { id: 11, title: "Регулярные выражения", filename: "ling_programming_11.html" },
             { id: 12, title: "Расстояние Левенштейна", filename: "ling_programming_12.html" },
             { id: 13, title: "Наивный Байесовский классификатор", filename: "ling_programming_13.html" },
+            { id: 14, title: "N-граммные языковые модели", filename: "ling_programming_14.html" },
         ]
     },
     
