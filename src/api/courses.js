@@ -191,7 +191,8 @@ const coursesData = [
             { id: 18, title: "Регулярные выражения", filename: "python_genling_bac_16.html" },
             { id: 19, title: "Морфологический анализ", filename: "python_genling_bac_17.html" },
             { id: 20, title: "Корпус OpenCorpora", filename: "python_genling_bac_18.html" },
-            { id: 21, title: "Telegram-боты", filename: "python_genling_bac_19.html" },
+            { id: 21, title: "Национальный корпус русского языка", filename: "python_genling_bac_19.html" },
+            { id: 22, title: "Telegram-боты", filename: "python_genling_bac_20.html" },
 
         ]
     },
