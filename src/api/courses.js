@@ -191,6 +191,7 @@ const coursesData = [
             { id: 18, title: "Регулярные выражения", filename: "python_genling_bac_16.html" },
             { id: 19, title: "Морфологический анализ", filename: "python_genling_bac_17.html" },
             { id: 20, title: "Корпус OpenCorpora", filename: "python_genling_bac_18.html" },
+            { id: 21, title: "Telegram-боты", filename: "python_genling_bac_19.html" },
 
         ]
     },
@@ -235,6 +236,7 @@ const coursesData = [
             { id: 4, title: "Чтение и запись файлов разметки Wave Assistant", filename: "python_ai_mag_4.html" },
             { id: 5, title: "Файловые системы и работа с многоуровневой разметкой", filename: "python_ai_mag_5.html" },
             { id: 6, title: "Работа с метками периодов основного тона", filename: "python_ai_mag_6.html" },
+            { id: 7, title: "Работа с файлами аннотации TextGrid", filename: "python_ai_mag_7.html" },
         ]
     },
     {
