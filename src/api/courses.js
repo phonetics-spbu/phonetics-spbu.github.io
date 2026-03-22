@@ -289,6 +289,7 @@ const coursesData = [
             { id: 8, title: "Библиотека PraatIO", filename: "praatio.html" },
             { id: 9, title: "Библиотека SciPy", filename: "scipy.html" },
             { id: 10, title: "Работа с фонетической транскрипцией", filename: "transcription_processing.html" },
+            { id: 11, title: "Работа с внешними инструментами", filename: "extra_tools.html" },
             { id: 99, title: "Список литературы", filename: "sources.html" },
             { id: 100, title: "Документация к упомянутым библиотекам", filename: "packages.html" },
         ]
