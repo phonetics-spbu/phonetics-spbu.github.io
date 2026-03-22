@@ -381,10 +381,48 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb49-1"><a h
 <p>Однако ряд признаков можно использовать как удобный способ
 определить, относится ли тот или иной звук к какой-либо группе
 (например, огубленных гласных или звонких согласных).</p>
-<!-- ### Расстояние Левенштейна
-
-Кроме этого, в библиотеке `panphon` есть ряд других полезных функций. Например, в модуле `distance` определён класс для вычисления расстояния Левенштейна и некоторых других смежных расстояний. -->
-
+<h3 id="расстояние-левенштейна">Расстояние Левенштейна</h3>
+<p>Под расстоянием Левенштейна (<em>Levenshtein distance</em>, <em>edit
+distance</em>) понимается минимальное количество элементарных операций
+(замен, вставок или удалений), которые нужно совершить, чтобы из одной
+последовательности получить другую. У расстояния Левенштейна много
+применений, в том числе в лингвистике. На нём основано семейство метрик
+Error Rate (Word Error Rate, Phone Error Rate и т. д.), которые
+оценивают качество предсказанной каким-нибудь образом
+последовательности, например, в задаче автоматического распознавания
+речи или автоматической транскрипции. Чтобы вычислить такую метрику,
+нужно расстояние Левенштейна между эталонной последовательностью и
+предсказанной разделить на длину эталонной последовательности. Часто
+такие метрики выражаются в процентах.</p>
+<p>Расстояние Левенштейна реализовано для Python в достаточно большом
+количестве библиотек. Например, функции для его вычисления (а также
+других родственных ему метрик) реализованы в <code>panphon</code>.</p>
+<div class="sourceCode" id="cb51"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> panphon <span class="im">import</span> distance</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>dist <span class="op">=</span> distance.Distance()</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>w1 <span class="op">=</span> <span class="st">&quot;tʃ iː f&quot;</span>.split()</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>w2 <span class="op">=</span> <span class="st">&quot;ə tʃ iː v&quot;</span>.split()</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> dist.fast_levenshtein_distance(w1, w2)</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Levenshtein distance = </span><span class="sc">{</span>d<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>per <span class="op">=</span> d <span class="op">/</span> <span class="bu">len</span>(w1)</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;PER = </span><span class="sc">{</span>per <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%&quot;</span>)</span></code></pre></div>
+<pre><code>Levenshtein distance = 2
+PER = 66.67%</code></pre>
+<p>Другие библиотеки для расстояния Левенштейна:</p>
+<ul>
+<li>Levenshtein (<code>pip install Levenshtein</code>): <a
+href="https://rapidfuzz.github.io/Levenshtein/">https://rapidfuzz.github.io/Levenshtein/</a></li>
+<li>editdistance (<code>pip install editdistance</code>): <a
+href="https://github.com/roy-ht/editdistance">https://github.com/roy-ht/editdistance</a></li>
+<li>polyleven (<code>pip install polyleven</code>): <a
+href="https://github.com/fujimotos/polyleven">https://github.com/fujimotos/polyleven</a></li>
+<li>textdistance (<code>pip install textdistance</code>): <a
+href="https://github.com/life4/textdistance">https://github.com/life4/textdistance</a></li>
+<li>weighted-levenshtein
+(<code>pip install weighted-levenshtein</code>): <a
+href="https://github.com/infoscout/weighted-levenshtein">https://github.com/infoscout/weighted-levenshtein</a></li>
+</ul>
 <h3 id="библиотека-phonetisaurus">Библиотека
 <code>phonetisaurus</code></h3>
 <p><code>phonetisaurus</code> — это обёртка над одноимённым инструментом
@@ -399,58 +437,58 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb49-1"><a h
 href="http://svn.code.sf.net/p/cmusphinx/code/trunk/cmudict/cmudict-0.7b">по
 ссылке</a> и уберём оттуда лишние строки. Запишем словарь в новый
 файл.</p>
-<div class="sourceCode" id="cb51"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> phonetisaurus</span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;cmudict-0.7b&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;cp1252&quot;</span>) <span class="im">as</span> f:</span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    lines <span class="op">=</span> f.readlines()</span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>lines <span class="op">=</span> [</span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>    re.sub(<span class="vs">r&quot;</span><span class="ch">\(</span><span class="dv">.</span><span class="op">+</span><span class="ch">\)</span><span class="vs">&quot;</span>, <span class="st">&quot;&quot;</span>, line) <span class="cf">for</span> line <span class="kw">in</span> lines</span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> line.strip() <span class="kw">and</span> line[<span class="dv">0</span>].isalpha()</span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;cmudict_clean.txt&quot;</span>, <span class="st">&quot;w&quot;</span>) <span class="im">as</span> f:</span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>    f.writelines(lines)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> phonetisaurus</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;cmudict-0.7b&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;cp1252&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    lines <span class="op">=</span> f.readlines()</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>lines <span class="op">=</span> [</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>    re.sub(<span class="vs">r&quot;</span><span class="ch">\(</span><span class="dv">.</span><span class="op">+</span><span class="ch">\)</span><span class="vs">&quot;</span>, <span class="st">&quot;&quot;</span>, line) <span class="cf">for</span> line <span class="kw">in</span> lines</span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> line.strip() <span class="kw">and</span> line[<span class="dv">0</span>].isalpha()</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;cmudict_clean.txt&quot;</span>, <span class="st">&quot;w&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>    f.writelines(lines)</span></code></pre></div>
 <p>Теперь загрузим словарь в нужном формате с помощью функции
 <code>load_lexicon()</code>, которая вернёт нам словарь, ключи которого
 — слова в орфографии, а значения — списки транскрипций, каждая из
 которых — список списков</p>
-<div class="sourceCode" id="cb52"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;cmudict_clean.txt&quot;</span>) <span class="im">as</span> f:</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    lexicon2 <span class="op">=</span> phonetisaurus.load_lexicon(f)</span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(lexicon[<span class="st">&quot;READ&quot;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;cmudict_clean.txt&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>    lexicon2 <span class="op">=</span> phonetisaurus.load_lexicon(f)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(lexicon[<span class="st">&quot;READ&quot;</span>])</span></code></pre></div>
 <pre><code>[[&#39;R&#39;, &#39;EH1&#39;, &#39;D&#39;], [&#39;R&#39;, &#39;IY1&#39;, &#39;D&#39;]]</code></pre>
 <p>Теперь можно приступить к обучению: в функцию <code>train()</code>
 передадим словарь и путь, куда запишем получившуюся модель. Обучение
 займёт несколько минут.</p>
-<div class="sourceCode" id="cb54"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>phonetisaurus.train(lexicon, <span class="st">&quot;model.fst&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>phonetisaurus.train(lexicon, <span class="st">&quot;model.fst&quot;</span>)</span></code></pre></div>
 <p>Использовать модель можно с помощью функции <code>predict()</code>, в
 которую передадим список слов в орфографической записи и модель. Она
 вернёт нам генераторный объект, пройдя циклом по которому, мы получим
 сгенерированные транскрипции.</p>
-<div class="sourceCode" id="cb55"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> word <span class="kw">in</span> phonetisaurus.predict(<span class="st">&quot;Hello there&quot;</span>.upper().split(), <span class="st">&quot;model.fst&quot;</span>):</span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(word)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> word <span class="kw">in</span> phonetisaurus.predict(<span class="st">&quot;Hello there&quot;</span>.upper().split(), <span class="st">&quot;model.fst&quot;</span>):</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(word)</span></code></pre></div>
 <pre><code>(&#39;HELLO&#39;, [&#39;HH&#39;, &#39;EH1&#39;, &#39;L&#39;, &#39;OW0&#39;])
 (&#39;THERE&#39;, [&#39;DH&#39;, &#39;EH1&#39;, &#39;R&#39;])</code></pre>
 <p>В аргумент <code>nbest</code> можем передать количество вариантов,
 которые сгенерирует модель для каждого слова:</p>
-<div class="sourceCode" id="cb57"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> word <span class="kw">in</span> phonetisaurus.predict([<span class="st">&quot;WIZOMANIAC&quot;</span>], <span class="st">&quot;model.fst&quot;</span>, nbest<span class="op">=</span><span class="dv">3</span>):</span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(word)</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> word <span class="kw">in</span> phonetisaurus.predict([<span class="st">&quot;WIZOMANIAC&quot;</span>], <span class="st">&quot;model.fst&quot;</span>, nbest<span class="op">=</span><span class="dv">3</span>):</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(word)</span></code></pre></div>
 <pre><code>(&#39;WIZOMANIAC&#39;, [&#39;W&#39;, &#39;IH1&#39;, &#39;Z&#39;, &#39;OW0&#39;, &#39;M&#39;, &#39;EY1&#39;, &#39;N&#39;, &#39;IY0&#39;, &#39;AE2&#39;, &#39;K&#39;])
 (&#39;WIZOMANIAC&#39;, [&#39;W&#39;, &#39;IH1&#39;, &#39;Z&#39;, &#39;OW0&#39;, &#39;M&#39;, &#39;EY1&#39;, &#39;N&#39;, &#39;IY0&#39;, &#39;AE0&#39;, &#39;K&#39;])
 (&#39;WIZOMANIAC&#39;, [&#39;W&#39;, &#39;AY1&#39;, &#39;Z&#39;, &#39;OW0&#39;, &#39;M&#39;, &#39;EY1&#39;, &#39;N&#39;, &#39;IY0&#39;, &#39;AE2&#39;, &#39;K&#39;])</code></pre>
 <p><code>phonetisaurus</code> можно использовать и через командную
 строку:</p>
-<div class="sourceCode" id="cb59"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>phonetisaurus train <span class="op">--</span>model model.fst cmudict_clean.txt</span></code></pre></div>
-<div class="sourceCode" id="cb60"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>phonetisaurus predict <span class="op">--</span>model model.fst HELLO THERE</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>phonetisaurus train <span class="op">--</span>model model.fst cmudict_clean.txt</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>phonetisaurus predict <span class="op">--</span>model model.fst HELLO THERE</span></code></pre></div>
 <pre><code>HELLO HH EH1 L OW0
 THERE DH EH1 R</code></pre>
 <h3 id="практические-задания">Практические задания</h3>
