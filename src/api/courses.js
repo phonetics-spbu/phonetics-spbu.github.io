@@ -256,6 +256,7 @@ const coursesData = [
             { id: 3, title: "Акустические модели", filename: "asr_3.html" },
             { id: 4, title: "Языковые модели", filename: "asr_4.html" },
             { id: 5, title: "Произносительные словари", filename: "asr_5.html" },
+            { id: 6, title: "Декодеры и нейросетевые алгоритмы АРР", filename: "asr_6.html" },
         ]
     },
     {
