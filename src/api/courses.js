@@ -57,6 +57,7 @@ const coursesData = [
             { id: 11, title: "Автоматическая сегментация периодов ОТ", filename: "dsp_11.html" },
             { id: 12, title: "Психоакустические шкалы", filename: "dsp_12.html" },
             { id: 13, title: "Вычисление спектра одного периода ОТ", filename: "dsp_13.html" },
+            { id: 14, title: "Спектральные метрики сигнала", filename: "dsp_14.html" },
         ]
     },
     {
