@@ -195,6 +195,7 @@ const coursesData = [
             { id: 21, title: "Национальный корпус русского языка", filename: "python_genling_bac_19.html" },
             { id: 22, title: "Telegram-боты", filename: "python_genling_bac_20.html" },
             { id: 23, title: "Работа с файлами аннотации TextGrid", filename: "python_genling_bac_21.html" },
+            { id: 24, title: "Работа с аудиофайлами", filename: "python_genling_bac_22.html" },
 
         ]
     },
