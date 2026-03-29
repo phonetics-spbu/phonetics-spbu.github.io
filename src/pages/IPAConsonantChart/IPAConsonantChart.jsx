@@ -240,170 +240,181 @@ const AudioPlayer = ({ consonant, isPlaying, onPlay, muted }) => {
 
 // IPA Consonant Chart Data (same as before)
 const consonantChartData = {
-  'Bilabial': {
-    'Plosive': {
+  'Губно-губные': {
+    'Взрывные': {
       voiceless: { symbol: 'p', name: 'Voiceless bilabial plosive', example: 'pat' },
       voiced: { symbol: 'b', name: 'Voiced bilabial plosive', example: 'bat' }
     },
-    'Nasal': {
+    'Носовые': {
       voiced: { symbol: 'm', name: 'Bilabial nasal', example: 'mat' }
     },
-    'Fricative': {
+    'Щелевые': {
       voiceless: { symbol: 'ɸ', name: 'Voiceless bilabial fricative', example: 'Japanese "fu"' },
       voiced: { symbol: 'β', name: 'Voiced bilabial fricative', example: 'Spanish "haber"' }
     },
-    'Approximant': {
+    'Аппроксиманты': {
       voiced: { symbol: 'β̞', name: 'Bilabial approximant', example: 'Spanish "lobo"' }
     },
-    'Trill': {
+    'Дрожащие': {
       voiced: { symbol: 'ʙ', name: 'Bilabial trill', example: 'raspberry sound' }
     }
   },
-  'Labiodental': {
-    'Nasal': {
+  'Губно-зубные': {
+    'Носовые': {
       voiced: { symbol: 'ɱ', name: 'Labiodental nasal', example: 'emphasis' }
     },
-    'Fricative': {
+    'Щелевые': {
       voiceless: { symbol: 'f', name: 'Voiceless labiodental fricative', example: 'fat' },
       voiced: { symbol: 'v', name: 'Voiced labiodental fricative', example: 'vat' }
     },
-    'Approximant': {
+    'Аппроксиманты': {
       voiced: { symbol: 'ʋ', name: 'Labiodental approximant', example: 'Dutch "west"' }
-    }
+    },
+    'Одноударные': {
+      voiced: { symbol: 'ⱱ', name: 'Labiodental tap', example: 'American English "butter"' }
+    },
   },
-  'Dental': {
-    'Fricative': {
+  'Зубные': {
+    'Щелевые': {
       voiceless: { symbol: 'θ', name: 'Voiceless dental fricative', example: 'thin' },
       voiced: { symbol: 'ð', name: 'Voiced dental fricative', example: 'this' }
     },
-    'Plosive': {
+    'Взрывные': {
       voiceless: { symbol: 't̪', name: 'Voiceless dental plosive', example: 'Spanish "toro"' },
       voiced: { symbol: 'd̪', name: 'Voiced dental plosive', example: 'Spanish "donde"' }
-    }
+    },
+    'Носовые': {
+      voiced: { symbol: 'n̪', name: 'Dental nasal', example: 'no' }
+    },
   },
-  'Alveolar': {
-    'Plosive': {
+  'Альвеолярные': {
+    'Взрывные': {
       voiceless: { symbol: 't', name: 'Voiceless alveolar plosive', example: 'top' },
       voiced: { symbol: 'd', name: 'Voiced alveolar plosive', example: 'dog' }
     },
-    'Nasal': {
+    'Носовые': {
       voiced: { symbol: 'n', name: 'Alveolar nasal', example: 'no' }
     },
-    'Fricative': {
+    'Щелевые': {
       voiceless: { symbol: 's', name: 'Voiceless alveolar fricative', example: 'sit' },
       voiced: { symbol: 'z', name: 'Voiced alveolar fricative', example: 'zoo' }
     },
-    'Lateral Fricative': {
+    'Латеральные щелевые': {
       voiceless: { symbol: 'ɬ', name: 'Voiceless alveolar lateral fricative', example: 'Welsh "llan"' },
       voiced: { symbol: 'ɮ', name: 'Voiced alveolar lateral fricative', example: 'Zulu "dlala"' }
     },
-    'Approximant': {
+    'Аппроксиманты': {
       voiced: { symbol: 'ɹ', name: 'Alveolar approximant', example: 'run' }
     },
-    'Lateral Approximant': {
+    'Латеральные аппроксиманты': {
       voiced: { symbol: 'l', name: 'Alveolar lateral approximant', example: 'lip' }
     },
-    'Tap/Flap': {
+    'Одноударные': {
       voiced: { symbol: 'ɾ', name: 'Alveolar tap', example: 'American English "butter"' }
     },
-    'Trill': {
+    'Дрожащие': {
       voiced: { symbol: 'r', name: 'Alveolar trill', example: 'Spanish "perro"' }
     }
   },
-  'Postalveolar': {
-    'Fricative': {
+  'Постальвеолярные': {
+    'Щелевые': {
       voiceless: { symbol: 'ʃ', name: 'Voiceless postalveolar fricative', example: 'ship' },
       voiced: { symbol: 'ʒ', name: 'Voiced postalveolar fricative', example: 'vision' }
     },
-    'Affricate': {
-      voiceless: { symbol: 'tʃ', name: 'Voiceless postalveolar affricate', example: 'chip' },
-      voiced: { symbol: 'dʒ', name: 'Voiced postalveolar affricate', example: 'jam' }
-    },
-    'Approximant': {
+    'Аппроксиманты': {
       voiced: { symbol: 'ɹ̠', name: 'Postalveolar approximant', example: 'red (retroflex)' }
-    }
+    },
+    'Носовые': {
+      voiced: { symbol: 'n̠', name: 'Postalveolar nasal', example: 'no' }
+    },
   },
-  'Retroflex': {
-    'Plosive': {
+  'Ретрофлексные': {
+    'Взрывные': {
       voiceless: { symbol: 'ʈ', name: 'Voiceless retroflex plosive', example: 'Swedish "parti"' },
       voiced: { symbol: 'ɖ', name: 'Voiced retroflex plosive', example: 'Swedish "ord"' }
     },
-    'Fricative': {
+    'Щелевые': {
       voiceless: { symbol: 'ʂ', name: 'Voiceless retroflex fricative', example: 'Mandarin "sh"' },
       voiced: { symbol: 'ʐ', name: 'Voiced retroflex fricative', example: 'Polish "ż"' }
     },
-    'Approximant': {
+    'Аппроксиманты': {
       voiced: { symbol: 'ɻ', name: 'Retroflex approximant', example: 'Tamil "zh"' }
     },
-    'Lateral Approximant': {
+    'Латеральные аппроксиманты': {
       voiced: { symbol: 'ɭ', name: 'Retroflex lateral approximant', example: 'Swedish "pärla"' }
-    }
+    },
+    'Носовые': {
+      voiced: { symbol: 'ɳ', name: 'Retroflex nasal', example: 'no' }
+    },
+    'Одноударные': {
+      voiced: { symbol: 'ɽ', name: 'Retroflex tap', example: 'American English "butter"' }
+    },
   },
-  'Palatal': {
-    'Plosive': {
+  'Палатальные': {
+    'Взрывные': {
       voiceless: { symbol: 'c', name: 'Voiceless palatal plosive', example: 'Hungarian "tyúk"' },
       voiced: { symbol: 'ɟ', name: 'Voiced palatal plosive', example: 'Hungarian "gyár"' }
     },
-    'Nasal': {
+    'Носовые': {
       voiced: { symbol: 'ɲ', name: 'Palatal nasal', example: 'Spanish "niño"' }
     },
-    'Fricative': {
+    'Щелевые': {
       voiceless: { symbol: 'ç', name: 'Voiceless palatal fricative', example: 'German "ich"' },
       voiced: { symbol: 'ʝ', name: 'Voiced palatal fricative', example: 'Spanish "yo"' }
     },
-    'Approximant': {
+    'Аппроксиманты': {
       voiced: { symbol: 'j', name: 'Palatal approximant', example: 'yes' }
     },
-    'Lateral Approximant': {
+    'Латеральные аппроксиманты': {
       voiced: { symbol: 'ʎ', name: 'Palatal lateral approximant', example: 'Italian "gli"' }
     }
   },
-  'Velar': {
-    'Plosive': {
+  'Велярные': {
+    'Взрывные': {
       voiceless: { symbol: 'k', name: 'Voiceless velar plosive', example: 'cat' },
       voiced: { symbol: 'g', name: 'Voiced velar plosive', example: 'go' }
     },
-    'Nasal': {
+    'Носовые': {
       voiced: { symbol: 'ŋ', name: 'Velar nasal', example: 'sing' }
     },
-    'Fricative': {
+    'Щелевые': {
       voiceless: { symbol: 'x', name: 'Voiceless velar fricative', example: 'Scottish "loch"' },
       voiced: { symbol: 'ɣ', name: 'Voiced velar fricative', example: 'Spanish "amigo"' }
     },
-    'Approximant': {
+    'Аппроксиманты': {
       voiced: { symbol: 'ɰ', name: 'Velar approximant', example: 'Japanese "u"' }
     },
-    'Lateral Approximant': {
+    'Латеральные аппроксиманты': {
       voiced: { symbol: 'ʟ', name: 'Velar lateral approximant', example: 'Mid-Waghi' }
     }
   },
-  'Uvular': {
-    'Plosive': {
+  'Увулярные': {
+    'Взрывные': {
       voiceless: { symbol: 'q', name: 'Voiceless uvular plosive', example: 'Arabic "qasr"' },
       voiced: { symbol: 'ɢ', name: 'Voiced uvular plosive', example: 'Persian "q"' }
     },
-    'Nasal': {
+    'Носовые': {
       voiced: { symbol: 'ɴ', name: 'Uvular nasal', example: 'Japanese "n" before g/k' }
     },
-    'Fricative': {
+    'Щелевые': {
       voiceless: { symbol: 'χ', name: 'Voiceless uvular fricative', example: 'French "rue"' },
       voiced: { symbol: 'ʁ', name: 'Voiced uvular fricative', example: 'French "rouge"' }
     },
-    'Trill': {
+    'Дрожащие': {
       voiced: { symbol: 'ʀ', name: 'Uvular trill', example: 'French "r" (some dialects)' }
     }
   },
-  'Pharyngeal': {
-    'Fricative': {
+  'Фарингальные': {
+    'Щелевые': {
       voiceless: { symbol: 'ħ', name: 'Voiceless pharyngeal fricative', example: 'Arabic "ح"' },
       voiced: { symbol: 'ʕ', name: 'Voiced pharyngeal fricative', example: 'Arabic "ع"' }
     }
   },
-  'Glottal': {
-    'Plosive': {
+  'Глоттальные': {
+    'Взрывные': {
       voiceless: { symbol: 'ʔ', name: 'Glottal stop', example: 'uh-oh' }
     },
-    'Fricative': {
+    'Щелевые': {
       voiceless: { symbol: 'h', name: 'Voiceless glottal fricative', example: 'hat' },
       voiced: { symbol: 'ɦ', name: 'Voiced glottal fricative', example: 'behind' }
     }
@@ -411,13 +422,13 @@ const consonantChartData = {
 };
 
 const mannerOrder = [
-  'Plosive', 'Nasal', 'Trill', 'Tap/Flap', 'Fricative', 'Lateral Fricative',
-  'Affricate', 'Approximant', 'Lateral Approximant'
+  'Взрывные', 'Носовые', 'Дрожащие', 'Одноударные', 'Щелевые', 'Латеральные щелевые',
+  'Аппроксиманты', 'Латеральные аппроксиманты'
 ];
 
 const placeOrder = [
-  'Bilabial', 'Labiodental', 'Dental', 'Alveolar', 'Postalveolar',
-  'Retroflex', 'Palatal', 'Velar', 'Uvular', 'Pharyngeal', 'Glottal'
+  'Губно-губные', 'Губно-зубные', 'Зубные', 'Альвеолярные', 'Постальвеолярные',
+  'Ретрофлексные', 'Палатальные', 'Велярные', 'Увулярные', 'Фарингальные', 'Глоттальные'
 ];
 
 // Consonant Cell Component
@@ -525,7 +536,7 @@ const IPAConsonantChart = () => {
           <table className="consonant-table">
             <thead>
               <tr>
-                <th className="table-header corner-cell">Manner ↓ \ Place →</th>
+                <th className="table-header corner-cell">Способ образования ↓ \ Место образования →</th>
                 {placeOrder.map(place => (
                   <th key={place} className="table-header">
                     {place}
@@ -619,11 +630,6 @@ const IPAConsonantChart = () => {
           </div>
         </div>
       )}
-
-      <div className="chart-footer">
-        <p>Audio files should be placed in the <code>/public/audio/</code> directory with filenames matching the IPA symbols.</p>
-        <p>Example: <code>/public/audio/p.mp3</code>, <code>/public/audio/ʃ.mp3</code>, etc.</p>
-      </div>
     </div>
   );
 };
