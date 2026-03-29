@@ -30,10 +30,7 @@ const ChevronDownIcon = ({ size = 20 }) => (
   </svg>
 );
 
-// Helper function to get audio file path
-const getAudioPath = (symbol) => {
-  // Map IPA symbols to filename-friendly names
-  const symbolMap = {
+const symbolMap = {
     // Plosives
     'p': 'p',
     'b': 'b',
@@ -41,6 +38,8 @@ const getAudioPath = (symbol) => {
     'd': 'd',
     'ʈ': 't-retroflex',
     'ɖ': 'd-retroflex',
+    'd̪': 'd-dental',
+    't̪': 't-dental',
     'c': 'c',
     'ɟ': 'j-bar',
     'k': 'k',
@@ -106,7 +105,8 @@ const getAudioPath = (symbol) => {
     'ʀ': 'r-small-cap',
 
     // Tap/Flap
-    'ɾ': 'r-flap',
+    'ɾ': 'r-alveolar-tap',
+    'ɽ': 'r-retroflex-flap',
 
     // Affricates
     'tʃ': 't-esh',
@@ -132,9 +132,17 @@ const getAudioPath = (symbol) => {
     'tʃʼ': 't-esh-ejective'
   };
 
+// Helper function to get audio file path
+const getAudioPath = (symbol) => {
   const fileName = symbolMap[symbol] || symbol.replace(/[^a-z0-9]/gi, '-').toLowerCase();
   console.log(fileName)
-  return `/audio/ipa_chart/${fileName}.mp3`;
+  return `/audio/ipa_chart/${fileName}.wav`;
+};
+
+const getImgPath = (symbol) => {
+  const fileName = symbolMap[symbol] || symbol.replace(/[^a-z0-9]/gi, '-').toLowerCase();
+  console.log(fileName)
+  return `/img/ipa_chart/${fileName}.png`;
 };
 
 // Audio Player Component with real audio files
@@ -242,178 +250,175 @@ const AudioPlayer = ({ consonant, isPlaying, onPlay, muted }) => {
 const consonantChartData = {
   'Губно-губные': {
     'Взрывные': {
-      voiceless: { symbol: 'p', name: 'Глухой губно-губной взрывной', example: 'pat' },
-      voiced: { symbol: 'b', name: 'Звонкий губно-губной взрывной', example: 'bat' }
+      voiceless: { symbol: 'p', name: 'Глухой губно-губной взрывной', example: '' },
+      voiced: { symbol: 'b', name: 'Звонкий губно-губной взрывной', example: '' }
     },
     'Носовые': {
-      voiced: { symbol: 'm', name: 'Губно-губной носовой', example: 'mat' }
+      voiced: { symbol: 'm', name: 'Губно-губной носовой', example: '' }
     },
     'Щелевые': {
-      voiceless: { symbol: 'ɸ', name: 'Глухой губно-губной щелевой', example: 'Japanese "fu"' },
-      voiced: { symbol: 'β', name: 'Звонкий губно-губной щелевой', example: 'Spanish "haber"' }
+      voiceless: { symbol: 'ɸ', name: 'Глухой губно-губной щелевой', example: '' },
+      voiced: { symbol: 'β', name: 'Звонкий губно-губной щелевой', example: '' }
     },
     'Дрожащие': {
-      voiced: { symbol: 'ʙ', name: 'Губно-губной дрожащий', example: 'raspberry sound' }
+      voiced: { symbol: 'ʙ', name: 'Губно-губной дрожащий', example: '' }
     }
   },
   'Губно-зубные': {
     'Носовые': {
-      voiced: { symbol: 'ɱ', name: 'Губно-зубной носовой', example: 'emphasis' }
+      voiced: { symbol: 'ɱ', name: 'Губно-зубной носовой', example: '' }
     },
     'Щелевые': {
-      voiceless: { symbol: 'f', name: 'Глухой губно-зубной щелевой', example: 'fat' },
-      voiced: { symbol: 'v', name: 'Звонкий губно-зубной щелевой', example: 'vat' }
+      voiceless: { symbol: 'f', name: 'Глухой губно-зубной щелевой', example: '' },
+      voiced: { symbol: 'v', name: 'Звонкий губно-зубной щелевой', example: '' }
     },
     'Аппроксиманты': {
-      voiced: { symbol: 'ʋ', name: 'Губно-зубной аппроксимант', example: 'Dutch "west"' }
+      voiced: { symbol: 'ʋ', name: 'Губно-зубной аппроксимант', example: '' }
     },
     'Одноударные': {
-      voiced: { symbol: 'ⱱ', name: 'Губно-зубной одноударный', example: 'American English "butter"' }
+      voiced: { symbol: 'ⱱ', name: 'Губно-зубной одноударный', example: '' }
     },
   },
   'Зубные': {
     'Щелевые': {
-      voiceless: { symbol: 'θ', name: 'Глухой зубной щелевой', example: 'thin' },
-      voiced: { symbol: 'ð', name: 'Звонкий зубной щелевой', example: 'this' }
+      voiceless: { symbol: 'θ', name: 'Глухой зубной щелевой', example: '' },
+      voiced: { symbol: 'ð', name: 'Звонкий зубной щелевой', example: '' }
     },
     'Взрывные': {
-      voiceless: { symbol: 't̪', name: 'Глухой зубной взрывной', example: 'Spanish "toro"' },
-      voiced: { symbol: 'd̪', name: 'Звонкий зубной взрывной', example: 'Spanish "donde"' }
+      voiceless: { symbol: 't̪', name: 'Глухой зубной взрывной', example: '' },
+      voiced: { symbol: 'd̪', name: 'Звонкий зубной взрывной', example: '' }
     },
     'Носовые': {
-      voiced: { symbol: 'n̪', name: 'Зубной носовой', example: 'no' }
+      voiced: { symbol: 'n̪', name: 'Зубной носовой', example: '' }
     },
   },
   'Альвеолярные': {
     'Взрывные': {
-      voiceless: { symbol: 't', name: 'Глухой альвеолярный взрывной', example: 'top' },
-      voiced: { symbol: 'd', name: 'Звонкий альвеолярный взрывной', example: 'dog' }
+      voiceless: { symbol: 't', name: 'Глухой альвеолярный взрывной', example: '' },
+      voiced: { symbol: 'd', name: 'Звонкий альвеолярный взрывной', example: '' }
     },
     'Носовые': {
-      voiced: { symbol: 'n', name: 'Альвеолярный носовой', example: 'no' }
+      voiced: { symbol: 'n', name: 'Альвеолярный носовой', example: '' }
     },
     'Щелевые': {
-      voiceless: { symbol: 's', name: 'Глухой альвеолярный щелевой', example: 'sit' },
-      voiced: { symbol: 'z', name: 'Звонкий альвеолярный щелевой', example: 'zoo' }
+      voiceless: { symbol: 's', name: 'Глухой альвеолярный щелевой', example: '' },
+      voiced: { symbol: 'z', name: 'Звонкий альвеолярный щелевой', example: '' }
     },
     'Латеральные щелевые': {
-      voiceless: { symbol: 'ɬ', name: 'Глухой альвеолярный латеральный щелевой', example: 'Welsh "llan"' },
-      voiced: { symbol: 'ɮ', name: 'Звонкий альвеолярный латеральный щелевой', example: 'Zulu "dlala"' }
+      voiceless: { symbol: 'ɬ', name: 'Глухой альвеолярный латеральный щелевой', example: '' },
+      voiced: { symbol: 'ɮ', name: 'Звонкий альвеолярный латеральный щелевой', example: '' }
     },
     'Аппроксиманты': {
-      voiced: { symbol: 'ɹ', name: 'Альвеолярный аппроксимант', example: 'run' }
+      voiced: { symbol: 'ɹ', name: 'Альвеолярный аппроксимант', example: '' }
     },
     'Латеральные аппроксиманты': {
-      voiced: { symbol: 'l', name: 'Альвеолярный латеральный аппроксимант', example: 'lip' }
+      voiced: { symbol: 'l', name: 'Альвеолярный латеральный аппроксимант', example: '' }
     },
     'Одноударные': {
-      voiced: { symbol: 'ɾ', name: 'Альвеолярный одноударный', example: 'American English "butter"' }
+      voiced: { symbol: 'ɾ', name: 'Альвеолярный одноударный', example: '' }
     },
     'Дрожащие': {
-      voiced: { symbol: 'r', name: 'Альвеолярный дрожащий', example: 'Spanish "perro"' }
+      voiced: { symbol: 'r', name: 'Альвеолярный дрожащий', example: '' }
     }
   },
   'Постальвеолярные': {
     'Щелевые': {
-      voiceless: { symbol: 'ʃ', name: 'Глухой постальвеолярный щелевой', example: 'ship' },
-      voiced: { symbol: 'ʒ', name: 'Звонкий постальвеолярный щелевой', example: 'vision' }
+      voiceless: { symbol: 'ʃ', name: 'Глухой постальвеолярный щелевой', example: '' },
+      voiced: { symbol: 'ʒ', name: 'Звонкий постальвеолярный щелевой', example: '' }
     },
     'Аппроксиманты': {
-      voiced: { symbol: 'ɹ̠', name: 'Постальвеолярный аппроксимант', example: 'red (retroflex)' }
-    },
-    'Носовые': {
-      voiced: { symbol: 'n̠', name: 'Постальвеолярный носовой', example: 'no' }
+      voiced: { symbol: 'ɹ̠', name: 'Постальвеолярный аппроксимант', example: '' }
     },
   },
   'Ретрофлексные': {
     'Взрывные': {
-      voiceless: { symbol: 'ʈ', name: 'Глухой ретрофлексный взрывной', example: 'Swedish "parti"' },
-      voiced: { symbol: 'ɖ', name: 'Звонкий ретрофлексный взрывной', example: 'Swedish "ord"' }
+      voiceless: { symbol: 'ʈ', name: 'Глухой ретрофлексный взрывной', example: '' },
+      voiced: { symbol: 'ɖ', name: 'Звонкий ретрофлексный взрывной', example: '' }
     },
     'Щелевые': {
-      voiceless: { symbol: 'ʂ', name: 'Глухой ретрофлексный щелевой', example: 'Mandarin "sh"' },
-      voiced: { symbol: 'ʐ', name: 'Звонкий ретрофлексный щелевой', example: 'Polish "ż"' }
+      voiceless: { symbol: 'ʂ', name: 'Глухой ретрофлексный щелевой', example: '' },
+      voiced: { symbol: 'ʐ', name: 'Звонкий ретрофлексный щелевой', example: '' }
     },
     'Аппроксиманты': {
-      voiced: { symbol: 'ɻ', name: 'Ретрофлексный аппроксимант', example: 'Tamil "zh"' }
+      voiced: { symbol: 'ɻ', name: 'Ретрофлексный аппроксимант', example: '' }
     },
     'Латеральные аппроксиманты': {
-      voiced: { symbol: 'ɭ', name: 'Ретрофлексный латеральный аппроксимант', example: 'Swedish "pärla"' }
+      voiced: { symbol: 'ɭ', name: 'Ретрофлексный латеральный аппроксимант', example: '' }
     },
     'Носовые': {
-      voiced: { symbol: 'ɳ', name: 'Ретрофлексный носовой', example: 'no' }
+      voiced: { symbol: 'ɳ', name: 'Ретрофлексный носовой', example: '' }
     },
     'Одноударные': {
-      voiced: { symbol: 'ɽ', name: 'Ретрофлексный одноударный', example: 'American English "butter"' }
+      voiced: { symbol: 'ɽ', name: 'Ретрофлексный одноударный', example: '' }
     },
   },
   'Палатальные': {
     'Взрывные': {
-      voiceless: { symbol: 'c', name: 'Глухой палатальный взрывной', example: 'Hungarian "tyúk"' },
-      voiced: { symbol: 'ɟ', name: 'Звонкий палатальный взрывной', example: 'Hungarian "gyár"' }
+      voiceless: { symbol: 'c', name: 'Глухой палатальный взрывной', example: '' },
+      voiced: { symbol: 'ɟ', name: 'Звонкий палатальный взрывной', example: '' }
     },
     'Носовые': {
-      voiced: { symbol: 'ɲ', name: 'Палатальный носовой', example: 'Spanish "niño"' }
+      voiced: { symbol: 'ɲ', name: 'Палатальный носовой', example: '' }
     },
     'Щелевые': {
-      voiceless: { symbol: 'ç', name: 'Глухой палатальный щелевой', example: 'German "ich"' },
-      voiced: { symbol: 'ʝ', name: 'Звонкий палатальный щелевой', example: 'Spanish "yo"' }
+      voiceless: { symbol: 'ç', name: 'Глухой палатальный щелевой', example: '' },
+      voiced: { symbol: 'ʝ', name: 'Звонкий палатальный щелевой', example: '' }
     },
     'Аппроксиманты': {
-      voiced: { symbol: 'j', name: 'Палатальный аппроксимант', example: 'yes' }
+      voiced: { symbol: 'j', name: 'Палатальный аппроксимант', example: '' }
     },
     'Латеральные аппроксиманты': {
-      voiced: { symbol: 'ʎ', name: 'Палатальный латеральный аппроксимант', example: 'Italian "gli"' }
+      voiced: { symbol: 'ʎ', name: 'Палатальный латеральный аппроксимант', example: '' }
     }
   },
   'Велярные': {
     'Взрывные': {
-      voiceless: { symbol: 'k', name: 'Глухой велярный взрывной', example: 'cat' },
-      voiced: { symbol: 'g', name: 'Звонкий велярный взрывной', example: 'go' }
+      voiceless: { symbol: 'k', name: 'Глухой велярный взрывной', example: '' },
+      voiced: { symbol: 'g', name: 'Звонкий велярный взрывной', example: '' }
     },
     'Носовые': {
-      voiced: { symbol: 'ŋ', name: 'Велярный носовой', example: 'sing' }
+      voiced: { symbol: 'ŋ', name: 'Велярный носовой', example: '' }
     },
     'Щелевые': {
-      voiceless: { symbol: 'x', name: 'Глухой велярный щелевой', example: 'Scottish "loch"' },
-      voiced: { symbol: 'ɣ', name: 'Звонкий велярный щелевой', example: 'Spanish "amigo"' }
+      voiceless: { symbol: 'x', name: 'Глухой велярный щелевой', example: '/ˈxəɾə/ - "осёл" (мунджанский)' },
+      voiced: { symbol: 'ɣ', name: 'Звонкий велярный щелевой', example: '/ʔi.ˈɣaː/ - "шерсть" (хикарильянский апаче)' }
     },
     'Аппроксиманты': {
-      voiced: { symbol: 'ɰ', name: 'Велярный аппроксимант', example: 'Japanese "u"' }
+      voiced: { symbol: 'ɰ', name: 'Велярный аппроксимант', example: '/ɰɔh/ - "ветка" (Мах Мери)' }
     },
     'Латеральные аппроксиманты': {
-      voiced: { symbol: 'ʟ', name: 'Велярный латеральный аппроксимант', example: 'Mid-Waghi' }
+      voiced: { symbol: 'ʟ', name: 'Велярный латеральный аппроксимант', example: '' }
     }
   },
   'Увулярные': {
     'Взрывные': {
-      voiceless: { symbol: 'q', name: 'Глухой увулярный взрывной', example: 'Arabic "qasr"' },
-      voiced: { symbol: 'ɢ', name: 'Звонкий увулярный взрывной', example: 'Persian "q"' }
+      voiceless: { symbol: 'q', name: 'Глухой увулярный взрывной', example: '/qalb/ - "сердце" (арабский)' },
+      voiced: { symbol: 'ɢ', name: 'Звонкий увулярный взрывной', example: '' }
     },
     'Носовые': {
-      voiced: { symbol: 'ɴ', name: 'Увулярный носовой', example: 'Japanese "n" before g/k' }
+      voiced: { symbol: 'ɴ', name: 'Увулярный носовой', example: '' }
     },
     'Щелевые': {
-      voiceless: { symbol: 'χ', name: 'Глухой увулярный щелевой', example: 'French "rue"' },
-      voiced: { symbol: 'ʁ', name: 'Звонкий увулярный щелевой', example: 'French "rouge"' }
+      voiceless: { symbol: 'χ', name: 'Глухой увулярный щелевой', example: '[aːχt] - "восемь" (люксембургский)' },
+      voiced: { symbol: 'ʁ', name: 'Звонкий увулярный щелевой', example: '/ʁu/ - "колесо" (французский)' }
     },
     'Дрожащие': {
-      voiced: { symbol: 'ʀ', name: 'Увулярный дрожащий', example: 'French "r" (some dialects)' }
+      voiced: { symbol: 'ʀ', name: 'Увулярный дрожащий', example: '/ʀiːst/ - рис (нидерландский)' }
     }
   },
   'Фарингальные': {
     'Щелевые': {
-      voiceless: { symbol: 'ħ', name: 'Глухой фарингальный щелевой', example: 'Arabic "ح"' },
-      voiced: { symbol: 'ʕ', name: 'Звонкий фарингальный щелевой', example: 'Arabic "ع"' }
+      voiceless: { symbol: 'ħ', name: 'Глухой фарингальный щелевой', example: '/maˈħar/ - "завтра" (иврит)' },
+      voiced: { symbol: 'ʕ', name: 'Звонкий фарингальный щелевой', example: '/buʕːu/ - "монстр" (шильхский)' }
     }
   },
   'Ларингальные': {
     'Взрывные': {
-      voiceless: { symbol: 'ʔ', name: 'Гортанная смычка', example: 'uh-oh' }
+      voiceless: { symbol: 'ʔ', name: 'Гортанная смычка', example: '/ˈʔaka/ - "смех" (гавайский)' }
     },
     'Щелевые': {
-      voiceless: { symbol: 'h', name: 'Глухой гортанный щелевой', example: 'hat' },
-      voiced: { symbol: 'ɦ', name: 'Звонкий гортанный щелевой', example: 'behind' }
+      voiceless: { symbol: 'h', name: 'Глухой гортанный щелевой', example: '' },
+      voiced: { symbol: 'ɦ', name: 'Звонкий гортанный щелевой', example: '/ɦora/ - "гора" (чешский)' }
     }
   }
 };
@@ -451,11 +456,14 @@ const ConsonantCellComponent = ({ cell, currentlyPlaying, setCurrentlyPlaying, m
             onPlay={() => setCurrentlyPlaying(isPlaying ? null : consonant.symbol)}
             muted={muted}
           />
+          <span>
+          <img className="consonant-img" src={getImgPath(consonant.symbol)}/>
+          </span>
         </div>
         {hovered === consonant.symbol && (
           <div className="tooltip">
             <div className="tooltip-name">{consonant.name}</div>
-            {consonant.example && <div className="tooltip-example">e.g., "{consonant.example}"</div>}
+            {consonant.example && <div className="tooltip-example">{consonant.example}</div>}
           </div>
         )}
       </div>

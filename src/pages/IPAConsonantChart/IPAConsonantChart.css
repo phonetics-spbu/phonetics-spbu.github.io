@@ -356,6 +356,10 @@
   padding-top: 1rem;
 }
 
+.consonant-img {
+    height: 100px;
+}
+
 /* Animations */
 @keyframes pulse {
   0%, 100% {
