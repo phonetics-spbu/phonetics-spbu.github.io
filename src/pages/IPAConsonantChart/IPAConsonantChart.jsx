@@ -252,9 +252,6 @@ const consonantChartData = {
       voiceless: { symbol: 'ɸ', name: 'Глухой губно-губной щелевой', example: 'Japanese "fu"' },
       voiced: { symbol: 'β', name: 'Звонкий губно-губной щелевой', example: 'Spanish "haber"' }
     },
-    'Аппроксиманты': {
-      voiced: { symbol: 'β̞', name: 'Губно-губной аппроксимант', example: 'Spanish "lobo"' }
-    },
     'Дрожащие': {
       voiced: { symbol: 'ʙ', name: 'Губно-губной дрожащий', example: 'raspberry sound' }
     }
