@@ -26,9 +26,9 @@ const coursesData = [
             { id: 14, title: "Z-преобразование", filename: "lm_14.html" },
             { id: 15, title: "Дискретное преобразование Фурье и круговая свёртка", filename: "lm_15.html" },
             { id: 16, title: "Проектирование фильтров", filename: "lm_16.html" },
-            { id: 17, title: "Модуляция и демодуляция", filename: "lm_17.html" },
-            { id: 18, title: "Шумы", filename: "lm_18.html" },
-            { id: 19, title: "Преобразование частоты дискретизации", filename: "lm_19.html" },
+            { id: 17, title: "Преобразование частоты дискретизации", filename: "lm_17.html" },
+            { id: 18, title: "Модуляция и демодуляция", filename: "lm_18.html" },
+            { id: 19, title: "Шумы", filename: "lm_19.html" },
             { id: 20, title: "Параметрический синтез", filename: "lm_20.html" },
             { id: 97, title: "Домашние задания", filename: "homework.html" },
             { id: 98, title: "Список литературы", filename: "lit.html" },
@@ -195,6 +195,7 @@ const coursesData = [
             { id: 21, title: "Национальный корпус русского языка", filename: "python_genling_bac_19.html" },
             { id: 22, title: "Telegram-боты", filename: "python_genling_bac_20.html" },
             { id: 23, title: "Работа с файлами аннотации TextGrid", filename: "python_genling_bac_21.html" },
+            { id: 24, title: "Работа с аудиофайлами", filename: "python_genling_bac_22.html" },
 
         ]
     },
