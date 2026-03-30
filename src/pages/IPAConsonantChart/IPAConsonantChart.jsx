@@ -52,8 +52,10 @@ const symbolMap = {
     'm': 'm',
     'ɱ': 'm-dental',
     'n': 'n',
+    'n̪': 'n-dental',
     'ɲ': 'n-tilde',
     'ŋ': 'n-eng',
+    'ɳ': 'n-retroflex',
     'ɴ': 'n-small-cap',
 
     // Fricatives
@@ -107,6 +109,7 @@ const symbolMap = {
     // Tap/Flap
     'ɾ': 'r-alveolar-tap',
     'ɽ': 'r-retroflex-flap',
+    'ⱱ': 'v-alveolar-flap',
 
     // Affricates
     'tʃ': 't-esh',
@@ -318,9 +321,6 @@ const consonantChartData = {
     'Щелевые': {
       voiceless: { symbol: 'ʃ', name: 'Глухой постальвеолярный щелевой', example: '' },
       voiced: { symbol: 'ʒ', name: 'Звонкий постальвеолярный щелевой', example: '' }
-    },
-    'Аппроксиманты': {
-      voiced: { symbol: 'ɹ̠', name: 'Постальвеолярный аппроксимант', example: '' }
     },
   },
   'Ретрофлексные': {
