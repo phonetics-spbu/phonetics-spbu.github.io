@@ -487,7 +487,7 @@ const ConsonantCellComponent = ({ cell, currentlyPlaying, setCurrentlyPlaying, c
         if (consonant.symbol === 'm' || consonant.symbol === 'ɭ' || consonant.symbol === 'ʁ') {
             return prevCerceau + consonant.symbol;
         }
-        return prevCerceau;
+        return '';
     });
 }}
               />
