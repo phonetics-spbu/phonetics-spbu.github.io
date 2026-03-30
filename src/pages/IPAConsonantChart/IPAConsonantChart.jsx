@@ -523,7 +523,7 @@ const IPAConsonantChart = () => {
           onClick={() => setActiveTab('pulmonic')}
           className={`tab-button ${activeTab === 'pulmonic' ? 'active' : ''}`}
         >
-          Pulmonic Consonants
+          Дыхательные согласные
         </button>
 {/*         <button */}
 {/*           onClick={() => setActiveTab('non-pulmonic')} */}
