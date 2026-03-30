@@ -424,8 +424,44 @@ const placeOrder = [
   'Ретрофлексные', 'Палатальные', 'Велярные', 'Увулярные', 'Фарингальные', 'Ларингальные'
 ];
 
+// Модальное окно для поздравления
+const CerceauModal = ({ isOpen, onClose, onReset, cerceau }) => {
+  const audioRef = useRef(null);
+
+  const handleClose = () => {
+    onClose();
+    onReset(); // Сбросить cerceau после закрытия
+  };
+
+  useEffect(() => {
+    if (isOpen && audioRef.current) {
+      audioRef.current.play().catch(err => console.log('Audio play failed:', err));
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={handleClose}>×</button>
+
+        <div className="modal-images">
+          <img src={getImgPath('cerceau')} alt="cerceau" />
+        </div>
+
+        <audio
+          ref={audioRef}
+          src={getAudioPath('cerceau2')}
+          autoPlay
+        />
+      </div>
+    </div>
+  );
+};
+
 // Consonant Cell Component
-const ConsonantCellComponent = ({ cell, currentlyPlaying, setCurrentlyPlaying }) => {
+const ConsonantCellComponent = ({ cell, currentlyPlaying, setCurrentlyPlaying, cerceau, setCerceau }) => {
   const [hovered, setHovered] = useState(null);
 
   const renderConsonant = (consonant) => {
@@ -445,7 +481,15 @@ const ConsonantCellComponent = ({ cell, currentlyPlaying, setCurrentlyPlaying })
               <AudioPlayer
                 consonant={consonant}
                 isPlaying={isPlaying}
-                onPlay={() => setCurrentlyPlaying(isPlaying ? null : consonant.symbol)}
+                onPlay={() => {
+    setCurrentlyPlaying(isPlaying ? null : consonant.symbol);
+    setCerceau(prevCerceau => {
+        if (consonant.symbol === 'm' || consonant.symbol === 'ɭ' || consonant.symbol === 'ʁ') {
+            return prevCerceau + consonant.symbol;
+        }
+        return prevCerceau;
+    });
+}}
               />
           </div>
           <span>
@@ -481,6 +525,19 @@ const ConsonantCellComponent = ({ cell, currentlyPlaying, setCurrentlyPlaying })
 const IPAConsonantChart = () => {
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
   const [activeTab, setActiveTab] = useState('pulmonic');
+  const [cerceau, setCerceau] = useState('');
+  const [showCerceau, setShowCerceau] = useState(false);
+
+  // Отслеживаем, когда cerceau содержит все три символа
+  useEffect(() => {
+    const hasM = cerceau.includes('m');
+    const hasL = cerceau.includes('ɭ');
+    const hasR = cerceau.includes('ʁ');
+
+    if (hasM && hasL && hasR && !showCerceau) {
+      setShowCerceau(true);
+    }
+  }, [cerceau, showCerceau]);
 
   useEffect(() => {
     if (currentlyPlaying) {
@@ -493,6 +550,12 @@ const IPAConsonantChart = () => {
 
   return (
     <div className="ipa-chart-container">
+        <CerceauModal
+          isOpen={showCerceau}
+          onClose={() => setShowCerceau(false)}
+          onReset={() => setCerceau('')}
+          cerceau={cerceau}
+        />
       <div className="chart-header">
         <div>
           <h1 className="chart-title">МФАзбука</h1>
@@ -548,6 +611,8 @@ const IPAConsonantChart = () => {
                           cell={cell}
                           currentlyPlaying={currentlyPlaying}
                           setCurrentlyPlaying={setCurrentlyPlaying}
+                          cerceau={cerceau}
+                          setCerceau={setCerceau}
                         />
                       );
                     })}
