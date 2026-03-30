@@ -124,7 +124,7 @@
 .manner-cell {
   font-family: 'Andika', sans-serif;
   border: 1px solid #e2e8f0;
-  padding: 0.75rem 0.5rem;
+  padding: 1.5rem 0.5rem;
   background: #f1f5f9;
   font-weight: 600;
   position: sticky;
@@ -132,6 +132,8 @@
   color: #334155;
   font-size: 14px;
   z-index: 5;
+  writing-mode: sideways-lr;
+  text-orientation: mixed;
 }
 
 .chart-cell {
@@ -396,7 +398,7 @@
   }
 
   .consonant-symbol {
-    font-size: 1rem;
+    font-size: 4.5rem;
   }
 
   .table-header,
