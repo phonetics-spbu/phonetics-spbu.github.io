@@ -252,9 +252,9 @@ const consonantChartData = {
     'Носовые': {
       voiced: { symbol: 'm', name: 'Губно-губной носовой', example: '[ˈmɪlɪt]', translation: 'Просо', lang: 'Британский английский' }
     },
-    'Щелевые': {
-      voiceless: { symbol: 'ɸ', name: 'Глухой губно-губной щелевой', example: '[ˈɸɛːɬ]', translation: 'Кряква', lang: 'Сери' },
-      voiced: { symbol: 'β', name: 'Звонкий губно-губной щелевой', example: '[kaˈβaʝo]', translation: 'Лошадь', lang: 'Испанский' }
+    'Фрикативные': {
+      voiceless: { symbol: 'ɸ', name: 'Глухой губно-губной фрикативный', example: '[ˈɸɛːɬ]', translation: 'Кряква', lang: 'Сери' },
+      voiced: { symbol: 'β', name: 'Звонкий губно-губной фрикативный', example: '[kaˈβaʝo]', translation: 'Лошадь', lang: 'Испанский' }
     },
     'Дрожащие': {
       voiced: { symbol: 'ʙ', name: 'Губно-губной дрожащий', example: '[tʙ̩]', translation: 'Боб', lang: 'Лизу' }
@@ -264,9 +264,9 @@ const consonantChartData = {
     'Носовые': {
       voiced: { symbol: 'ɱ', name: 'Губно-зубной носовой', example: '[liɱˈfɛr.no]', translation: 'Ад', lang: 'Итальянский' }
     },
-    'Щелевые': {
-      voiceless: { symbol: 'f', name: 'Глухой губно-зубной щелевой', example: '[fúːꜝlá]', translation: ' Раздеваться', lang: 'Бемба' },
-      voiced: { symbol: 'v', name: 'Звонкий губно-зубной щелевой', example: '[vaaz]', translation: 'Ваза', lang: 'Ямайский креольский' }
+    'Фрикативные': {
+      voiceless: { symbol: 'f', name: 'Глухой губно-зубной фрикативный', example: '[fúːꜝlá]', translation: ' Раздеваться', lang: 'Бемба' },
+      voiced: { symbol: 'v', name: 'Звонкий губно-зубной фрикативный', example: '[vaaz]', translation: 'Ваза', lang: 'Ямайский креольский' }
     },
     'Аппроксиманты': {
       voiced: { symbol: 'ʋ', name: 'Губно-зубной аппроксимант', example: '[ɐːʋu]', translation: 'Корова', lang: 'Телугу' }
@@ -276,16 +276,16 @@ const consonantChartData = {
     },
   },
   'Зубные': {
-    'Щелевые': {
-      voiceless: { symbol: 'θ', name: 'Глухой зубной щелевой', example: '[aˈθa]', translation: 'Огонь', lang: 'Умбуйгаму' },
-      voiced: { symbol: 'ð', name: 'Звонкий зубной щелевой', example: '[ðraɪg]', translation: 'Дракон', lang: 'Валлийский' }
+    'Фрикативные': {
+      voiceless: { symbol: 'θ', name: 'Глухой зубной фрикативный', example: '[aˈθa]', translation: 'Огонь', lang: 'Умбуйгаму' },
+      voiced: { symbol: 'ð', name: 'Звонкий зубной фрикативный', example: '[ðraɪɡ]', translation: 'Дракон', lang: 'Валлийский' }
     },
     'Взрывные': {
       voiceless: { symbol: 't̪', name: 'Глухой зубной взрывной', example: '[ˈtapka]', translation: 'Тапка', lang: 'Русский' },
       voiced: { symbol: 'd̪', name: 'Звонкий зубной взрывной', example: '[dom]', translation: 'Дом', lang: 'Болгарский' }
     },
     'Носовые': {
-      voiced: { symbol: 'n̪', name: 'Зубной носовой', example: '[an̪ək]', translation: 'Промок', lang: 'Аранта' }
+      voiced: { symbol: 'n̪', name: 'Зубной носовой', example: '[an̪ɐkɐ]', translation: 'Промок', lang: 'Аранта' }
     },
   },
   'Альвеолярные': {
@@ -296,13 +296,13 @@ const consonantChartData = {
     'Носовые': {
       voiced: { symbol: 'n', name: 'Альвеолярный носовой', example: '[nanɨˀɨ]', translation: 'Госпожа', lang: 'Тилькиапанский сапотекский' }
     },
-    'Щелевые': {
-      voiceless: { symbol: 's', name: 'Глухой альвеолярный щелевой', example: '[so²¹]', translation: 'Ходить', lang: 'Цзайва' },
-      voiced: { symbol: 'z', name: 'Звонкий альвеолярный щелевой', example: '[zɔ̀ɔrɛ́ɛ]', translation: 'Шить', lang: 'Кера' }
+    'Фрикативные': {
+      voiceless: { symbol: 's', name: 'Глухой альвеолярный фрикативный', example: '[so²¹]', translation: 'Ходить', lang: 'Цзайва' },
+      voiced: { symbol: 'z', name: 'Звонкий альвеолярный фрикативный', example: '[zɔ̀ɔrɛ́ɛ]', translation: 'Шить', lang: 'Кера' }
     },
-    'Латеральные щелевые': {
-      voiceless: { symbol: 'ɬ', name: 'Глухой альвеолярный латеральный щелевой', example: '[ɬar]', translation: 'Ручей', lang: 'Аварский' },
-      voiced: { symbol: 'ɮ', name: 'Звонкий альвеолярный латеральный щелевой', example: '[ɮèpti]', translation: 'Заплетание кос', lang: 'Тера' }
+    'Латеральные фрикативные': {
+      voiceless: { symbol: 'ɬ', name: 'Глухой альвеолярный латеральный фрикативный', example: '[ɬar]', translation: 'Ручей', lang: 'Аварский' },
+      voiced: { symbol: 'ɮ', name: 'Звонкий альвеолярный латеральный фрикативный', example: '[ɮèpti]', translation: 'Заплетание кос', lang: 'Тера' }
     },
     'Аппроксиманты': {
       voiced: { symbol: 'ɹ', name: 'Альвеолярный аппроксимант', example: '[ɹɑm]', translation: 'Индийский бог Рама', lang: 'Ассамский' }
@@ -318,9 +318,9 @@ const consonantChartData = {
     }
   },
   'Постальвеолярные': {
-    'Щелевые': {
-      voiceless: { symbol: 'ʃ', name: 'Глухой постальвеолярный щелевой', example: '[ʃa]', translation: 'Искать', lang: 'Бирманский' },
-      voiced: { symbol: 'ʒ', name: 'Звонкий постальвеолярный щелевой', example: '[ˈʒiːla]', translation: 'Вена', lang: 'Словенский' }
+    'Фрикативные': {
+      voiceless: { symbol: 'ʃ', name: 'Глухой постальвеолярный фрикативный', example: '[ʃa]', translation: 'Искать', lang: 'Бирманский' },
+      voiced: { symbol: 'ʒ', name: 'Звонкий постальвеолярный фрикативный', example: '[ˈʒiːla]', translation: 'Вена', lang: 'Словенский' }
     },
   },
   'Ретрофлексные': {
@@ -328,9 +328,9 @@ const consonantChartData = {
       voiceless: { symbol: 'ʈ', name: 'Глухой ретрофлексный взрывной', example: '[ʈopi]', translation: 'Шапка', lang: 'Синдхи' },
       voiced: { symbol: 'ɖ', name: 'Звонкий ретрофлексный взрывной', example: '[ɖɤɾɤ]', translation: 'Кровь', lang: 'Мадурский' }
     },
-    'Щелевые': {
-      voiceless: { symbol: 'ʂ', name: 'Глухой ретрофлексный щелевой', example: '[ʂelɑ]', translation: 'Глина', lang: 'Юго-восточный пашаи' },
-      voiced: { symbol: 'ʐ', name: 'Звонкий ретрофлексный щелевой', example: '[ʐɐ̝ˈjë n]', translation: 'Цветок', lang: 'Арауканский' }
+    'Фрикативные': {
+      voiceless: { symbol: 'ʂ', name: 'Глухой ретрофлексный фрикативный', example: '[ʂelɑ]', translation: 'Глина', lang: 'Юго-восточный пашаи' },
+      voiced: { symbol: 'ʐ', name: 'Звонкий ретрофлексный фрикативный', example: '[ʐɐ̝ˈjën]', translation: 'Цветок', lang: 'Арауканский' }
     },
     'Аппроксиманты': {
       voiced: { symbol: 'ɻ', name: 'Ретрофлексный аппроксимант', example: '[ɻeːʃ]', translation: 'Рвота', lang: 'Кумзари' }
@@ -353,9 +353,9 @@ const consonantChartData = {
     'Носовые': {
       voiced: { symbol: 'ɲ', name: 'Палатальный носовой', example: '[ɲàm]', translation: 'Продавать', lang: 'Ибибио' }
     },
-    'Щелевые': {
-      voiceless: { symbol: 'ç', name: 'Глухой палатальный щелевой', example: '[çim]', translation: 'Сила', lang: 'Корейский' },
-      voiced: { symbol: 'ʝ', name: 'Звонкий палатальный щелевой', example: '[ʝuːrd]', translation: 'Почва', lang: 'Шведский' }
+    'Фрикативные': {
+      voiceless: { symbol: 'ç', name: 'Глухой палатальный фрикативный', example: '[çim]', translation: 'Сила', lang: 'Корейский' },
+      voiced: { symbol: 'ʝ', name: 'Звонкий палатальный фрикативный', example: '[ʝuːrd]', translation: 'Почва', lang: 'Шведский' }
     },
     'Аппроксиманты': {
       voiced: { symbol: 'j', name: 'Палатальный аппроксимант', example: '[ˈjiʒa]', translation: 'Еда', lang: 'Украинский' }
@@ -372,9 +372,9 @@ const consonantChartData = {
     'Носовые': {
       voiced: { symbol: 'ŋ', name: 'Велярный носовой', example: '[ŋú̙]', translation: 'Пить', lang: 'Игбо' }
     },
-    'Щелевые': {
-      voiceless: { symbol: 'x', name: 'Глухой велярный щелевой', example: '[ˈxəɾə]', translation: 'Осёл', lang: 'Мунджанский' },
-      voiced: { symbol: 'ɣ', name: 'Звонкий велярный щелевой', example: '[ʔi.ˈɣaː]', translation: 'Шерсть', lang: 'Хикарильянский апаче' }
+    'Фрикативные': {
+      voiceless: { symbol: 'x', name: 'Глухой велярный фрикативный', example: '[ˈxəɾə]', translation: 'Осёл', lang: 'Мунджанский' },
+      voiced: { symbol: 'ɣ', name: 'Звонкий велярный фрикативный', example: '[ʔi.ˈɣaː]', translation: 'Шерсть', lang: 'Хикарильянский апаче' }
     },
     'Аппроксиманты': {
       voiced: { symbol: 'ɰ', name: 'Велярный аппроксимант', example: '[ɰɔh]', translation: 'Ветка', lang: 'Мах Мери' }
@@ -391,33 +391,33 @@ const consonantChartData = {
     'Носовые': {
       voiced: { symbol: 'ɴ', name: 'Увулярный носовой', example: '[ɖàɴ]', translation: 'Орхидея', lang: 'Японский' }
     },
-    'Щелевые': {
-      voiceless: { symbol: 'χ', name: 'Глухой увулярный щелевой', example: '[aːχt]', translation: 'Восемь', lang: 'Люксембургский' },
-      voiced: { symbol: 'ʁ', name: 'Звонкий увулярный щелевой', example: '[ʁu]', translation: 'Колесо', lang: 'Французский' }
+    'Фрикативные': {
+      voiceless: { symbol: 'χ', name: 'Глухой увулярный фрикативный', example: '[aːχt]', translation: 'Восемь', lang: 'Люксембургский' },
+      voiced: { symbol: 'ʁ', name: 'Звонкий увулярный фрикативный', example: '[ʁu]', translation: 'Колесо', lang: 'Французский' }
     },
     'Дрожащие': {
       voiced: { symbol: 'ʀ', name: 'Увулярный дрожащий', example: '[ʀiːst]', translation: 'Рис', lang: 'Нидерландский' }
     }
   },
   'Фарингальные': {
-    'Щелевые': {
-      voiceless: { symbol: 'ħ', name: 'Глухой фарингальный щелевой', example: '[maˈħar]', translation: 'Завтра', lang: 'Иврит' },
-      voiced: { symbol: 'ʕ', name: 'Звонкий фарингальный щелевой', example: '[buʕːu]', translation: 'Монстр', lang: 'Шильхский' }
+    'Фрикативные': {
+      voiceless: { symbol: 'ħ', name: 'Глухой фарингальный фрикативный', example: '[maˈħar]', translation: 'Завтра', lang: 'Иврит' },
+      voiced: { symbol: 'ʕ', name: 'Звонкий фарингальный фрикативный', example: '[buʕːu]', translation: 'Монстр', lang: 'Шильхский' }
     }
   },
   'Ларингальные': {
     'Взрывные': {
       voiceless: { symbol: 'ʔ', name: 'Гортанная смычка', example: '[ˈʔaka]', translation: 'Смех', lang: 'Гавайский' }
     },
-    'Щелевые': {
-      voiceless: { symbol: 'h', name: 'Глухой гортанный щелевой', example: '[hɑt͡sɑɾ]', translation: 'Ключ', lang: 'Азербайдджанский' },
-      voiced: { symbol: 'ɦ', name: 'Звонкий гортанный щелевой', example: '[ˈɦora]', translation: 'Гора', lang: 'Чешский' }
+    'Фрикативные': {
+      voiceless: { symbol: 'h', name: 'Глухой гортанный фрикативный', example: '[hɑt͡sɑɾ]', translation: 'Ключ', lang: 'Азербайдджанский' },
+      voiced: { symbol: 'ɦ', name: 'Звонкий гортанный фрикативный', example: '[ˈɦora]', translation: 'Гора', lang: 'Чешский' }
     }
   }
 };
 
 const mannerOrder = [
-  'Взрывные', 'Носовые', 'Дрожащие', 'Одноударные', 'Щелевые', 'Латеральные щелевые',
+  'Взрывные', 'Носовые', 'Дрожащие', 'Одноударные', 'Фрикативные', 'Латеральные фрикативные',
   'Аппроксиманты', 'Латеральные аппроксиманты'
 ];
 
