@@ -138,19 +138,17 @@ const symbolMap = {
 // Helper function to get audio file path
 const getAudioPath = (symbol) => {
   const fileName = symbolMap[symbol] || symbol.replace(/[^a-z0-9]/gi, '-').toLowerCase();
-  console.log(fileName)
   return `/audio/ipa_chart/${fileName}.wav`;
 };
 
 const getImgPath = (symbol) => {
   const fileName = symbolMap[symbol] || symbol.replace(/[^a-z0-9]/gi, '-').toLowerCase();
-  console.log(fileName)
   return `/img/ipa_chart/${fileName}.png`;
 };
 
 // Audio Player Component with real audio files
 // Audio Player Component - optimized for short audio (1 word)
-const AudioPlayer = ({ consonant, isPlaying, onPlay, muted }) => {
+const AudioPlayer = ({ consonant, isPlaying, onPlay }) => {
   const audioRef = useRef(null);
   const [error, setError] = useState(false);
   const [isReady, setIsReady] = useState(false);
@@ -201,7 +199,7 @@ const AudioPlayer = ({ consonant, isPlaying, onPlay, muted }) => {
   }, [consonant.symbol]);
 
   const handlePlayClick = async () => {
-    if (muted || error || !audioRef.current) return;
+    if (error || !audioRef.current) return;
 
     try {
       // Reset to start (fixes the "click" if played rapidly)
@@ -219,7 +217,7 @@ const AudioPlayer = ({ consonant, isPlaying, onPlay, muted }) => {
 
   // Determine button state
   const isLoading = !isReady && !error;
-  const isDisabled = isPlaying || muted || isLoading;
+  const isDisabled = isPlaying || isLoading;
 
   return (
     <button
@@ -427,7 +425,7 @@ const placeOrder = [
 ];
 
 // Consonant Cell Component
-const ConsonantCellComponent = ({ cell, currentlyPlaying, setCurrentlyPlaying, muted }) => {
+const ConsonantCellComponent = ({ cell, currentlyPlaying, setCurrentlyPlaying }) => {
   const [hovered, setHovered] = useState(null);
 
   const renderConsonant = (consonant) => {
@@ -448,7 +446,6 @@ const ConsonantCellComponent = ({ cell, currentlyPlaying, setCurrentlyPlaying, m
                 consonant={consonant}
                 isPlaying={isPlaying}
                 onPlay={() => setCurrentlyPlaying(isPlaying ? null : consonant.symbol)}
-                muted={muted}
               />
           </div>
           <span>
@@ -484,7 +481,6 @@ const ConsonantCellComponent = ({ cell, currentlyPlaying, setCurrentlyPlaying, m
 const IPAConsonantChart = () => {
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
   const [activeTab, setActiveTab] = useState('pulmonic');
-  const [muted, setMuted] = useState(false);
 
   useEffect(() => {
     if (currentlyPlaying) {
@@ -495,27 +491,12 @@ const IPAConsonantChart = () => {
     }
   }, [currentlyPlaying]);
 
-  const handleGlobalMute = () => {
-    setMuted(!muted);
-    if (!muted && window.currentAudio) {
-      window.currentAudio.pause();
-      window.currentAudio.currentTime = 0;
-    }
-  };
-
   return (
     <div className="ipa-chart-container">
       <div className="chart-header">
         <div>
           <h1 className="chart-title">МФАзбука</h1>
         </div>
-        <button
-          onClick={handleGlobalMute}
-          className="mute-button"
-          title={muted ? "Unmute" : "Mute"}
-        >
-          {muted ? <VolumeXIcon size={20} /> : <Volume2Icon size={20} />}
-        </button>
       </div>
 
       <div className="tabs-container">
@@ -567,7 +548,6 @@ const IPAConsonantChart = () => {
                           cell={cell}
                           currentlyPlaying={currentlyPlaying}
                           setCurrentlyPlaying={setCurrentlyPlaying}
-                          muted={muted}
                         />
                       );
                     })}
@@ -594,7 +574,7 @@ const IPAConsonantChart = () => {
                 { symbol: 'ǂ', name: 'Palatal click', example: 'South African languages', audioFile: 'palatal-click.mp3' },
                 { symbol: 'ǁ', name: 'Lateral click', example: 'clicking sound', audioFile: 'lateral-click.mp3' }
               ].map(click => (
-                <SoundCard key={click.symbol} sound={click} muted={muted} setCurrentlyPlaying={setCurrentlyPlaying} />
+                <SoundCard key={click.symbol} sound={click} setCurrentlyPlaying={setCurrentlyPlaying} />
               ))}
             </div>
           </div>
@@ -609,7 +589,7 @@ const IPAConsonantChart = () => {
                 { symbol: 'ɠ', name: 'Voiced velar implosive', audioFile: 'g-hook.mp3' },
                 { symbol: 'ʛ', name: 'Voiced uvular implosive', audioFile: 'g-cap-hook.mp3' }
               ].map(implosive => (
-                <SoundCard key={implosive.symbol} sound={implosive} muted={muted} setCurrentlyPlaying={setCurrentlyPlaying} />
+                <SoundCard key={implosive.symbol} sound={implosive} setCurrentlyPlaying={setCurrentlyPlaying} />
               ))}
             </div>
           </div>
@@ -626,7 +606,7 @@ const IPAConsonantChart = () => {
                 { symbol: 'tsʼ', name: 'Alveolar affricate ejective', audioFile: 'ts-ejective.mp3' },
                 { symbol: 'tʃʼ', name: 'Postalveolar affricate ejective', audioFile: 't-esh-ejective.mp3' }
               ].map(ejective => (
-                <SoundCard key={ejective.symbol} sound={ejective} muted={muted} setCurrentlyPlaying={setCurrentlyPlaying} />
+                <SoundCard key={ejective.symbol} sound={ejective} setCurrentlyPlaying={setCurrentlyPlaying} />
               ))}
             </div>
           </div>
@@ -637,7 +617,7 @@ const IPAConsonantChart = () => {
 };
 
 // Sound Card Component for non-pulmonic sounds
-const SoundCard = ({ sound, muted, setCurrentlyPlaying }) => {
+const SoundCard = ({ sound, setCurrentlyPlaying }) => {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioError, setAudioError] = useState(false);
@@ -661,7 +641,7 @@ const SoundCard = ({ sound, muted, setCurrentlyPlaying }) => {
   }, [sound.audioFile, setCurrentlyPlaying]);
 
   const playAudio = () => {
-    if (isPlaying || muted || !audioRef.current) return;
+    if (isPlaying || !audioRef.current) return;
 
     if (window.currentAudio) {
       window.currentAudio.pause();
@@ -688,7 +668,7 @@ const SoundCard = ({ sound, muted, setCurrentlyPlaying }) => {
       </div>
       <button
         onClick={playAudio}
-        disabled={isPlaying || muted}
+        disabled={isPlaying}
         className="play-button-small"
         title={audioError ? `No audio file for ${sound.name}` : `Play ${sound.name}`}
       >

@@ -87,6 +87,7 @@
 
 /* Table Wrapper */
 .table-wrapper {
+  padding: 0;
   overflow-x: auto;
   border-radius: 0.75rem;
   background-color: white;
@@ -123,7 +124,7 @@
 .manner-cell {
   font-family: 'Andika', sans-serif;
   border: 1px solid #e2e8f0;
-  padding: 0.75rem 0.5rem;
+  padding: 1.5rem 0.5rem;
   background: #f1f5f9;
   font-weight: 600;
   position: sticky;
@@ -131,6 +132,8 @@
   color: #334155;
   font-size: 14px;
   z-index: 5;
+  writing-mode: sideways-lr;
+  text-orientation: mixed;
 }
 
 .chart-cell {
@@ -347,16 +350,6 @@
   transform: scale(1.05);
 }
 
-/* Footer */
-.chart-footer {
-  margin-top: 1.5rem;
-  font-size: 0.75rem;
-  color: #64748b;
-  text-align: center;
-  border-top: 1px solid #e2e8f0;
-  padding-top: 1rem;
-}
-
 .consonant-img {
     height: 100px;
 }
@@ -405,7 +398,7 @@
   }
 
   .consonant-symbol {
-    font-size: 1rem;
+    font-size: 4.5rem;
   }
 
   .table-header,
@@ -413,6 +406,8 @@
   .chart-cell {
     padding: 0.5rem 0.375rem;
     min-width: 80px;
+    writing-mode: sideways-lr;
+    text-orientation: mixed;
   }
 
   .clicks-grid,
