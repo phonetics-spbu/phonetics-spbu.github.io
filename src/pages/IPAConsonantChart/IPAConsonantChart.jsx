@@ -146,105 +146,98 @@ const getImgPath = (symbol) => {
 };
 
 // Audio Player Component with real audio files
+// Audio Player Component - optimized for short audio (1 word)
 const AudioPlayer = ({ consonant, isPlaying, onPlay, muted }) => {
   const audioRef = useRef(null);
-  const [audioError, setAudioError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
+  // 1. Initialize Audio Object once
   useEffect(() => {
-    // Cleanup previous audio
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
+    audioRef.current = new Audio();
 
-    // Create new audio instance
-    const audioPath = getAudioPath(consonant.symbol);
-    const audio = new Audio(audioPath);
+    const audio = audioRef.current;
 
-    audio.oncanplaythrough = () => {
-      setIsLoading(false);
+    const handleCanPlay = () => {
+      setIsReady(true);
+      setError(false);
     };
 
-    audio.onerror = (e) => {
-      console.error(`Failed to load audio for ${consonant.symbol}:`, e);
-      setAudioError(true);
-      setIsLoading(false);
+    const handleError = () => {
+      console.error(`Audio error for: ${consonant.symbol}`);
+      setError(true);
+      if (isPlaying) onPlay(false); // Reset parent state
     };
 
-    audio.onended = () => {
-      onPlay();
+    const handleEnded = () => {
+      if (onPlay) onPlay(false); // Signal parent that sound finished
     };
 
-    audioRef.current = audio;
+    audio.addEventListener('canplaythrough', handleCanPlay);
+    audio.addEventListener('error', handleError);
+    audio.addEventListener('ended', handleEnded);
 
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
+      audio.removeEventListener('canplaythrough', handleCanPlay);
+      audio.removeEventListener('error', handleError);
+      audio.removeEventListener('ended', handleEnded);
+      audio.pause();
     };
-  }, [consonant.symbol, onPlay]);
+  }, []);
 
-  // Handle mute changes
+  // 2. Update Source when consonant changes
   useEffect(() => {
-    if (audioRef.current && muted) {
-      audioRef.current.pause();
-      if (isPlaying) {
-        onPlay();
-      }
+    if (!audioRef.current) return;
+
+    setIsReady(false);
+    setError(false);
+
+    const path = getAudioPath(consonant.symbol);
+    audioRef.current.src = path;
+    audioRef.current.load(); // Force browser to buffer
+  }, [consonant.symbol]);
+
+  const handlePlayClick = async () => {
+    if (muted || error || !audioRef.current) return;
+
+    try {
+      // Reset to start (fixes the "click" if played rapidly)
+      audioRef.current.currentTime = 0;
+
+      // Signal parent we started playing
+      if (onPlay) onPlay(true);
+
+      await audioRef.current.play();
+    } catch (err) {
+      console.error("Playback failed:", err);
+      if (onPlay) onPlay(false);
     }
-  }, [muted, isPlaying, onPlay]);
-
-  const playAudio = () => {
-    if (isPlaying || muted || !audioRef.current) return;
-
-    setIsLoading(true);
-
-    // Stop any currently playing audio
-    if (window.currentAudio) {
-      window.currentAudio.pause();
-      window.currentAudio.currentTime = 0;
-    }
-
-    audioRef.current.play()
-      .then(() => {
-        window.currentAudio = audioRef.current;
-        onPlay();
-      })
-      .catch((err) => {
-        console.error('Audio playback failed:', err);
-        setAudioError(true);
-        setIsLoading(false);
-        onPlay();
-      });
   };
 
   // Determine button state
+  const isLoading = !isReady && !error;
   const isDisabled = isPlaying || muted || isLoading;
-  let buttonClass = 'audio-button';
-  if (isPlaying) buttonClass += ' playing';
-  if (audioError) buttonClass += ' error';
 
   return (
     <button
-      onClick={playAudio}
+      onClick={handlePlayClick}
       disabled={isDisabled}
-      className={buttonClass}
-      title={audioError ? `No audio file for ${consonant.name}` : `Play ${consonant.name}`}
+      className={`audio-button ${isPlaying ? 'playing' : ''} ${error ? 'error' : ''}`}
+      title={error ? "File not found" : `Play ${consonant.name}`}
     >
       {isLoading ? (
-        <div className="loading-spinner" />
+        <div className="spinner" />
+      ) : error ? (
+        <span>⚠️</span>
       ) : isPlaying ? (
         <Volume2Icon size={14} />
-      ) : audioError ? (
-        <span className="error-icon">⚠️</span>
       ) : (
         <PlayIcon size={14} />
       )}
     </button>
   );
 };
+
 
 // IPA Consonant Chart Data (same as before)
 const consonantChartData = {
