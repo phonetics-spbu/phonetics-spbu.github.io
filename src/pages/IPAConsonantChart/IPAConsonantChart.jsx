@@ -43,7 +43,7 @@ const symbolMap = {
     'c': 'c',
     'ɟ': 'j-bar',
     'k': 'k',
-    'g': 'g',
+    'ɡ': 'g',
     'q': 'q',
     'ɢ': 'g-cap',
     'ʔ': 'glottal-stop',
@@ -351,7 +351,7 @@ const consonantChartData = {
       voiced: { symbol: 'ɟ', name: 'Звонкий палатальный взрывной', example: '[ˈɟaːr]', translation: 'Фабрика', lang: 'Венгерский' }
     },
     'Носовые': {
-      voiced: { symbol: 'ɲ', name: 'Палатальный носовой', example: '[ɲàm]', translation: 'Ибибио', lang: 'Продавать' }
+      voiced: { symbol: 'ɲ', name: 'Палатальный носовой', example: '[ɲàm]', translation: 'Продавать', lang: 'Ибибио' }
     },
     'Щелевые': {
       voiceless: { symbol: 'ç', name: 'Глухой палатальный щелевой', example: '[çim]', translation: 'Сила', lang: 'Корейский' },
@@ -367,7 +367,7 @@ const consonantChartData = {
   'Велярные': {
     'Взрывные': {
       voiceless: { symbol: 'k', name: 'Глухой велярный взрывной', example: '[ˈkaki]', translation: 'Нога', lang: 'Кокосовый малайский' },
-      voiced: { symbol: 'g', name: 'Звонкий велярный взрывной', example: '[ɡɐ́m]', translation: 'Ночь', lang: 'Вайгео' }
+      voiced: { symbol: 'ɡ', name: 'Звонкий велярный взрывной', example: '[ɡɐ́m]', translation: 'Ночь', lang: 'Вайгео' }
     },
     'Носовые': {
       voiced: { symbol: 'ŋ', name: 'Велярный носовой', example: '[ŋú̙]', translation: 'Пить', lang: 'Игбо' }
@@ -393,7 +393,7 @@ const consonantChartData = {
     },
     'Щелевые': {
       voiceless: { symbol: 'χ', name: 'Глухой увулярный щелевой', example: '[aːχt]', translation: 'Восемь', lang: 'Люксембургский' },
-      voiced: { symbol: 'ʁ', name: 'Звонкий увулярный щелевой', example: '/ʁu/ - "колесо" (французский)', translation: '', lang: '' }
+      voiced: { symbol: 'ʁ', name: 'Звонкий увулярный щелевой', example: '[ʁu]', translation: 'Колесо', lang: 'Французский' }
     },
     'Дрожащие': {
       voiced: { symbol: 'ʀ', name: 'Увулярный дрожащий', example: '[ʀiːst]', translation: 'Рис', lang: 'Нидерландский' }
@@ -442,21 +442,25 @@ const ConsonantCellComponent = ({ cell, currentlyPlaying, setCurrentlyPlaying, m
         onMouseLeave={() => setHovered(null)}
       >
         <div className="consonant-content">
-          <span className="consonant-symbol">{consonant.symbol}</span>
-          <AudioPlayer
-            consonant={consonant}
-            isPlaying={isPlaying}
-            onPlay={() => setCurrentlyPlaying(isPlaying ? null : consonant.symbol)}
-            muted={muted}
-          />
+          <div>
+              <div className="consonant-symbol">{consonant.symbol}</div>
+              <AudioPlayer
+                consonant={consonant}
+                isPlaying={isPlaying}
+                onPlay={() => setCurrentlyPlaying(isPlaying ? null : consonant.symbol)}
+                muted={muted}
+              />
+          </div>
           <span>
           <img className="consonant-img" src={getImgPath(consonant.symbol)}/>
+          <div className="example">{consonant.example}</div>
+          <div className="translation">{consonant.translation}</div>
+          <div className="lang-name">{consonant.lang}</div>
           </span>
         </div>
         {hovered === consonant.symbol && (
           <div className="tooltip">
             <div className="tooltip-name">{consonant.name}</div>
-            {consonant.example && <div className="tooltip-example">{consonant.example}</div>}
           </div>
         )}
       </div>

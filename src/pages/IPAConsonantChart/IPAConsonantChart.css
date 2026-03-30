@@ -103,13 +103,14 @@
 }
 
 .table-header {
+  font-family: 'Andika', sans-serif;
   border: 1px solid #e2e8f0;
   padding: 0.75rem 0.5rem;
   background: #f1f5f9;
   font-weight: 700;
   min-width: 100px;
   color: #1e293b;
-  font-size: 0.8125rem;
+  font-size: 14px;
 }
 
 .corner-cell {
@@ -120,6 +121,7 @@
 }
 
 .manner-cell {
+  font-family: 'Andika', sans-serif;
   border: 1px solid #e2e8f0;
   padding: 0.75rem 0.5rem;
   background: #f1f5f9;
@@ -127,14 +129,14 @@
   position: sticky;
   left: 0;
   color: #334155;
-  font-size: 0.8125rem;
+  font-size: 14px;
   z-index: 5;
 }
 
 .chart-cell {
   border: 1px solid #e2e8f0;
   padding: 0.5rem;
-  vertical-align: middle;
+  vertical-align: top;
   background-color: white;
   min-width: 100px;
   transition: background-color 0.2s ease;
@@ -175,10 +177,9 @@
 }
 
 .consonant-symbol {
-  font-size: 1.25rem;
-  font-family: 'Segoe UI', 'Courier New', monospace;
-  font-weight: 600;
-  color: #0f172a;
+    font-family: 'Andika', sans-serif;
+    font-size: 42pt;
+    color: #d12d2d;
 }
 
 /* Audio Button */
@@ -360,6 +361,16 @@
     height: 100px;
 }
 
+.lang-name {
+    font-size: 10px;
+    font-style: italic;
+}
+
+.example {
+    font-family: 'Andika', sans-serif;
+    font-size: 20px;
+}
+
 /* Animations */
 @keyframes pulse {
   0%, 100% {
@@ -424,10 +435,6 @@
   .chart-header {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .consonant-symbol {
-    font-size: 0.875rem;
   }
 
   .audio-button {
