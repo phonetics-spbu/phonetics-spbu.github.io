@@ -87,6 +87,7 @@
 
 /* Table Wrapper */
 .table-wrapper {
+  padding: 0;
   overflow-x: auto;
   border-radius: 0.75rem;
   background-color: white;
@@ -345,16 +346,6 @@
 .play-button-small:hover {
   background-color: #2563eb;
   transform: scale(1.05);
-}
-
-/* Footer */
-.chart-footer {
-  margin-top: 1.5rem;
-  font-size: 0.75rem;
-  color: #64748b;
-  text-align: center;
-  border-top: 1px solid #e2e8f0;
-  padding-top: 1rem;
 }
 
 .consonant-img {
