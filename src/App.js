@@ -18,7 +18,8 @@ function App() {
                         <Routes>
                             <Route path="/course/:courseId/chapter/:chapterId" element={<ChapterPage/>}/>
                             <Route path="/course/:courseId" element={<CoursePage/>}/>
-                            <Route path="/useful_links" element={<UsefulLinks/>}/>
+                            <Route path="/useful_links" element={<UsefulLinks mode="useful"/>}/>
+                            <Route path="/useless_links" element={<UsefulLinks mode="useless"/>}/>
                             <Route path="/keyboard" element={<Keyboard/>}/>
                             <Route path="/ipabet" element={<IPAConsonantChart/>}/>
                             <Route path="/kholyavin" element={<HomePage author="kholyavin"/>}/>

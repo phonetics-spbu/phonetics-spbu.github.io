@@ -2,14 +2,15 @@ import { useState, useEffect } from 'react';
 import './UsefulLinks.css';
 import SideMenu from "../../components/SideMenu/SideMenu";
 
-function UsefulLinks() {
+function UsefulLinks({mode}) {
     const [content, setContent] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         // Load HTML content from public directory
-        fetch(`${process.env.PUBLIC_URL}/courses/useful_links.html`)
+        const html_name = mode === "useful" ? "useful_links.html" : "useless_links.html"
+        fetch(`${process.env.PUBLIC_URL}/courses/${html_name}`)
             .then(response => {
                 if (!response.ok) throw new Error('Failed to load content');
                 return response.text();
@@ -27,7 +28,8 @@ function UsefulLinks() {
     return (
         <div className="chapter-page">
             <div className="chapter-page-content">
-                <h2>Полезные ссылки</h2>
+                {mode === "useful" ? <h2>Полезные ссылки</h2> : <h2>Бесполезные ссылки</h2>}
+
                 {loading && <div className="loading">Загрузка...</div>}
                 {error && <div className="error">Ошибка: {error}</div>}
                 {!loading && !error && (

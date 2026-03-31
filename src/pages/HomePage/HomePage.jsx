@@ -42,6 +42,13 @@ function HomePage({author}) {
                       <option id="mag">Магистратура</option>
                  </select>
                  {author === 'all' ?
+                        <Link to={`/useless_links`} className="useful-links">
+                            <button className="select-button">
+                                <div>Бесполезные ссылки</div>
+                            </button>
+                        </Link> : <div></div>
+            }
+                   {author === 'all' ?
                         <Link to={`/useful_links`} className="useful-links">
                             <button className="select-button">
                                 <div>Полезные ссылки</div>
