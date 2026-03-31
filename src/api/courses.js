@@ -242,6 +242,7 @@ const coursesData = [
             { id: 5, title: "Файловые системы и работа с многоуровневой разметкой", filename: "python_ai_mag_5.html" },
             { id: 6, title: "Работа с метками периодов основного тона", filename: "python_ai_mag_6.html" },
             { id: 7, title: "Работа с файлами аннотации TextGrid", filename: "python_ai_mag_7.html" },
+            { id: 8, title: "Библиотека Parselmouth. Часть 1", filename: "python_ai_mag_8.html" },
         ]
     },
     {
@@ -271,6 +272,8 @@ const coursesData = [
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Компилятивный синтез: практикум", filename: "tts_1.html" },
+            { id: 2, title: "Формантный синтез", filename: "tts_2.html" },
+            { id: 3, title: "Статистический параметрический синтез", filename: "tts_3.html" },
         ]
     },
     {
