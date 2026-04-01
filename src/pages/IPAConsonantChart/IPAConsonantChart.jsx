@@ -245,7 +245,7 @@ const consonantChartData = {
   'Губно-губные': {
     'Взрывные': {
       voiceless: { symbol: 'p', name: 'Глухой губно-губной взрывной', example: '[pat̪ʉ]', translation: 'Десять', lang: 'Тамильский' },
-      voiced: { symbol: 'b', name: 'Звонкий губно-губной взрывной', example: '[bak]', translation: 'Бак', lang: 'Беларусский' }
+      voiced: { symbol: 'b', name: 'Звонкий губно-губной взрывной', example: '[bak]', translation: 'Бак', lang: 'Белорусский' }
     },
     'Носовые': {
       voiced: { symbol: 'm', name: 'Губно-губной носовой', example: '[ˈmɪlɪt]', translation: 'Просо', lang: 'Британский английский' }
