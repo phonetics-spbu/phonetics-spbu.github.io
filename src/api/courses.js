@@ -223,6 +223,7 @@ const coursesData = [
             { id: 12, title: "Расстояние Левенштейна", filename: "ling_programming_12.html" },
             { id: 13, title: "Наивный Байесовский классификатор", filename: "ling_programming_13.html" },
             { id: 14, title: "N-граммные языковые модели", filename: "ling_programming_14.html" },
+            { id: 15, title: "TF-IDF", filename: "ling_programming_15.html" },
         ]
     },
     
