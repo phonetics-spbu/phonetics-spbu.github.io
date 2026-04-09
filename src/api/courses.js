@@ -197,6 +197,7 @@ const coursesData = [
             { id: 22, title: "Telegram-боты", filename: "python_genling_bac_20.html" },
             { id: 23, title: "Работа с файлами аннотации TextGrid", filename: "python_genling_bac_21.html" },
             { id: 24, title: "Работа с аудиофайлами", filename: "python_genling_bac_22.html" },
+            { id: 25, title: "Работа с фонетической транскрипцией", filename: "python_genling_bac_23.html" },
 
         ]
     },
@@ -224,6 +225,7 @@ const coursesData = [
             { id: 13, title: "Наивный Байесовский классификатор", filename: "ling_programming_13.html" },
             { id: 14, title: "N-граммные языковые модели", filename: "ling_programming_14.html" },
             { id: 15, title: "TF-IDF", filename: "ling_programming_15.html" },
+            { id: 16, title: "Word2Vec", filename: "ling_programming_16.html" },
         ]
     },
     

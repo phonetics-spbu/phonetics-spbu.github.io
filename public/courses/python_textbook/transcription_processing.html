@@ -319,7 +319,7 @@ href="https://pypi.org/project/panphon/0.5/"><code>panphon</code></a>,
 которая позволяет конвертировать символы МФА в наборы бинарных
 фонологических признаков.</p>
 <div class="sourceCode" id="cb37"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> panphon._panphon <span class="im">as</span> panphon</span>
+class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> panphon</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>ft <span class="op">=</span> panphon.FeatureTable()</span></code></pre></div>
 <p>Набор признаков, которым пользуется <code>panphon</code>, таков:</p>
 <pre><code>syl [±syllabic]. Is the segment the nucleus of a syllable?
@@ -511,10 +511,11 @@ sibling_sample.txt из формата CoRuSS/SibLing в формат МФА. З
 <p>Дефис после [r] обозначает оглушение, что в МФА обозначается
 кружочком снизу: [r̥]. В Unicode это символ <code>\u0325</code>.</p>
 <h4 id="num4">10.4</h4>
-<p>Обучите модель G2P на произносительном словаре, построенном вами на
-основе корпуса CORPRES. Разделите словарь на обучающую и тестовую части
-в соотношении 9:1. Постройте транскрипции для тестовой части и оцените
-их качество с помощью метрики Phone Error Rate.</p>
+<p>Обучите модель G2P: (а) на произносительном словаре, построенном вами
+на основе корпуса CORPRES; (б) на материале русского Викисловаря (файл
+<em>lexicon_wikt_cleaned.txt</em>). Разделите словарь на обучающую и
+тестовую части в соотношении 9:1. Постройте транскрипции для тестовой
+части и оцените их качество с помощью метрики Phone Error Rate.</p>
 <h4 id="num5">10.5</h4>
 <p>Напишите функцию, которая принимает на вход строку текста на
 английском языке и возвращает транскрипцию этого текста в формате МФА.
