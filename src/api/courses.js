@@ -59,6 +59,7 @@ const coursesData = [
             { id: 13, title: "Вычисление спектра одного периода ОТ", filename: "dsp_13.html" },
             { id: 14, title: "Спектральные метрики сигнала", filename: "dsp_14.html" },
             { id: 15, title: "TD-PSOLA", filename: "dsp_15.html" },
+            { id: 16, title: "Темпоральные характеристики", filename: "dsp_16.html" },
         ]
     },
     {
@@ -75,7 +76,7 @@ const coursesData = [
             { id: 3, title: "Циклы", filename: "python_1_mag_3.html" },
             { id: 4, title: "Строки", filename: "python_1_mag_4.html" },
             { id: 5, title: "Списки", filename: "python_1_mag_5.html" },
-//            { id: 6, title: "Коллекции в Python", filename: "python_1_mag_6.html" },
+            { id: 6, title: "Коллекции в Python", filename: "python_1_mag_6.html" },
 //            { id: 7, title: "Функции", filename: "python_1_mag_7.html" },
 //            { id: 8, title: "Работа с файлами", filename: "python_1_mag_8.html" },
 //            { id: 9, title: "Обработка исключений", filename: "python_1_mag_9.html" },
