@@ -20,8 +20,8 @@ function Keyboard() {
     };
 
     const punctuationMap = {
-        '\'': 'ˈ',
-        '"': 'ˌ',
+        '"': 'ˈ',
+        ';': 'ˌ',
         '*': '˚',
         '%': '˳',
         '=': 'ˉ',
@@ -260,8 +260,8 @@ function Keyboard() {
                                             <tr><td>ˇyes</td><td>Fall-Rise</td><td>5</td></tr>
                                             <tr><td>ˆyes</td><td>Rise-Fall</td><td>6</td></tr>
                                             <tr><td>˃yes</td><td>Mid-Level</td><td>7</td></tr>
-                                            <tr><td>ˈyes</td><td>High Accent</td><td>'</td></tr>
-                                            <tr><td>ˌyes</td><td>Low Accent</td><td>"</td></tr>
+                                            <tr><td>ˈyes</td><td>High Accent</td><td>"</td></tr>
+                                            <tr><td>ˌyes</td><td>Low Accent</td><td>;</td></tr>
                                             <tr><td>˚yes</td><td>Non-Low Unaccented</td><td>*</td></tr>
                                             <tr><td>˳yes</td><td>Low Unaccented</td><td>%</td></tr>
                                             <tr><td>ˉyes</td><td>High Pre-head</td><td>=</td></tr>
