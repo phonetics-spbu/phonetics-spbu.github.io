@@ -199,6 +199,7 @@ const coursesData = [
             { id: 23, title: "Работа с файлами аннотации TextGrid", filename: "python_genling_bac_21.html" },
             { id: 24, title: "Работа с аудиофайлами", filename: "python_genling_bac_22.html" },
             { id: 25, title: "Работа с фонетической транскрипцией", filename: "python_genling_bac_23.html" },
+            { id: 26, title: "Работа с инструментами BAS", filename: "python_genling_bac_24.html" },
 
         ]
     },
