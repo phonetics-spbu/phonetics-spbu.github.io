@@ -201,6 +201,7 @@ const coursesData = [
             { id: 24, title: "Работа с аудиофайлами", filename: "python_genling_bac_22.html" },
             { id: 25, title: "Работа с фонетической транскрипцией", filename: "python_genling_bac_23.html" },
             { id: 26, title: "Работа с инструментами BAS", filename: "python_genling_bac_24.html" },
+            { id: 27, title: "Работа с географическими картами", filename: "python_genling_bac_25.html" },
 
         ]
     },
@@ -280,6 +281,18 @@ const coursesData = [
             { id: 1, title: "Компилятивный синтез: практикум", filename: "tts_1.html" },
             { id: 2, title: "Формантный синтез", filename: "tts_2.html" },
             { id: 3, title: "Статистический параметрический синтез", filename: "tts_3.html" },
+        ]
+    },
+    {
+        id: 'text_proc',
+        title: 'Обработка текста для задач речевых технологий',
+        description: 'Искусственный интеллект в моделировании речевой деятельности',
+        long_description: 'Искусственный интеллект в моделировании речевой деятельности, 1 курс магистратуры',
+        level: "mag",
+        year: 1,
+        author: "kholyavin",
+        chapters: [
+            { id: 1, title: "Прото-транскриптор", filename: "text_proc_1.html" },
         ]
     },
     {
