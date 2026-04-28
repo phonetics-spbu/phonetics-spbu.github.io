@@ -61,6 +61,7 @@ const coursesData = [
             { id: 15, title: "TD-PSOLA", filename: "dsp_15.html" },
             { id: 16, title: "Темпоральные характеристики", filename: "dsp_16.html" },
             { id: 17, title: "Алгоритм Гриффина-Лима", filename: "dsp_17.html" },
+            { id: 18, title: "Вычисление формант синхронно ЧОТ", filename: "dsp_18.html" },
         ]
     },
     {
