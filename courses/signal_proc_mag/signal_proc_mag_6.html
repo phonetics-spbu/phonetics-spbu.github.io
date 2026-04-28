@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Voice Activity Detection</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+<div class="chapter-content">
+<p class="note">
+        <a target="_blank"
+                       href="https://docs.google.com/presentation/d/1wqGhNJdM5w_Ct6-HJGZOx_d9wSqq7iHi">Презентация</a>
+         (<a target="_blank"
+                       href="courses/signal_proc_mag/pdf/SIGPROC_6_voice_activity_detection.pdf">pdf</a>)
+    </p>
+    <p class="note">
+        <a target="_blank" href="https://www.fon.hum.uva.nl/paul/papers/Proceedings_1993.pdf">Статья Praat</a>
+    </p>
+    <p>
+        <b>Задание для выполнения в классе:</b>
+        <ol>
+            <li>Определите паузы в файле cta0003.wav с помощью Praat. Используйте команду To TextGrid (silences)</li>
+            <li>Используя разметку на уровне .seg_R2, определите accuracy, HR1 и HR0 (с шагом в 10 мс)</li>
+        </ol>
+    </p>
+    <p class="note">
+        <a target="_blank" href="https://pkholyavin.github.io/signal/cta0003.wav">cta0003.wav</a>
+        <br/>
+        <a target="_blank" href="https://pkholyavin.github.io/signal/cta0003.seg_R2">cta0003.seg_R2</a>
+    </p>
+    <p>
+        <b>Домашнее задание:</b>
+    </p>
+    <p>
+        Используя данные об интенсивности из Praat, реализуйте алгоритм определения пауз. 
+        Проверьте эффективность с разными значениями порога, минимальной длительности пауз и речевых фрагментов.
+    </p>
+</div>
+</body>
+</html>

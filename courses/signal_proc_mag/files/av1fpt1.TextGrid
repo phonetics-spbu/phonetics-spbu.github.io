@@ -1,0 +1,240 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2.0075023347701153 
+tiers? <exists> 
+size = 4 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "acoustic" 
+        xmin = 0 
+        xmax = 2.0075023347701153 
+        intervals: size = 17 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.078976293103448281 
+            text = "b" 
+        intervals [2]:
+            xmin = 0.078976293103448281 
+            xmax = 0.10991310256037712 
+            text = "\mt" 
+        intervals [3]:
+            xmin = 0.10991310256037712 
+            xmax = 0.19978879310344827 
+            text = "l" 
+        intervals [4]:
+            xmin = 0.19978879310344827 
+            xmax = 0.30457777336660624 
+            text = "t'" 
+        intervals [5]:
+            xmin = 0.30457777336660624 
+            xmax = 0.38138254310344832 
+            text = "i" 
+        intervals [6]:
+            xmin = 0.38138254310344832 
+            xmax = 0.47175754310344831 
+            text = "x'" 
+        intervals [7]:
+            xmin = 0.47175754310344831 
+            xmax = 0.53363254310344732 
+            text = "i" 
+        intervals [8]:
+            xmin = 0.53363254310344732 
+            xmax = 0.66992040806695197 
+            text = "s'" 
+        intervals [9]:
+            xmin = 0.66992040806695197 
+            xmax = 0.77789129929156708 
+            text = "e" 
+        intervals [10]:
+            xmin = 0.77789129929156708 
+            xmax = 0.80251477979589592 
+            text = "r" 
+        intervals [11]:
+            xmin = 0.80251477979589592 
+            xmax = 0.92507004310344831 
+            text = "\i-" 
+        intervals [12]:
+            xmin = 0.92507004310344831 
+            xmax = 0.98125754310344726 
+            text = "\ht" 
+        intervals [13]:
+            xmin = 0.98125754310344726 
+            xmax = 1.0713200431034482 
+            text = "e" 
+        intervals [14]:
+            xmin = 1.0713200431034482 
+            xmax = 1.1703825431034482 
+            text = "t\li\sh'" 
+        intervals [15]:
+            xmin = 1.1703825431034482 
+            xmax = 1.2224802901964715 
+            text = "\ep" 
+        intervals [16]:
+            xmin = 1.2224802901964715 
+            xmax = 1.2964346264367816 
+            text = "r-" 
+        intervals [17]:
+            xmin = 1.2964346264367816 
+            xmax = 2.0075023347701153 
+            text = "pause" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "perception" 
+        xmin = 0 
+        xmax = 2.0075023347701153 
+        intervals: size = 17 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.078976293103448281 
+            text = "b" 
+        intervals [2]:
+            xmin = 0.078976293103448281 
+            xmax = 0.10991310256037712 
+            text = "\i-" 
+        intervals [3]:
+            xmin = 0.10991310256037712 
+            xmax = 0.19978879310344827 
+            text = "l" 
+        intervals [4]:
+            xmin = 0.19978879310344827 
+            xmax = 0.30457777336660624 
+            text = "t'" 
+        intervals [5]:
+            xmin = 0.30457777336660624 
+            xmax = 0.38138254310344832 
+            text = "i" 
+        intervals [6]:
+            xmin = 0.38138254310344832 
+            xmax = 0.47175754310344831 
+            text = "x'" 
+        intervals [7]:
+            xmin = 0.47175754310344831 
+            xmax = 0.53363254310344732 
+            text = "ij" 
+        intervals [8]:
+            xmin = 0.53363254310344732 
+            xmax = 0.66992040806695197 
+            text = "s'" 
+        intervals [9]:
+            xmin = 0.66992040806695197 
+            xmax = 0.77789129929156708 
+            text = "e" 
+        intervals [10]:
+            xmin = 0.77789129929156708 
+            xmax = 0.80251477979589592 
+            text = "r" 
+        intervals [11]:
+            xmin = 0.80251477979589592 
+            xmax = 0.92507004310344831 
+            text = "\i-j" 
+        intervals [12]:
+            xmin = 0.92507004310344831 
+            xmax = 0.98125754310344726 
+            text = "v'" 
+        intervals [13]:
+            xmin = 0.98125754310344726 
+            xmax = 1.0713200431034482 
+            text = "e" 
+        intervals [14]:
+            xmin = 1.0713200431034482 
+            xmax = 1.1703825431034482 
+            text = "t\li\sh'" 
+        intervals [15]:
+            xmin = 1.1703825431034482 
+            xmax = 1.2224802901964715 
+            text = "e" 
+        intervals [16]:
+            xmin = 1.2224802901964715 
+            xmax = 1.2964346264367816 
+            text = "r-" 
+        intervals [17]:
+            xmin = 1.2964346264367816 
+            xmax = 2.0075023347701153 
+            text = "pause" 
+    item [3]:
+        class = "IntervalTier" 
+        name = "ideal" 
+        xmin = 0 
+        xmax = 2.0075023347701153 
+        intervals: size = 17 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.078976293103448281 
+            text = "b" 
+        intervals [2]:
+            xmin = 0.078976293103448281 
+            xmax = 0.10991310256037712 
+            text = "\i-" 
+        intervals [3]:
+            xmin = 0.10991310256037712 
+            xmax = 0.19978879310344827 
+            text = "l" 
+        intervals [4]:
+            xmin = 0.19978879310344827 
+            xmax = 0.30457777336660624 
+            text = "t'" 
+        intervals [5]:
+            xmin = 0.30457777336660624 
+            xmax = 0.38138254310344832 
+            text = "i" 
+        intervals [6]:
+            xmin = 0.38138254310344832 
+            xmax = 0.47175754310344831 
+            text = "x'" 
+        intervals [7]:
+            xmin = 0.47175754310344831 
+            xmax = 0.53363254310344732 
+            text = "ij" 
+        intervals [8]:
+            xmin = 0.53363254310344732 
+            xmax = 0.66992040806695197 
+            text = "s'" 
+        intervals [9]:
+            xmin = 0.66992040806695197 
+            xmax = 0.77789129929156708 
+            text = "e" 
+        intervals [10]:
+            xmin = 0.77789129929156708 
+            xmax = 0.80251477979589592 
+            text = "r" 
+        intervals [11]:
+            xmin = 0.80251477979589592 
+            xmax = 0.92507004310344831 
+            text = "\i-j" 
+        intervals [12]:
+            xmin = 0.92507004310344831 
+            xmax = 0.98125754310344726 
+            text = "v'" 
+        intervals [13]:
+            xmin = 0.98125754310344726 
+            xmax = 1.0713200431034482 
+            text = "e" 
+        intervals [14]:
+            xmin = 1.0713200431034482 
+            xmax = 1.1703825431034482 
+            text = "t\li\sh'" 
+        intervals [15]:
+            xmin = 1.1703825431034482 
+            xmax = 1.2224802901964715 
+            text = "i" 
+        intervals [16]:
+            xmin = 1.2224802901964715 
+            xmax = 1.2964346264367816 
+            text = "r" 
+        intervals [17]:
+            xmin = 1.2964346264367816 
+            xmax = 2.0075023347701153 
+            text = "pause" 
+    item [4]:
+        class = "IntervalTier" 
+        name = "phrases" 
+        xmin = 0 
+        xmax = 2.0075023347701153 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 2.0075023347701153 
+            text = "1" 

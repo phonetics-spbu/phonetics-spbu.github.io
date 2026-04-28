@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Автоматическая сегментация</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+<div class="chapter-content">
+<p class="note">
+        <a target="_blank"
+                       href="https://pkholyavin.github.io/signal/SIGPROC_11_forced_alignment.pdf">Презентация</a>
+    </p>
+    <p>
+        <b>Задание для выполнения в классе:</b>
+    </p>
+    <p>
+        <ol>
+        <li>Создать для файла cta0003.wav файл csv вида
+        `<орфография>;<транскрипция в X-SAMPA>` на основании .seg_Y1 и .seg_B1</li>
+        <li>Использовать сервис <a target="_blank" href="https://clarin.phonetik.uni-muenchen.de/BASWebServices/interface/WebMAUSGeneral">WebMAUS General</a>, чтобы получить выравнивание.</li>
+        <li>Оценить качество:<br/>
+        * среднеквадратическая ошибка<br/>
+        * процент совпадений с допустимой ошибкой 10 мс
+        </li>
+        </ol>
+    </p>
+    <p>
+        <b>Домашнее задание:</b>
+    </p>
+    <p>
+        Улучшить границы, опираясь на данные звонкости и интенсивности из Praat. Проверить эффективность.
+    </p>
+</div>
+</body>
+</html>

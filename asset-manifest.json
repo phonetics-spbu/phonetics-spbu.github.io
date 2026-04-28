@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d4da05ff.css",
+    "main.js": "/static/js/main.ea8a66e1.js",
+    "static/js/453.7775a050.chunk.js": "/static/js/453.7775a050.chunk.js",
+    "static/media/AndikaTT-Regular.ttf": "/static/media/AndikaTT-Regular.ae387753aa19ff72ffb5.ttf",
+    "static/media/Gentium-Regular.woff2": "/static/media/Gentium-Regular.8878ceeba327a04cd602.woff2",
+    "index.html": "/index.html",
+    "main.d4da05ff.css.map": "/static/css/main.d4da05ff.css.map",
+    "main.ea8a66e1.js.map": "/static/js/main.ea8a66e1.js.map",
+    "453.7775a050.chunk.js.map": "/static/js/453.7775a050.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d4da05ff.css",
+    "static/js/main.ea8a66e1.js"
+  ]
+}
