@@ -252,6 +252,7 @@ const coursesData = [
             { id: 6, title: "Работа с метками периодов основного тона", filename: "python_ai_mag_6.html" },
             { id: 7, title: "Работа с файлами аннотации TextGrid", filename: "python_ai_mag_7.html" },
             { id: 8, title: "Библиотека Parselmouth. Часть 1", filename: "python_ai_mag_8.html" },
+            { id: 11, title: "Работа с фонетической транскрипцией", filename: "python_ai_mag_11.html" },
         ]
     },
     {
