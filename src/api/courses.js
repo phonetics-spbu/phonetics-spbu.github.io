@@ -297,6 +297,7 @@ const coursesData = [
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Прото-транскриптор", filename: "text_proc_1.html" },
+            { id: 2, title: "Словарь квазиомонимов", filename: "text_proc_2.html" },
         ]
     },
     {
