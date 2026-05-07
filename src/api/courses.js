@@ -204,6 +204,7 @@ const coursesData = [
             { id: 25, title: "Работа с фонетической транскрипцией", filename: "python_genling_bac_23.html" },
             { id: 26, title: "Работа с инструментами BAS", filename: "python_genling_bac_24.html" },
             { id: 27, title: "Работа с географическими картами", filename: "python_genling_bac_25.html" },
+            { id: 28, title: "Практика по второму семестру", filename: "python_genling_bac_26.html" },
 
         ]
     },
