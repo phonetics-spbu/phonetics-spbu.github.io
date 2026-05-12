@@ -285,6 +285,7 @@ const coursesData = [
             { id: 1, title: "Компилятивный синтез: практикум", filename: "tts_1.html" },
             { id: 2, title: "Формантный синтез", filename: "tts_2.html" },
             { id: 3, title: "Статистический параметрический синтез", filename: "tts_3.html" },
+            { id: 4, title: "Моделирование мелодического контура", filename: "tts_4.html" },
         ]
     },
     {
