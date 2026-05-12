@@ -204,6 +204,7 @@ const coursesData = [
             { id: 25, title: "Работа с фонетической транскрипцией", filename: "python_genling_bac_23.html" },
             { id: 26, title: "Работа с инструментами BAS", filename: "python_genling_bac_24.html" },
             { id: 27, title: "Работа с географическими картами", filename: "python_genling_bac_25.html" },
+            { id: 28, title: "Практика по второму семестру", filename: "python_genling_bac_26.html" },
 
         ]
     },
@@ -252,6 +253,7 @@ const coursesData = [
             { id: 6, title: "Работа с метками периодов основного тона", filename: "python_ai_mag_6.html" },
             { id: 7, title: "Работа с файлами аннотации TextGrid", filename: "python_ai_mag_7.html" },
             { id: 8, title: "Библиотека Parselmouth. Часть 1", filename: "python_ai_mag_8.html" },
+            { id: 11, title: "Работа с фонетической транскрипцией", filename: "python_ai_mag_11.html" },
         ]
     },
     {
@@ -295,6 +297,7 @@ const coursesData = [
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Прото-транскриптор", filename: "text_proc_1.html" },
+            { id: 2, title: "Словарь квазиомонимов", filename: "text_proc_2.html" },
         ]
     },
     {
