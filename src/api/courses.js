@@ -300,6 +300,7 @@ const coursesData = [
         chapters: [
             { id: 1, title: "Прото-транскриптор", filename: "text_proc_1.html" },
             { id: 2, title: "Словарь квазиомонимов", filename: "text_proc_2.html" },
+            { id: 3, title: "Обработка сочетаний \"согласный + Е\"", filename: "text_proc_3.html" },
         ]
     },
     {
