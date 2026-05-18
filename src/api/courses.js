@@ -84,7 +84,7 @@ const coursesData = [
             { id: 9, title: "JSON, csv", filename: "python_2_mag_7.html" },
 //            { id: 9, title: "Обработка исключений", filename: "python_1_mag_9.html" },
             { id: 10, title: "Построение графиков", filename: "python_1_mag_10.html" },
-            { id: 11, title: 'Бонус: разное полезное', filename: "python_1_mag_11.html"}
+            { id: 11, title: 'Бонус: разное полезное', filename: "python_1_mag_11.html"},
             { id: 99, title: "Задачи к зачету", filename: "exam_tasks.html" },
         ]
     },
