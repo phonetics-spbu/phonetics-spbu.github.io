@@ -206,6 +206,7 @@ const coursesData = [
             { id: 26, title: "Работа с инструментами BAS", filename: "python_genling_bac_24.html" },
             { id: 27, title: "Работа с географическими картами", filename: "python_genling_bac_25.html" },
             { id: 28, title: "Практика по второму семестру", filename: "python_genling_bac_26.html" },
+            { id: 29, title: "Введение в Pandas", filename: "python_genling_bac_27.html" },
 
         ]
     },
@@ -300,6 +301,7 @@ const coursesData = [
         chapters: [
             { id: 1, title: "Прото-транскриптор", filename: "text_proc_1.html" },
             { id: 2, title: "Словарь квазиомонимов", filename: "text_proc_2.html" },
+            { id: 3, title: "Обработка сочетаний \"согласный + Е\"", filename: "text_proc_3.html" },
         ]
     },
     {
