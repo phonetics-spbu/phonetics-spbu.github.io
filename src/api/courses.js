@@ -207,6 +207,7 @@ const coursesData = [
             { id: 27, title: "Работа с географическими картами", filename: "python_genling_bac_25.html" },
             { id: 28, title: "Практика по второму семестру", filename: "python_genling_bac_26.html" },
             { id: 29, title: "Введение в Pandas", filename: "python_genling_bac_27.html" },
+            { id: 30, title: "Статистика в SciPy", filename: "python_genling_bac_28.html" },
 
         ]
     },
@@ -303,6 +304,7 @@ const coursesData = [
             { id: 1, title: "Прото-транскриптор", filename: "text_proc_1.html" },
             { id: 2, title: "Словарь квазиомонимов", filename: "text_proc_2.html" },
             { id: 3, title: "Обработка сочетаний \"согласный + Е\"", filename: "text_proc_3.html" },
+            { id: 4, title: "Расстояние Левенштейна", filename: "text_proc_4.html" },
         ]
     },
     {
