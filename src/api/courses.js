@@ -259,6 +259,7 @@ const coursesData = [
             { id: 8, title: "Библиотека Parselmouth. Часть 1", filename: "python_ai_mag_8.html" },
             { id: 11, title: "Работа с фонетической транскрипцией", filename: "python_ai_mag_11.html" },
             { id: 12, title: "Работа с внешними инструментами", filename: "python_ai_mag_12.html" },
+            { id: 13, title: "Материалы к зачёту", filename: "python_ai_mag_finals.html" },
         ]
     },
     {
