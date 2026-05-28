@@ -208,6 +208,7 @@ const coursesData = [
             { id: 28, title: "Практика по второму семестру", filename: "python_genling_bac_26.html" },
             { id: 29, title: "Введение в Pandas", filename: "python_genling_bac_27.html" },
             { id: 30, title: "Статистика в SciPy", filename: "python_genling_bac_28.html" },
+            { id: 31, title: "Материалы к зачёту", filename: "python_genling_bac_finals.html" },
 
         ]
     },
