@@ -98,13 +98,13 @@ const coursesData = [
         author: "tityushina",
         chapters: [
             { id: 1, title: "Повторение", filename: "python_2_mag_1.html" },
-            { id: 2, title: "Классы в Python", filename: "python_2_mag_2.html" },
-            { id: 3, title: "Работа с файлами разметки Praat", filename: "python_2_mag_3.html" },
-            { id: 4, title: "Работа с аудио", filename: "python_2_mag_4.html" },
-            { id: 5, title: "Pymorphy3", filename: "python_2_mag_5.html" },
-            { id: 6, title: "Статистика в Python", filename: "python_2_mag_6.html" },
-            { id: 7, title: "JSON, csv", filename: "python_2_mag_7.html" },
-            { id: 8, title: "Задачи к зачёту", filename: "python_2_mag_8.html" },
+//            { id: 2, title: "Классы в Python", filename: "python_2_mag_2.html" },
+//            { id: 3, title: "Работа с файлами разметки Praat", filename: "python_2_mag_3.html" },
+//            { id: 4, title: "Работа с аудио", filename: "python_2_mag_4.html" },
+//            { id: 5, title: "Pymorphy3", filename: "python_2_mag_5.html" },
+//            { id: 6, title: "Статистика в Python", filename: "python_2_mag_6.html" },
+//            { id: 7, title: "JSON, csv", filename: "python_2_mag_7.html" },
+//            { id: 8, title: "Задачи к зачёту", filename: "python_2_mag_8.html" },
         ]
     },
     {
