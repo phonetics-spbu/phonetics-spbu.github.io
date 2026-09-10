@@ -1,0 +1,478 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0.0
+xmax = 16.498625
+tiers? <exists>
+size = 5
+item []:
+	item [1]:
+		class = "TextTier"
+		name = "f0"
+		xmin = 0.0
+		xmax = 16.498625
+		points: size = 9
+		points [1]:
+			number = 2.017504
+			mark = "HiF0"
+		points [2]:
+			number = 4.223748
+			mark = "HiF0"
+		points [3]:
+			number = 5.726113
+			mark = "HiF0"
+		points [4]:
+			number = 6.937088
+			mark = "HiF0"
+		points [5]:
+			number = 8.730843
+			mark = "HiF0"
+		points [6]:
+			number = 9.779093
+			mark = "HiF0"
+		points [7]:
+			number = 10.770578
+			mark = "HiF0"
+		points [8]:
+			number = 12.174551
+			mark = "HiF0"
+		points [9]:
+			number = 13.798015
+			mark = "HiF0"
+	item [2]:
+		class = "TextTier"
+		name = "tones"
+		xmin = 0.0
+		xmax = 16.498625
+		points: size = 34
+		points [1]:
+			number = 2.009143
+			mark = "H*"
+		points [2]:
+			number = 2.35809
+			mark = "!H*"
+		points [3]:
+			number = 2.850049
+			mark = "H*"
+		points [4]:
+			number = 3.198204
+			mark = "!H*"
+		points [5]:
+			number = 3.489595
+			mark = "!H*"
+		points [6]:
+			number = 3.796123
+			mark = "!H*"
+		points [7]:
+			number = 3.871809
+			mark = "L-"
+		points [8]:
+			number = 4.242668
+			mark = "H*"
+		points [9]:
+			number = 4.545412
+			mark = "!H*"
+		points [10]:
+			number = 4.708137
+			mark = "L-L%"
+		points [11]:
+			number = 5.676916
+			mark = "H*"
+		points [12]:
+			number = 6.138601
+			mark = "!H*"
+		points [13]:
+			number = 6.233208
+			mark = "L-"
+		points [14]:
+			number = 6.952224
+			mark = "H*"
+		points [15]:
+			number = 7.622045
+			mark = "!H*"
+		points [16]:
+			number = 7.958848
+			mark = "!H*"
+		points [17]:
+			number = 8.166984
+			mark = "L-"
+		points [18]:
+			number = 8.711921
+			mark = "H*"
+		points [19]:
+			number = 9.135763
+			mark = "!H*"
+		points [20]:
+			number = 9.306056
+			mark = "L-"
+		points [21]:
+			number = 9.763955
+			mark = "H*"
+		points [22]:
+			number = 10.297541
+			mark = "!H*"
+		points [23]:
+			number = 10.354306
+			mark = "H-"
+		points [24]:
+			number = 10.399717
+			mark = "L%"
+		points [25]:
+			number = 10.778147
+			mark = "H*"
+		points [26]:
+			number = 11.270106
+			mark = "!H*"
+		points [27]:
+			number = 11.383635
+			mark = "L-L%"
+		points [28]:
+			number = 12.174551
+			mark = "H*"
+		points [29]:
+			number = 12.526491
+			mark = "!H*"
+		points [30]:
+			number = 12.976824
+			mark = "L-L%"
+		points [31]:
+			number = 13.763956
+			mark = "H*"
+		points [32]:
+			number = 14.051563
+			mark = "!H*"
+		points [33]:
+			number = 14.475404
+			mark = "!H*"
+		points [34]:
+			number = 14.539737
+			mark = "L-L%"
+	item [3]:
+		class = "IntervalTier"
+		name = "words"
+		xmin = 0.0
+		xmax = 16.498625
+		intervals: size = 47
+		intervals [1]:
+			xmin = 0.0
+			xmax = 1.86944
+			text = "#"
+		intervals [2]:
+			xmin = 1.86944
+			xmax = 2.21444
+			text = "First"
+		intervals [3]:
+			xmin = 2.21444
+			xmax = 2.48894
+			text = "enter"
+		intervals [4]:
+			xmin = 2.48894
+			xmax = 2.59112
+			text = "the"
+		intervals [5]:
+			xmin = 2.59112
+			xmax = 2.98075
+			text = "Harvard"
+		intervals [6]:
+			xmin = 2.98075
+			xmax = 3.30131
+			text = "Square"
+		intervals [7]:
+			xmin = 3.30131
+			xmax = 3.55431
+			text = "T"
+		intervals [8]:
+			xmin = 3.55431
+			xmax = 3.97225
+			text = "stop"
+		intervals [9]:
+			xmin = 3.97225
+			xmax = 4.08537
+			text = "and"
+		intervals [10]:
+			xmin = 4.08537
+			xmax = 4.28337
+			text = "buy"
+		intervals [11]:
+			xmin = 4.28337
+			xmax = 4.34937
+			text = "a"
+		intervals [12]:
+			xmin = 4.34937
+			xmax = 4.80188
+			text = "token"
+		intervals [13]:
+			xmin = 4.80188
+			xmax = 5.58125
+			text = "#"
+		intervals [14]:
+			xmin = 5.58125
+			xmax = 5.75725
+			text = "Then"
+		intervals [15]:
+			xmin = 5.75725
+			xmax = 6.2585
+			text = "proceed"
+		intervals [16]:
+			xmin = 6.2585
+			xmax = 6.41437
+			text = "to"
+		intervals [17]:
+			xmin = 6.41437
+			xmax = 6.54138
+			text = "get"
+		intervals [18]:
+			xmin = 6.54138
+			xmax = 6.66312
+			text = "on"
+		intervals [19]:
+			xmin = 6.66312
+			xmax = 6.7935
+			text = "the"
+		intervals [20]:
+			xmin = 6.7935
+			xmax = 7.30487
+			text = "inbound"
+		intervals [21]:
+			xmin = 7.30487
+			xmax = 7.47175
+			text = "Red"
+		intervals [22]:
+			xmin = 7.47175
+			xmax = 7.74369
+			text = "Line"
+		intervals [23]:
+			xmin = 7.74369
+			xmax = 8.27375
+			text = "subway"
+		intervals [24]:
+			xmin = 8.27375
+			xmax = 8.43344
+			text = "#"
+		intervals [25]:
+			xmin = 8.43344
+			xmax = 8.55619
+			text = "and"
+		intervals [26]:
+			xmin = 8.55619
+			xmax = 8.89681
+			text = "take"
+		intervals [27]:
+			xmin = 8.89681
+			xmax = 8.94969
+			text = "the"
+		intervals [28]:
+			xmin = 8.94969
+			xmax = 9.40906
+			text = "subway"
+		intervals [29]:
+			xmin = 9.40906
+			xmax = 9.5415
+			text = "from"
+		intervals [30]:
+			xmin = 9.5415
+			xmax = 9.9775
+			text = "Harvard"
+		intervals [31]:
+			xmin = 9.9775
+			xmax = 10.4574
+			text = "Square"
+		intervals [32]:
+			xmin = 10.4574
+			xmax = 10.6456
+			text = "to"
+		intervals [33]:
+			xmin = 10.6456
+			xmax = 11.0458
+			text = "Central"
+		intervals [34]:
+			xmin = 11.0458
+			xmax = 11.4558
+			text = "Square"
+		intervals [35]:
+			xmin = 11.4558
+			xmax = 11.9849
+			text = "#"
+		intervals [36]:
+			xmin = 11.9849
+			xmax = 12.1223
+			text = "and"
+		intervals [37]:
+			xmin = 12.1223
+			xmax = 12.2795
+			text = "then"
+		intervals [38]:
+			xmin = 12.2795
+			xmax = 12.3861
+			text = "to"
+		intervals [39]:
+			xmin = 12.3861
+			xmax = 12.7488
+			text = "Kendall"
+		intervals [40]:
+			xmin = 12.7488
+			xmax = 13.1149
+			text = "Square"
+		intervals [41]:
+			xmin = 13.1149
+			xmax = 13.6746
+			text = "#"
+		intervals [42]:
+			xmin = 13.6746
+			xmax = 13.8641
+			text = "Then"
+		intervals [43]:
+			xmin = 13.8641
+			xmax = 13.9817
+			text = "get"
+		intervals [44]:
+			xmin = 13.9817
+			xmax = 14.2583
+			text = "off"
+		intervals [45]:
+			xmin = 14.2583
+			xmax = 14.3041
+			text = "the"
+		intervals [46]:
+			xmin = 14.3041
+			xmax = 14.6044
+			text = "T"
+		intervals [47]:
+			xmin = 14.6044
+			xmax = 16.498625
+			text = ""
+	item [4]:
+		class = "TextTier"
+		name = "breaks"
+		xmin = 0.0
+		xmax = 16.498625
+		points: size = 41
+		points [1]:
+			number = 2.21444
+			mark = "1"
+		points [2]:
+			number = 2.48894
+			mark = "0"
+		points [3]:
+			number = 2.59112
+			mark = "1"
+		points [4]:
+			number = 2.98075
+			mark = "1"
+		points [5]:
+			number = 3.30131
+			mark = "1"
+		points [6]:
+			number = 3.55431
+			mark = "1"
+		points [7]:
+			number = 3.97225
+			mark = "3"
+		points [8]:
+			number = 4.08537
+			mark = "0"
+		points [9]:
+			number = 4.28337
+			mark = "0"
+		points [10]:
+			number = 4.34937
+			mark = "1"
+		points [11]:
+			number = 4.80188
+			mark = "4"
+		points [12]:
+			number = 5.75725
+			mark = "1"
+		points [13]:
+			number = 6.2585
+			mark = "3"
+		points [14]:
+			number = 6.41437
+			mark = "0"
+		points [15]:
+			number = 6.54138
+			mark = "0"
+		points [16]:
+			number = 6.66312
+			mark = "0"
+		points [17]:
+			number = 6.7935
+			mark = "1"
+		points [18]:
+			number = 7.30487
+			mark = "1"
+		points [19]:
+			number = 7.47175
+			mark = "1"
+		points [20]:
+			number = 7.74369
+			mark = "1"
+		points [21]:
+			number = 8.27375
+			mark = "3"
+		points [22]:
+			number = 8.55619
+			mark = "0"
+		points [23]:
+			number = 8.89681
+			mark = "1"
+		points [24]:
+			number = 8.94969
+			mark = "0"
+		points [25]:
+			number = 9.40906
+			mark = "3"
+		points [26]:
+			number = 9.5415
+			mark = "1"
+		points [27]:
+			number = 9.9775
+			mark = "1"
+		points [28]:
+			number = 10.4574
+			mark = "4"
+		points [29]:
+			number = 10.6456
+			mark = "0"
+		points [30]:
+			number = 11.0458
+			mark = "1"
+		points [31]:
+			number = 11.4558
+			mark = "4"
+		points [32]:
+			number = 12.1223
+			mark = "0"
+		points [33]:
+			number = 12.2795
+			mark = "1"
+		points [34]:
+			number = 12.3861
+			mark = "0"
+		points [35]:
+			number = 12.7488
+			mark = "1"
+		points [36]:
+			number = 13.1149
+			mark = "4"
+		points [37]:
+			number = 13.8641
+			mark = "1"
+		points [38]:
+			number = 13.9817
+			mark = "0"
+		points [39]:
+			number = 14.2583
+			mark = "1"
+		points [40]:
+			number = 14.3041
+			mark = "1"
+		points [41]:
+			number = 14.6044
+			mark = "4"
+	item [5]:
+		class = "TextTier"
+		name = "misc"
+		xmin = 0.0
+		xmax = 16.498625
+		points: size = 0

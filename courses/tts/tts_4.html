@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Моделирование мелодического контура</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+<div class="chapter-content">
+<p class="note">
+        <a target="_blank"
+                       href="https://pkholyavin.github.io/signal/SIGPROC_7_pitch_modelling.pdf">Презентация</a>
+    </p>
+    <p class="note">
+        <a target="_blank" href="courses/signal_proc_mag/pdf/1993HirstEspesser-TravauxdelInstitutdephonetiquedAix-1.pdf">Статья Momel 1</a>
+        <br/>
+        <a target="_blank" href="courses/signal_proc_mag/pdf/2007%20Hirst%20-%20A%20Praat%20plugin%20for%20Momel.pdf">Статья Momel 2</a>
+        <br/>
+        <a target="_blank" href="http://festvox.org/docs/speech_tools-2.4.0/esttilt.html">The Tilt Intonation Model</a>
+        <br/>
+        <a target="_blank" href="courses/tts/pdf/Dusterhoff_1997_a.pdf">Generating F0 contours for speech synthesis using the Tilt intonation theory (pdf)</a>
+
+    </p>
+    <p>
+        <b>Задание:</b>
+        <ol>
+            <li>Напишите функцию, которая принимает на вход последовательность меток INTSINT, параметры key и range, а возвращает последовательность значений ЧОТ в герцах</li>
+            <li>Напишите функцию, которая принимает на вход последовательность ключевых точек (t, h) и общую длительность звука, 
+                а возвращает объект PitchTier с шагом 10 мс, где значения интерполированы (а) линейно; (б) с помощью квадратичного сплайна</li>
+            <li>Измените функцию для компилятивного синтеза так, чтобы к названиям аллофоном можно было приписывать обозначения INTSINT.
+                В аргументы функции теперь должны входить key и range. Используйте parselmouth для генерации нового контура.</li>
+            <li> (*) напишите программу, которая принимает на вход файл .wav и параллельный ему .TextGrid
+        с точечным уровнем "INTSINT", на котором отмечены метки INTSINT, генерирует новый контур по разметке и пересаживает его в файл. </li>
+        </ol>
+    </p>
+    <p>
+        <a target="_blank" href="https://docs.scipy.org/doc/scipy/tutorial/interpolate/1D.html#interpolation-with-b-splines">scipy.interpolate.make_interp_spline</a>
+    </p>
+</div>
+</body>
+</html>
