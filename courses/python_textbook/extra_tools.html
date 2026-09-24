@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Работа с внешними инструментами</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+
+        img {
+            width: 80%;
+            max-width: 800px;
+        }
+    </style>
+    <link href="styles/syntax_highlight.css" rel="stylesheet">
+    <base target="_blank">
+</head>
+
+<body>
+<div class="chapter-content">
+
+<p>Некоторые инструменты, полезные в работе фонетиста, не обладают
+реализацией для Python. Это могут быть инструменты для командной строки
+или сервисы, доступные через web-API. В предыдущих главах уже
+упоминалось, как обращаться к программе <em>Praat</em> через командную
+строку с помощью модуля <code>subprocess</code>. В этой главе модуль
+<code>subprocess</code> будет рассмотрен более подробно на примере
+сервиса для синтеза речи eSpeak-NG. Также в главе будут рассмотрены
+методы обращения к веб-сервисам с помощью библиотеки
+<code>requests</code> на примере сервисов BAS Web Services (Bavarian
+Archive for Speech Signals).</p>
+<h3 id="espeak-ng">eSpeak-NG</h3>
+<p>Программа eSpeak-NG представляет собой легковесный кроссплатформенный
+синтезатор речи для большого количества языков. На компьютеры Unix (в
+том числе Google Colab) его легко установить через терминал, для Windows
+можно скачать установщик из <a
+href="https://github.com/espeak-ng/espeak-ng/releases">репозитория
+программы</a>. Там же можно ознакомиться с документацией и списком
+поддерживаемых языков. Не забудьте добавить папку, где располагается
+исполняемый файл, в переменную среды <code>PATH</code>.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>sudo apt install espeak<span class="op">-</span>ng</span></code></pre></div>
+<p>Для синтеза eSpeak-NG использует автоматические транскрипторы,
+построенные на правилах. В частности, для английского языка разработан
+достаточно качественный транскриптор, которыйподдерживает слабые
+(редуцированные) формы служебных слов и явления на стыках слов
+(например, связывание), тогда как большинство аналогов работают с
+текстом как с последовательностью отдельных слов. Недостатком
+транскриптора является его непоследовательность в некоторых
+транскрипциях и обозначениях.</p>
+<p>Для работы с программами через командную строку воспользуемся
+встроенным модулем <code>subprocess</code>. Чтобы сохранить текст,
+полученный через стандартный вывод, нам нужна функция
+<code>check_output()</code>.</p>
+<p>Инструменты командной строки часто принимают на вход различные
+аргументы и опции. Их названия предваряются двумя дефисами (или одним,
+если используется сокращённое название опции). Каких опций требует
+программа, обычно можно узнать, запустив её с опциями
+<code>--help</code> или <code>-h</code>:
+<code>espeak-ng --help</code>.</p>
+<p>Воспользуемся eSpeak-NG, чтобы получить транскрипцию текста на
+британском варианте английского языка, записанную символом МФА. Для
+этого передадим параметры:</p>
+<ul>
+<li><code>-v en-gb-x-rp</code>: «голос» — британский английский
+(Received Pronunciation);</li>
+<li><code>-q</code>: «тихий» вызов — собственно синтез не будет
+произведён;</li>
+<li><code>--ipa</code>: в стандартный вывод будет напечатана
+транскрипция МФА (можно вместо этого передать опцию <code>-x</code>,
+чтобы получить результат в формате X-SAMPA).</li>
+<li><code>--tie</code>: сложные символы, состоящие из более чем одной
+буквы, будут объединены лигатурой <code>\u0361</code> (или другим
+символом, который можно передать через знак <code>=</code>). Можно также
+передать параметр <code>--sep</code>, чтобы между знаками разных фонем
+стоял пробел (или другой символ, который также передаётся через
+<code>=</code>).</li>
+</ul>
+<p>Зададим список с этими параметрами и передадим его на вход
+<code>check_output()</code>. Функция вернёт нам последовательность байт,
+которую нужно превратить в строку, раскодировав как UTF-8.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>command <span class="op">=</span> [<span class="st">&quot;espeak-ng&quot;</span>, <span class="st">&quot;-v&quot;</span>, <span class="st">&quot;en-gb-x-rp&quot;</span>, <span class="st">&quot;-q&quot;</span>, <span class="st">&quot;--ipa&quot;</span>, <span class="st">&quot;--tie&quot;</span>, <span class="st">&#39;&quot;hello world&quot;&#39;</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> subprocess.check_output(command).decode(<span class="st">&quot;utf-8&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(res)</span></code></pre></div>
+<pre><code>həlˈə͡ʊ wˈɜːld</code></pre>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>command <span class="op">=</span> [<span class="st">&quot;espeak-ng&quot;</span>, <span class="st">&quot;-v&quot;</span>, <span class="st">&quot;en-gb-x-rp&quot;</span>, <span class="st">&quot;-q&quot;</span>, <span class="st">&quot;--ipa&quot;</span>, <span class="st">&quot;--sep=_&quot;</span>, <span class="st">&#39;&quot;hello world&quot;&#39;</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> subprocess.check_output(command).decode(<span class="st">&quot;utf-8&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(res)</span></code></pre></div>
+<pre><code>_h_ə_l_ˈəʊ w_ˈɜː_l_d</code></pre>
+<p>Обратите внимание, что система обозначений в eSpeak-NG несколько
+отличается от общепринятой (например, в словаре Джона Уэллза). Ниже
+приведена краткая таблица отличий.</p>
+<table>
+<thead>
+<tr>
+<th>eSpeak</th>
+<th>Wells</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ɹ</td>
+<td>r</td>
+</tr>
+<tr>
+<td>ɐ (<em>употребляется непоследовательно</em>)</td>
+<td>ə</td>
+</tr>
+<tr>
+<td>ɛ</td>
+<td>e</td>
+</tr>
+<tr>
+<td>iə</td>
+<td>ɪə</td>
+</tr>
+</tbody>
+</table>
+<p>Кроме этого, в некоторых случаях последовательность /əl/ считается
+одним звуком, а в некоторых случаях используется знак слоговости
+<code>\u0329</code> [n̩], но также непоследовательно.</p>
+<p>Если нам не нужен стандартный вывод, можно воспользоваться функцией
+<code>subprocess.call()</code>. Например, получим файл WAV с
+синтезированной речью. Функция возвращает т. н. код возврата — целое
+число. 0 обычно указывает на успешное выполнение процесса.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fname <span class="op">=</span> <span class="st">&quot;hello.wav&quot;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>command <span class="op">=</span> [<span class="st">&quot;espeak-ng&quot;</span>, <span class="st">&quot;-v&quot;</span>, <span class="st">&quot;en-gb-x-rp&quot;</span>, <span class="st">&quot;-w&quot;</span>, fname, <span class="st">&#39;&quot;hello world&quot;&#39;</span>]</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>code <span class="op">=</span> subprocess.call(command)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> code <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Success!&quot;</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Error!&quot;</span>)</span></code></pre></div>
+<pre><code>Success!</code></pre>
+<p>Прослушаем получившийся файл:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Audio</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Audio(fname)</span></code></pre></div>
+<audio controls>
+        <source src="courses/python_textbook/files/hello.wav" type="audio/wav">
+        Your browser does not support the audio tag.
+</audio>
+
+<h3 id="bas-web-services">BAS Web Services</h3>
+<p>Веб-сервисы BAS — это достаточно большой набор сервисов для обработки
+речевого сигнала и смежных задач для разных языков, в который
+входят:</p>
+<ul>
+<li>автоматическая транскрипция (grapheme-to-phoneme, G2P);</li>
+<li>автоматическая сегментация;</li>
+<li>определение значений формант;</li>
+<li>автоматическое слогоделение.</li>
+</ul>
+<p>С полным списком сервисов и поддерживаемых языков (среди которых
+английский и русский) можно ознакомиться на <a
+href="https://clarin.phonetik.uni-muenchen.de/BASWebServices/interface">сайте</a>.</p>
+<p>Большинство сервисов доступно через web-API. API (<em>application
+programming interface</em>) — это общее название для способов общения
+между программами. Часто этим словом обозначают web-API — то есть API
+для веб-сервера.</p>
+<p>Для обращения к API используют так называемые HTTP-запросы —
+структурированные сообщения. Они используют разные методы в зависимости
+от желаемого действия. Чаще всего это методы <code>GET</code> для
+получения данных с сервера и <code>POST</code> для отправки данных на
+сервер.</p>
+<p>Для работы с HTTP-запросами в Python наиболее удобное средство —
+сторонняя библиотека <code>requests</code>
+(<code>pip install requests</code>). В Google Colab она установлена по
+умолчанию.</p>
+<p>Кроме библиотеки <code>requests</code>, нам понадобится модуль
+<code>xml</code> для анализа результатов запроса, приходящих в формате
+<em>xml</em>.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xml.etree.ElementTree <span class="im">as</span> ET</span></code></pre></div>
+<p>Запросы к сервисам BAS отправляются на адреса вида
+<code>https://clarin.phonetik.uni-muenchen.de/BASWebServices/services/&lt;SERVICE&gt;</code>.
+Например, сервис для получения автоматической транскрипции называется
+<code>runG2P</code>. Полная документация к API BAS с указанием названий
+сервисов и их параметров расположена по <a
+href="https://clarin.phonetik.uni-muenchen.de/BASWebServices/services/help">ссылке</a>.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>baseurl <span class="op">=</span> <span class="st">&quot;https://clarin.phonetik.uni-muenchen.de/BASWebServices/services/&quot;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>service <span class="op">=</span> <span class="st">&quot;runG2P&quot;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> baseurl <span class="op">+</span> service</span></code></pre></div>
+<p>Чаще всего HTTP-запрос содержит определённый набор параметров. Они
+могут передаваться в разном виде, и в <code>requests</code> для этого
+используются разные аргументы функций для соответствующих запросов. Эти
+параметры могут быть текстовыми полями или содержимым файлов (как
+текстовых, так и нет).</p>
+<p>Воспользуемся сервисом <code>runG2P</code>, чтобы получить
+транскрипцию текста. Алгоритм G2P для русского языка в сервисах BAS
+далёк от совершенства, поэтому работу сервиса продемонстрируем на
+примере британского английского. Запишем желаемый текст в новый
+файл:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">&quot;Hello world!&quot;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">&quot;hello.txt&quot;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(filename, <span class="st">&quot;w&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    f.write(text)</span></code></pre></div>
+<p>Зададим необходимые параметры для сервиса <code>runG2P</code>.
+Текстовые параметры зададим в словаре <code>data</code>. Здесь укажем
+язык (британский английский), алфавит для записи результата (МФА) и
+формат результата (текстовый файл). Другие значения, которые можно
+установить этим параметрам, а также дополнительные параметры перечислены
+в документации по ссылке выше. В частности, МФА можно заменить на
+универсальный алфавит X-SAMPA (<code>"x-sampa"</code>) или версию SAMPA,
+модифицированную под выбранный язык (<code>"sampa"</code>).</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;lng&quot;</span>: <span class="st">&quot;eng-GB&quot;</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;outsym&quot;</span>: <span class="st">&quot;ipa&quot;</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;oform&quot;</span>: <span class="st">&quot;txt&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Файлы для обработки зададим в словаре <code>files</code>. Теперь
+значениями будут кортежи, в которых мы перечислим название файла,
+файловый объект для работы с ним и указатель на тип данных, содержащийся
+в файле. В нашем случае, поскольку файл текстовый, это будет строка
+<code>"text/txt"</code>.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>files <span class="op">=</span> {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;i&quot;</span>: (filename, <span class="bu">open</span>(filename, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>), <span class="st">&quot;text/txt&quot;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Теперь мы можем отправить <code>POST</code>-запрос на сервер. Ответ
+на запрос будет записан в переменную <code>res</code>.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> requests.post(url, files<span class="op">=</span>files, data<span class="op">=</span>data)</span></code></pre></div>
+<p>В зависимости от того, к какому результату привёл запрос, у ответа
+будут разные коды статуса. Если запрос был успешно обработан, код будет
+равен 200.</p>
+<p>В случае успеха сервис вернёт нам в качестве результата xml-файл, в
+котором в теге <code>downloadLink</code> будет содержаться временная
+ссылка на файл с результатом на сервере. Найдём её с помощью библиотеки
+<code>xml</code> и отправим на неё запрос <code>GET</code>, чтобы
+скачать получившийся файл.</p>
+<p>Теперь результат хранится в атрибуте <code>text</code> результата
+второго запроса. Чтобы символы МФА были интерпретированы правильно,
+установим кодировку <code>utf-8</code>. Результат содержит фонемную
+транскрипцию изначального текста, где транскрипционные знаки отделены
+пробелами, а слова — знаком табуляции.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> res.status_code <span class="op">==</span> <span class="dv">200</span>:</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    tree <span class="op">=</span> ET.fromstring(res.text)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    res2 <span class="op">=</span> requests.get(tree.find(<span class="st">&#39;downloadLink&#39;</span>).text)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> res2.status_code <span class="op">==</span> <span class="dv">200</span>:</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        res2.encoding <span class="op">=</span> <span class="st">&quot;utf-8&quot;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(res2.text)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">&quot;Произошла ошибка при получении результата!&quot;</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(res2.text)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Произошла ошибка при отправке данных!&quot;</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(res.text)</span></code></pre></div>
+<pre><code>h ə l əʊ    w ɜː l d</code></pre>
+<p>Рассмотрим теперь работу с сервисами <code>runMAUS</code> и
+<code>runMAUSBasic</code>, которые позволяет получить границы звуков в
+сигнале. Первый принимает на вход готовую фонетическую транскрипцию
+текста и в целом допускает более гибкую настройку, второй же работает с
+орфографической записью и использует алгоритмы G2P.</p>
+<p>Проиллюстрируем работу первого на примере файла <em>cta0001.wav</em>.
+Нам необходимо будет задать транскрипцию заранее. Мы можем использовать
+как МФА, так и X-SAMPA; для простоты воспользуемся последней. Алфавит
+символов для каждого языка можно посмотреть с помощью сервиса
+<code>runMAUSGetInventar</code>, передав в качестве параметра название
+языка. Это можно сделать прямо в браузере, перейдя по <a
+href="https://clarin.phonetik.uni-muenchen.de/BASWebServices/services/runMAUSGetInventar?LANGUAGE=rus-RU">ссылке</a>.
+Можно получить эту информацию и программно:</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>service <span class="op">=</span> <span class="st">&quot;runMAUSGetInventar&quot;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> baseurl <span class="op">+</span> service</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>lang <span class="op">=</span> <span class="st">&quot;rus-RU&quot;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> {<span class="st">&quot;LANGUAGE&quot;</span>: lang}</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> requests.get(url, params)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>res.encoding <span class="op">=</span> <span class="st">&quot;utf-8&quot;</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="ss">f&quot;webmaus_</span><span class="sc">{</span>lang<span class="sc">}</span><span class="ss">.tsv&quot;</span>, <span class="st">&quot;w&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> res.text.split(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>):</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> line.startswith(<span class="st">&quot;%&quot;</span>):</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>            f.write(line <span class="op">+</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<p>Получившаяся таблица содержит разные обозначения для всех звуков,
+определённых для данного языка. Её можно использовать для внутренней
+конвертации или для проверки валидности транскрипции.</p>
+<p>Составим таблицу CSV, в которой мы укажем произношение каждого слова.
+Ячейки таблицы отделим друг от друга точкой с запятой <code>;</code>,
+транскрипционные символы разделим пробелами.</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>csv_filename <span class="op">=</span> <span class="st">&quot;cta0001.csv&quot;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>wav_filename <span class="op">=</span> <span class="st">&quot;cta0001.wav&quot;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>res_filename <span class="op">=</span> <span class="st">&quot;cta0001.TextGrid&quot;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(csv_filename, <span class="st">&quot;w&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">&quot;юрий;j u r_j i j</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">&quot;трифонов;t r_j i f a n a f</span><span class="ch">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<p>Теперь зададим нужные параметры (обратите внимание, что теперь их
+названия другие). Звук передадим в поле <code>"SIGNAL"</code>,
+транскрипции — в поле <code>"BPF"</code>. В качестве формата выходных
+данных выберем TextGrid.</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>service <span class="op">=</span> <span class="st">&quot;runMAUS&quot;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> baseurl <span class="op">+</span> service</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;LANGUAGE&quot;</span>: <span class="st">&quot;rus-RU&quot;</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;INSYMBOL&quot;</span>: <span class="st">&quot;sampa&quot;</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;OUTFORMAT&quot;</span>: <span class="st">&quot;TextGrid&quot;</span>,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;OUTSYMBOL&quot;</span>: <span class="st">&quot;ipa&quot;</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>files <span class="op">=</span> {</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;SIGNAL&quot;</span>: (wav_filename, <span class="bu">open</span>(wav_filename, <span class="st">&quot;rb&quot;</span>), <span class="st">&quot;audio/wav&quot;</span>),</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;BPF&quot;</span>: (csv_filename, <span class="bu">open</span>(csv_filename), <span class="st">&quot;text/csv&quot;</span>)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Отправим запрос:</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> requests.post(url, files<span class="op">=</span>files, data<span class="op">=</span>data)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> res.status_code <span class="op">==</span> <span class="dv">200</span>:</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    tree <span class="op">=</span> ET.fromstring(res.text)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    res2 <span class="op">=</span> requests.get(tree.find(<span class="st">&#39;downloadLink&#39;</span>).text)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> res2.status_code <span class="op">==</span> <span class="dv">200</span>:</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Запись в файл </span><span class="sc">{</span>res_filename<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>        res2.encoding <span class="op">=</span> <span class="st">&quot;utf-8&quot;</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(res_filename, <span class="st">&quot;w&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>            f.write(res2.text)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">&quot;Произошла ошибка при получении результата!&quot;</span>)</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(res2.text)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Произошла ошибка при отправке данных!&quot;</span>)</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(res.text)</span></code></pre></div>
+<pre><code>Запись в файл cta0001.TextGrid</code></pre>
+<p>Так будет выглядеть результат, если открыть его в программе Praat. На
+уровне "ORT-MAU" помещены границы слов в орфографии, на уровне "KAN-MAU"
+— те же слова в транскрипции, на уровне "MAU" — границы звуков. Если при
+загрузке файла передать параметр <code>INSKANTEXTGRID=false</code>
+(добавьте в словарь <code>data</code> строку
+<code>"INSKANTEXTGRID": "false"</code>), то уровень "KAN-MAU" не будет
+сгенерирован.</p>
+<p><img src="courses/python_textbook/images/webmaus.png" /></p>
+<p>Если вы хотите каким-то образом изменить полученный TextGrid, можно
+передать его в TextGridTools, не записывая в файл. Для этого
+воспользуемся обёрткой для строк <code>StringIO</code> из встроенного
+модуля <code>io</code>, которая позволяет получить из строки файловый
+объект.</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> io <span class="im">import</span> StringIO</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tgt</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>grid <span class="op">=</span> tgt.read_textgrid(StringIO(res2.text))</span></code></pre></div>
+<p>Работу сервиса <code>runMAUSBasic</code> продемонстрируем на примере
+файла <em>northwindsun.wav</em>, содержащего запись басни «Северный
+ветер и солнце» на британском английском. Запись взята из описания
+фонетического строя Received Pronunciation, выпущенного в журнале МФА
+[Roach 2004].</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>service <span class="op">=</span> <span class="st">&quot;runMAUSBasic&quot;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> baseurl <span class="op">+</span> service</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>wav_filename <span class="op">=</span> <span class="st">&quot;northwindsun.wav&quot;</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>txt_filename <span class="op">=</span> <span class="st">&quot;northwindsun_ortho.txt&quot;</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>res_filename <span class="op">=</span> <span class="st">&quot;northwindsun.TextGrid&quot;</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;LANGUAGE&quot;</span>: <span class="st">&quot;eng-GB&quot;</span>,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;OUTFORMAT&quot;</span>: <span class="st">&quot;TextGrid&quot;</span>,</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;OUTSYMBOL&quot;</span>: <span class="st">&quot;ipa&quot;</span>,</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>files <span class="op">=</span> {</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;SIGNAL&quot;</span>: (wav_filename, <span class="bu">open</span>(wav_filename, <span class="st">&quot;rb&quot;</span>), <span class="st">&quot;audio/wav&quot;</span>),</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;TEXT&quot;</span>: (txt_filename, <span class="bu">open</span>(txt_filename), <span class="st">&quot;text/txt&quot;</span>)</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Отправление запроса происходит так же, как и в сервисе
+<code>runMAUS</code>.</p>
+<h3 id="практические-задания">Практические задания</h3>
+<h4 id="num1">11.1</h4>
+<p>Сгенерируйте транскрипцию для файла <em>northwindsun.wav</em> через
+eSpeak-NG и через BAS. Определите качество каждой через расстояние
+Левенштейна с учётом различий в обозначениях. Экспертная транскрипция
+помещена в файле <em>northwindsun.txt</em>, расшифровка — в файле
+<em>northwindsun_ortho.txt</em>.</p>
+<h4 id="num2">11.2</h4>
+<p>Напишите программу, которая генерирует на основе файлов SEG (уровни
+B1 и Y1) CSV-таблицу для сервиса WebMAUS. Получите границы звуков для
+файлов из архива <em>cta0001-0010.zip</em> и определите
+среднеквадратичное отклонение границ от истинных значений.</p>
+<h4 id="num3">11.3</h4>
+<p>Получите границы звуков для файла <em>northwindsun.wav</em>,
+основываясь на экспертной транскрипции. Используйте
+<code>segments</code>, чтобы разделить транскрипцию на отдельные звуки,
+после чего уберите из каждого звука знаки ударения и лигатуру, чтобы
+привести транскрипцию в соответствие с требованиями WebMAUS. Добавьте в
+файл TextGrid уровень предложений, опираясь на пунктуацию в файле
+<em>northwindsun_ortho.txt</em>.</p>
+
+
+</div>
+</body>
+</html>
