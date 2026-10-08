@@ -185,7 +185,7 @@ const coursesData = [
             { id: 3, title: "Списки, логические значения и условия", filename: "python_genling_bac_2.html" },
             { id: 4, title: "Циклы", filename: "python_genling_bac_3.html" },
             { id: 5, title: "List comprehension. Срезы", filename: "python_genling_bac_4.html" },
-            // { id: 6, title: "Работа с последовательностями", filename: "python_genling_bac_5.html" },
+            { id: 6, title: "Работа с последовательностями", filename: "python_genling_bac_5.html" },
             // { id: 7, title: "Коллоквиум", filename: "python_genling_bac_midterm.html" },
             // { id: 8, title: "Строковые методы. Текстовые файлы", filename: "python_genling_bac_6.html" },
             // { id: 9, title: "Множества и словари", filename: "python_genling_bac_7.html" },
@@ -224,7 +224,7 @@ const coursesData = [
         author: "kholyavin",
         chapters: [
             { id: 1, title: "Чтение и запись звуковых данных", filename: "ling_programming_1.html" },
-            // { id: 2, title: "Чтение и запись файлов разметки Wave Assistant", filename: "ling_programming_2.html" },
+            { id: 2, title: "Чтение и запись файлов разметки Wave Assistant", filename: "ling_programming_2.html" },
             // { id: 3, title: "Файловые системы и работа с многоуровневой разметкой", filename: "ling_programming_3.html" },
             // { id: 4, title: "Работа с метками периодов основного тона", filename: "ling_programming_4.html" },
             // { id: 5, title: "Работа с файлами аннотации TextGrid", filename: "ling_programming_5.html" },
