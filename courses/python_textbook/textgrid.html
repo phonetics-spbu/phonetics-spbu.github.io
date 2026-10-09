@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Работа с файлами аннотации TextGrid</title>
+    <style>
+        .chapter-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .note {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+        }
+
+        img {
+            width: 80%;
+            max-width: 800px;
+        }
+    </style>
+    <link href="styles/syntax_highlight.css" rel="stylesheet">
+    <base target="_blank">
+</head>
+
+<body>
+<div class="chapter-content">
+
+<h3 id="файлы-аннотации-textgrid">Файлы аннотации TextGrid</h3>
+<p>Программа Praat, широко использующаяся для фонетического анализа,
+имеет свой собственный формат разметки, достаточно сильно отличающийся
+от стандарта Wave Assistant. Этот формат называется TextGrid. Чаще всего
+для хранения TextGrid используются текстовые файлы, хотя Praat
+поддерживает и бинарные файлы; и у тех, и у других расширение обычно
+.TextGrid. Помните, что регистр обычно не важен на системах Windows и
+Mac, но важен на Unix (в том числе в Google Colab). Поэтому имена файлов
+<em>cta0001.TextGrid</em> и <em>cta0001.textgrid</em> будут
+соответствовать одному и тому же файлу в Windows, но разным — в
+Unix.</p>
+<p>Praat не поддерживает использование произвольных кодировок в
+текстовых файлах, доступные кодировки для чтения и записи указаны на
+рисунках (обратите внимание, что кириллические кодировки не
+поддерживаются).</p>
+<p><img src="courses/python_textbook/images/praat_text_reading_settings.png" /></p>
+<p><img src="courses/python_textbook/images/praat_text_writing_settings.png" /></p>
+<p>Кроме этого, у Praat есть собственный стандарт для кодирования
+специальных символов — т. н. триграфы: последовательность из обратного
+слеша <code>\</code> и двух символов ASCII (подробнее см. в главе
+«Работа с фонетической транскрипцией»). Например, символ <em>ɨ</em>
+кодируется последовательностью <code>\i-</code>.</p>
+<p>Важным отличием формата TextGrid от стандарта Wave Assistant
+заключается в том, что все временные значения в нём выражены в секундах
+(и, соответственно, представляют собой вещественные числа).</p>
+<p>Объект TextGrid представляет собой иерархическую структуру. Каждый
+TextGrid имеет следующие параметры: время начала (<code>xmin</code>),
+время конца (<code>xmax</code>) и количество уровней (<em>tiers</em>),
+которые в него входят (<code>size</code>). Время начала и конца
+определяют показываемую в Praat область сигнала: например, если сигнал
+длиннее, чем время конца TextGrid, часть после времени конца
+отображаться не будет. Время начала чаще всего равно 0, но может быть
+любым положительным числом. Типичное начало файла TextGrid:</p>
+<pre><code>File type = &quot;ooTextFile&quot;
+Object class = &quot;TextGrid&quot;
+
+xmin = 0 
+xmax = 1.74762 
+tiers? &lt;exists&gt; 
+size = 5</code></pre>
+<p>Каждый уровень также имеет время начала и конца (они могут отличаться
+от родительских), а также имя (<code>name</code>). Имя может быть пустым
+и не обязано быть уникальным, т. е. в одном объекте TextGrid могут быть
+несколько уровней с одинаковым именем. Не рекомендуется использовать
+нижнее подчёркивание <code>_</code> в названиях уровней, т. к. символы,
+перед которыми идёт нижнее подчёркивание, в Praat отображаются как
+подстрочные индексы (например, <code>"new_tier"</code> отобразится как
+<em>new<sub>t</sub>ier</em>).</p>
+<p>В Praat различаются два типа уровней: интервальные
+(<em>IntervalTier</em>) и точечные (<em>PointTier</em>), их элементы
+аннотации — интервалы (<em>Interval</em>) и точки (<em>Point</em>)
+соответственно.</p>
+<p>Интервалы имеют три поля: время начала и конца (<code>xmin</code> и
+<code>xmax</code>) и текстовое поле (<code>text</code>). Фрагмент
+TextGrid, содержащий начало интервального уровня:</p>
+<pre><code>    item [1]:
+        class = &quot;IntervalTier&quot; 
+        name = &quot;phonetic real&quot; 
+        xmin = 0 
+        xmax = 1.747619047619047 
+        intervals: size = 13 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.192562358276644 
+            text = &quot;j&quot; 
+        intervals [2]:
+            xmin = 0.192562358276644 
+            xmax = 0.288163265306122 
+            text = &quot;u0&quot;</code></pre>
+<p>Точки имеют два поля: позиция (<code>number</code>) и текстовое поле
+(<code>mark</code>). Фрагмент .TextGrid, содержащий начало точечного
+уровня:</p>
+<pre><code>    item [5]:
+        class = &quot;TextTier&quot; 
+        name = &quot;word boundaries&quot; 
+        xmin = 0 
+        xmax = 1.74762 
+        points: size = 2 
+        points [1]:
+            number = 0.412244897959183 
+            mark = &quot;1&quot; 
+        points [2]:
+            number = 1.239501133786848 
+            mark = &quot;2&quot; </code></pre>
+<p>Обратите внимание, что нумерация как уровней, так и элементов
+аннотации в Praat начинается с единицы.</p>
+<p>У текстовых файлов TextGrid есть т. н. «длинный» и «короткий»
+варианты. Они содержат одну и ту же информацию, но в «коротких» файлах
+не прописаны имена полей, что делает их менее подходящими для чтения
+людьми. Фрагмент такого файла:</p>
+<pre><code>File type = &quot;ooTextFile&quot;
+Object class = &quot;TextGrid&quot;
+
+0
+1.74762
+&lt;exists&gt;
+5</code></pre>
+<h3 id="библиотека-textgridtools">Библиотека TextGridTools</h3>
+<p>Для работы с файлами TextGrid существует ряд библиотек. Одна из самых
+популярных — TextGridTools. Её можно установить через командную строку с
+помощью pip (чтобы сделать это в Google Colab, поставьте в начале строки
+восклицательный знак <code>!</code>): <code>pip install tgt</code>.</p>
+<p>По <a
+href="https://textgridtools.readthedocs.io/en/stable/api.html">ссылке</a>
+расположена документация, с которой стоит ознакомиться, поскольку не
+весь функционал в полной мере освещён в данном пособии.</p>
+<p>Прочитаем TextGrid с помощью функции <code>read_textgrid()</code>.
+Эта функция принимает на вход три аргумента: имя файла, кодировку (по
+умолчанию — utf-8) и логическое значение
+<code>include_empty_intervals</code> (по умолчанию —
+<code>False</code>), которое показывает, нужно ли сохранять интервалы с
+пустым названием.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tgt</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>grid <span class="op">=</span> tgt.read_textgrid(<span class="st">&quot;cta0001.TextGrid&quot;</span>)</span></code></pre></div>
+<p>Эта функция возвращает объект класса <code>TextGrid</code>, в котором
+определён ряд полезных атрибутов и методов. В атрибуте
+<code>tiers</code> хранится список всех уровней:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grid.tiers)</span></code></pre></div>
+<p>(вывод сокращён)</p>
+<pre><code>[IntervalTier(start_time=0.0, end_time=1.747619047619047, name=&quot;phonetic real&quot;, ...), ...]</code></pre>
+<p>Метод <code>.get_tier_names()</code> позволяет получить список имён
+всех уровней:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grid.get_tier_names())</span></code></pre></div>
+<pre><code>[&#39;phonetic real&#39;, &#39;words&#39;, &#39;phonetic ideal&#39;, &#39;prosody&#39;, &#39;word boundaries&#39;]</code></pre>
+<p>Метод <code>.get_tier_by_name()</code> позволяет получить уровень с
+заданным названием (если их несколько, вернётся первый; если такого
+уровня нет, будет вызвано исключение <code>ValueError</code>):</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grid.get_tier_by_name(<span class="st">&quot;words&quot;</span>))</span></code></pre></div>
+<p>(вывод сокращён)</p>
+<pre><code>IntervalTier(start_time=0.0, end_time=1.747619047619047, name=&quot;words&quot;, ...)</code></pre>
+<p>Чтобы получить список всех уровней с заданным названием, можно
+использовать метод <code>.get_tiers_by_name()</code>. Чтобы определить,
+есть ли уровень с заданным названием, используйте метод
+<code>.has_tier()</code>.</p>
+<p>В атрибутах <code>start_time</code> и <code>end_time</code> хранятся
+время начала и конца соответственно.</p>
+<p>Объект класса <code>TextGrid</code> — итерируемый объект, мы можем
+получить все уровни простым циклом:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> tier <span class="kw">in</span> grid:</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(tier)</span></code></pre></div>
+<p>Каждый уровень (объект класса <code>IntervalTier</code> или
+<code>PointTier</code>) также является итерируемым объектом:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>word_tier <span class="op">=</span> grid.get_tier_by_name(<span class="st">&quot;words&quot;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> interval <span class="kw">in</span> word_tier:</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(interval)</span></code></pre></div>
+<pre><code>Interval(0.0, 0.412244897959183, &quot;юрий&quot;)
+Interval(0.412244897959183, 1.239501133786848, &quot;трифонов&quot;)</code></pre>
+<p>Некоторые полезные атрибуты объектов <code>IntervalTier</code> и
+<code>PointTier</code>:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(word_tier.name)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(word_tier.start_time)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(word_tier.end_time)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(word_tier.tier_type())</span></code></pre></div>
+<pre><code>words
+0.0
+1.747619047619047
+IntervalTier</code></pre>
+<p>Также у этих объектов есть ряд специальных методов, облегчающих
+работу с аннотацией:</p>
+<ul>
+<li><p><code>add_annotation()</code>, <code>add_annotations()</code>,
+<code>delete_annotation_by_start_time()</code>,
+<code>delete_annotation_by_end_time()</code>,
+<code>delete_annotations_between_timepoints()</code>,
+<code>delete_annotations_by_time()</code> позволяют добавить или удалить
+интервалы или точки.</p></li>
+<li><p><code>get_annotation_by_start_time()</code>,
+<code>get_annotation_by_end_time()</code>,
+<code>get_annotations_between_timepoints()</code>,
+<code>get_annotations_by_time()</code>,
+<code>get_nearest_annotation()</code> позволяют получить интервалы или
+точки в заданные моменты времени.</p></li>
+<li><p><code>delete_annotations_with_text()</code> и
+<code>get_annotations_with_text()</code> удаляют и получают
+соответственно интервалы или точки с заданным текстом (если передать
+аргумент <code>regex=True</code>, он будет интерпретирован как
+регулярное выражение; в аргумент <code>n</code> можно передать
+макисмальное число удалений/возвращаемых объектов: с начала, если
+<code>n</code> положительно, и с конца, если оно отрицательно).</p></li>
+<li><p><code>delete_empty_annotations()</code> удаляет интервалы или
+точки с пустыми названиями или названиями, содержащими только пробельные
+символы.</p></li>
+<li><p><code>get_copy_with_gaps_filled()</code> и
+<code>get_copy_with_same_intervals_merged()</code> работают только для
+объектов <code>IntervalTier</code>: первый заполняет промежутки между
+интервалами новыми интервалами с пустым текстом, второй — объединяет
+смежные интервалы с одинаковым названием в один.</p></li>
+</ul>
+<p>Ознакомьтесь со списком методов уровней и их аргументами в <a
+href="https://textgridtools.readthedocs.io/en/stable/api.html#tgt.core.Tier">документации</a>.</p>
+<p>Атрибуты объектов <code>Interval</code>:</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>one_word <span class="op">=</span> word_tier[<span class="dv">0</span>]</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(one_word.start_time)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(one_word.end_time)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(one_word.text)</span></code></pre></div>
+<pre><code>0.0
+0.412244897959183
+юрий</code></pre>
+<p>Атрибуты объектов <code>Point</code>:</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>point <span class="op">=</span> grid.get_tier_by_name(<span class="st">&quot;word boundaries&quot;</span>)[<span class="dv">0</span>]</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(point.time)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(point.text)</span></code></pre></div>
+<pre><code>0.412244897959183
+1</code></pre>
+<p>Чтобы создать пустой <code>TextGrid</code>, создадим экземпляр
+класса:</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>grid <span class="op">=</span> tgt.TextGrid()</span></code></pre></div>
+<p>Добавим в него новый <code>IntervalTier</code> с помощью метода
+<code>.add_tier()</code>:</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>new_tier <span class="op">=</span> tgt.IntervalTier(name<span class="op">=</span><span class="st">&quot;new tier&quot;</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>grid.add_tier(new_tier)</span></code></pre></div>
+<p>Если мы хотим добавить сразу несколько уровней, можно воспользоваться
+методом <code>.add_tiers()</code>. Чтобы добавить уровень не в конец
+списка, а в заданную позицию, можно воспользоваться методом
+<code>.insert_tier()</code>, который вторым аргументом принимает на вход
+необходимую позицию в виде целого числа. Удалить уровень или уровни
+можно с помощью методов <code>.delete_tier()</code> и
+<code>.delete_tiers()</code> соответственно.</p>
+<p>Добавим в уровень новый интервал, который начинается в 0 с,
+заканчивается в 1 с и называется «some text»:</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>new_tier.add_interval(tgt.Interval(<span class="dv">0</span>, <span class="fl">1.0</span>, <span class="st">&quot;some text&quot;</span>))</span></code></pre></div>
+<p>Добавим новый <code>PointTier</code>:</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>new_point_tier <span class="op">=</span> tgt.PointTier(name<span class="op">=</span><span class="st">&quot;new point tier&quot;</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>grid.add_tier(new_point_tier)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>new_point_tier.add_point(tgt.Point(<span class="fl">0.5</span>, <span class="st">&quot;some text&quot;</span>))</span></code></pre></div>
+<p>Запишем в разных форматах:</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>tgt.io.write_to_file(grid, <span class="st">&quot;new_grid_short.TextGrid&quot;</span>, <span class="bu">format</span><span class="op">=</span><span class="st">&quot;short&quot;</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>tgt.io.write_to_file(grid, <span class="st">&quot;new_grid_long.TextGrid&quot;</span>, <span class="bu">format</span><span class="op">=</span><span class="st">&quot;long&quot;</span>)</span></code></pre></div>
+<p>В модуле <code>util</code> помещены вспомогательные функции, среди
+которых: <code>concatenate_textgrids()</code> и
+<code>concatenate_tiers()</code> и для конкатенации объектов
+<code>TextGrid</code> и уровней соответственно,
+<code>get_overlapping_intervals()</code> для поиска наложений в двух
+уровнях, <code>merge_textgrids()</code> для «вертикального» объединения
+объектов <code>TextGrid</code>, <code>shift_boundaries()</code> для
+смещения границ.</p>
+<p>В модуле <code>agreement</code> помещены функции для вычисления
+статистических параметров, показывающих степень согласия между
+аннотаторами, например, <a
+href="https://en.wikipedia.org/wiki/Cohen%27s_kappa">каппы Коэна</a>
+(<code>cohen_kappa()</code>).</p>
+<h3 id="другие-библиотеки-для-работы-с-файлами-textgrid">Другие
+библиотеки для работы с файлами TextGrid</h3>
+<p>Кроме TextGridTools, есть и другие библиотеки с разным функционалом и
+разной степенью проработанности документации. TextGridTools выбрана в
+данном пособии как рекомендованная, поскольку рассматриваемая далее
+библиотека Parselmouth позволяет взаимную конвертацию с форматом
+TextGridTools, и в целом её функционал шире, чем у аналогов. Ниже
+приведён перечень альтернативных библиотек:</p>
+<ul>
+<li><p>TextGrid (<code>pip install TextGrid</code>): <a
+href="https://github.com/kylebgorman/textgrid">https://github.com/kylebgorman/textgrid</a>.</p></li>
+<li><p>mytextgrid (<code>pip install mytextgrid</code>): <a
+href="https://mytextgrid.readthedocs.io/en/latest/index.html">https://mytextgrid.readthedocs.io/en/latest/index.html</a>.</p></li>
+<li><p>aligned_textgrid (<code>pip install aligned_textgrid</code>): <a
+href="https://forced-alignment-and-vowel-extraction.github.io/alignedTextGrid/">https://forced-alignment-and-vowel-extraction.github.io/alignedTextGrid/</a>.
+Это более специализированная библиотека для работы с выводом
+автоматических сегментаторов (например, Montreal Forced
+Aligner).</p></li>
+<li><p>praat-textgrids (<code>pip install praat-textgrids</code>): <a
+href="https://github.com/Legisign/Praat-textgrids">https://github.com/Legisign/Praat-textgrids</a>.
+Преимуществом этой библиотеки является поддержка конвертации между
+триграфами Praat и Unicode, а также возможность работы с бинарными
+TextGrid.</p></li>
+</ul>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> textgrids</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(textgrids.symbols[<span class="st">&quot;</span><span class="ch">\\</span><span class="st">i-&quot;</span>])</span></code></pre></div>
+<pre><code>ɨ</code></pre>
+<h3 id="практические-задания">Практические задания</h3>
+<h4 id="num1">5.1</h4>
+<p>Напишите цикл, который перебирает все интервалы из уровня
+<code>"phonetic real"</code> файла <em>cta0001.TextGrid</em> и выводит
+на экран название каждого интервала и его серединную точку.</p>
+<h4 id="num2">5.2</h4>
+<p>Найдите самый длинный и самый короткий интервал на уровне
+<code>"phonetic real"</code> файла <em>cta0001.TextGrid</em>, не
+учитывая интервалы с пустым названием. Определите среднюю длину
+интервала и их общую длительность.</p>
+<h4 id="num3">5.3</h4>
+<p>Постройте график, где на оси X будут отмечены звуки, а на оси Y — их
+длительность.</p>
+<p>Подсказка: в функцию <code>plt.xticks()</code> можно передать набор
+координат отметок на оси X и подписей к ним.</p>
+<h4 id="num4">5.4</h4>
+<p>По уровню <code>"syllables"</code> файла <em>av18s.TextGrid</em>
+определите темп в слогах в секунду во всём файле и в каждом
+межпаузальном отрезке.</p>
+<h4 id="num5">5.5</h4>
+<p>а) Напишите функцию, которая принимает на вход имя файла SEG и делает
+следующее:</p>
+<ol type="1">
+<li>Читает из файла метки и параметры (вызывая отдельную функцию
+<code>read_seg()</code>);</li>
+<li>Cоздаёт новый <code>TextGrid</code> и уровень
+<code>IntervalTier</code>;</li>
+<li>Добавляет новый уровень в новый <code>TextGrid</code>;</li>
+<li>Перебирает циклом все пары соседних меток;</li>
+<li>Добавляет в уровень все интервалы, полученные таким образом
+(соответственно, время начала каждого интервала — позиция левой метки в
+паре, время конца — позиция правой, текст — имя левой метки);</li>
+<li>Записывает получившийся объект <code>TextGrid</code> в файл
+TextGrid.</li>
+</ol>
+<p>Откройте полученный файл в Praat и посмотрите на него.</p>
+<p>б) Дополните функцию так, чтобы метки разных цветов записывались в
+разные уровни. Сделайте название каждого уровня буквенно-цифровым
+сочетанием (например, <code>B1</code>).</p>
+<h4 id="num6">5.6</h4>
+<p>Напишите без использования сторонних библиотек функцию, которая
+получает на вход имя файла TextGrid (на ваш выбор — короткого или
+длинного), а возвращает список словарей вида:</p>
+<pre><code>[
+    {
+        &quot;name&quot;: &quot;название уровня&quot;,
+        &quot;type&quot;: &quot;interval&quot; или &quot;point&quot;,
+        &quot;data&quot;:
+        [
+            #для interval tier
+            (метка начала в миллисекундах, метка конца в миллисекундах, текст метки),
+            #для point tier
+            (метка в миллисекундах, текст метки),
+        ]
+    }
+]</code></pre>
+<h4 id="num7">5.7</h4>
+<p>Написать программу, которая:</p>
+<ol type="1">
+<li>Обрабатывает все файлы .seg в архиве <em>cta_seg</em>;</li>
+<li>Для каждого аллофона вычисляет его среднюю длительность (в секундах)
+и стандартное отклонение;</li>
+<li>Для файла <em>cta0001</em> генерирует файл TextGrid с двумя
+уровнями. Первый должен содержать информацию из файла SEG_B1 (границы
+звуков и их названия), а второй должен совпадать с первым, но имя
+каждого интервала должно содержать не название звука, а его
+длительность, нормализованную путём <a
+href="https://en.wikipedia.org/wiki/Standard_score">z-нормализации</a> и
+округлённую до 3 знаков после запятой.</li>
+</ol>
+<p>Чтобы вычислить нормализованную длительность звука, нужно из его
+физической длительности (в секундах) вычесть среднее значение
+длительности этого аллофона <strong>по всему корпусу</strong> и
+разделить на стандартное отклонение.</p>
+<p>Т.е. чтобы сделать это для, например, звука [u0] из слова
+<em>юрий</em>, нужно определить среднее и ст. отклонение по всем звукам
+[u0] из всего корпуса и использовать эти значения. Для звука [r'] эти
+значения уже будут другими.</p>
+<p>В качестве иллюстрации: сгенерируем массив из 100 случайных чисел и
+вычислим его среднее значение и стандартное отклонение.</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng()</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>nums <span class="op">=</span> rng.normal(loc<span class="op">=</span><span class="dv">3</span>, scale<span class="op">=</span><span class="fl">1.5</span>, size<span class="op">=</span><span class="dv">100</span>)  <span class="co"># нормальное распределение с МО=3 и СКО=1.5</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>mean_value <span class="op">=</span> np.mean(nums)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>st_dev <span class="op">=</span> np.std(nums)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mean_value, st_dev)</span></code></pre></div>
+<pre><code>3.179129928894265 1.5264234172254023</code></pre>
+<p>Сгенерируем ещё одно случайное число из того же распределения и
+нормализуем его:</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>new_num <span class="op">=</span> rng.normal(loc<span class="op">=</span><span class="dv">3</span>, scale<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>norm_num <span class="op">=</span> (new_num <span class="op">-</span> mean_value) <span class="op">/</span> st_dev</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(new_num, norm_num)</span></code></pre></div>
+<pre><code>2.8445746470246758 -0.21917593643689928</code></pre>
+<p>Не забудьте открыть полученный файл в Praat, чтобы убедиться в том,
+что он:</p>
+<ol type="1">
+<li>Открывается</li>
+<li>Содержит нужные данные</li>
+<li>Полученные значения адекватны — получиться должно примерно следующее
+(точные значения могут отличаться):</li>
+</ol>
+<p><img src="courses/python_textbook/images/result_example.png" /></p>
+<h4 id="num8">5.8</h4>
+<p>В системе просодической разметки ToBI есть два уровня аннотации:
+уровень тонов (<em>tones</em>) и уровень границ (<em>breaks</em>).
+Границы классифицируются по силе от 0 до 4, где 3 — граница
+промежуточной интонационной фразы (<em>intermediate phrase, ip</em>), 4
+— граница полной интонационной фразы (<em>intonational phrase, IP</em>).
+Тоны делятся на тональные акценты (*), фразовые акценты (-) и граничные
+тоны (%). Тональные акценты ассоциируются с ударными слогами, фразовые
+акценты — с границей <em>ip</em>, а граничные тоны — с границей
+<em>IP</em>.</p>
+<p>В приведённом файле TextGrid (<em>h1r1.TextGrid</em>) дана разметка
+по системе ToBI (точечные уровни). Приведите её в соответствие
+стандартам. Для этого:</p>
+<ol type="1">
+<li>Слейте в одну точку фразовый акцент и следующий непосредственно за
+ним граничный тон.</li>
+<li>Измените положение фразовых акцентов и граничных тонов так, чтобы
+они приходились точно на ближайшие границы индексов 3 и 4
+соответственно.</li>
+</ol>
+
+
+</div>
+</body>
+</html>

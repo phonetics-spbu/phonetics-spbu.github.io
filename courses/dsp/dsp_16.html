@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Темпоральные характеристики</title>
+</head>
+<body>
+<p class="note">
+    <a target="_blank" href="courses/signal_proc_mag/pdf/euro97-enrate.pdf">Статья enrate</a>
+</p>
+<p>Алгоритм enrate:</p>
+<p>1. Полуволновое выпрямление сигнала</p>
+<p>2. Фильтр низких частот (до 16 Гц)</p>
+<p>3. Снижение ЧД до 100 Гц (scipy.signal.resample)</p>
+<p>4. Окно Хэмминга (1-2 с, перекрытие >= 75 %)</p>
+<p>5. Преобразование Фурье (по формуле)</p>
+<p>6. Спектральный момент
+$$ enrate = \frac{\sum_{k=s}^K k|Y(k)|^2}{\sum_{k=s}^K |Y(k)|^2} $$
+</p>
+
+<p>Задание</p>
+<p>Возьмите любую размеченную на аллофоны запись. В каждом межпаузальном отрезке вычислите темп в слогах в секунду и значение enrate. Вычислите их корреляцию.</p>
+
+<p class="note">
+    <b>Колаб: enrate</b>
+    <br/>
+    <a
+            target="_blank"
+            href="https://colab.research.google.com/github/phonetics-spbu/phonetics-spbu.github.io/blob/main/public/courses/dsp/ipynb/enrate.ipynb"
+    >
+        Открыть в Colab
+    </a>
+    <br/>
+
+    <a
+            target="_blank"
+            href="https://github.com/phonetics-spbu/phonetics-spbu.github.io/blob/main/public/courses/dsp/ipynb/enrate.ipynb"
+    >
+        Открыть на Github
+    </a>
+    <br/>
+    <a
+            href="courses/dsp/ipynb/enrate.ipynb"
+            download
+    >
+        Скачать на устройство
+    </a>
+</p>
+</body>
+</html>
