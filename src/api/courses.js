@@ -337,6 +337,22 @@ const coursesData = [
             { id: 100, title: "Документация к упомянутым библиотекам", filename: "packages.html" },
         ]
     },
+    {
+        id: 'english_phonetics_mkk',
+        title: 'Практическая фонетика английского языка',
+        description: 'Теория и практика межкультурной коммуникации, 1 курс бакалавриата',
+        long_description: 'Теория и практика межкультурной коммуникации, 1 курс бакалавриата',
+        level: "bac",
+        year: 1,
+        author: "tityushina",
+        chapters: [
+            { id: 1, title: "Вводный курс", filename: "english_phonetics_intro.html" },
+            { id: 2, title: "Акцентуация", filename: "english_phonetics_accentuation.html" },
+            { id: 3, title: "Чистописание", filename: "english_phonetics_handwriting.html" },
+            { id: 4, title: "01.10", filename: "1.html" },
+            { id: 5, title: "15.10", filename: "2.html" },
+        ]
+    },
     
 ];
 
