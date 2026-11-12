@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Вычисление формант синхронно ЧОТ</title>
+</head>
+<body>
+<p class="note">
+    <a target="_blank" href="courses/dsp/files/Pitch-synch study of formants.pdf">Статья A Pitch-Synchronous Study of
+        Formants</a>
+</p>
+<p>Алгоритм вычисления формант:</p>
+<p>1. Сегментируем сигнал на периоды ЧОТ (либо используем готовую разметку)</p>
+<p>2. Для каждого периода находим спектр (синусоидальное разложение в статье). Используем размножение периода для
+    повышения разрешения по частоте. В статье предлагается интерполяция спектра до разрешения 10 Гц.</p>
+<p>3. Определяются локальные максимумы спектра - кандидаты в форманты (>1% от максимума амплитуды). Для каждого
+    кандидата сохраняем амплитуду и частоту.</p>
+<p>4. Оценивается ширина формант (формулы 13 и 12 в статье)</p>
+<p>5. Оценивается уровень энергии форманты (формула 14), переводим в дБ</p>
+<p>6. Отбор формант - оставляем только форманты, чья энергия >= 1% от суммарной энергии.</p>
+<p>7. Для проверки - ресинтез сигнала по вычисленным формантам (формула 16).</p>
+<p class="note">
+    <b>Колаб: форманты</b>
+    <br/>
+    <a
+            target="_blank"
+            href="https://colab.research.google.com/github/phonetics-spbu/phonetics-spbu.github.io/blob/main/public/courses/dsp/ipynb/formants.ipynb"
+    >
+        Открыть в Colab
+    </a>
+    <br/>
+
+    <a
+            target="_blank"
+            href="https://github.com/phonetics-spbu/phonetics-spbu.github.io/blob/main/public/courses/dsp/ipynb/formants.ipynb"
+    >
+        Открыть на Github
+    </a>
+    <br/>
+    <a
+            href="courses/dsp/ipynb/formants.ipynb"
+            download
+    >
+        Скачать на устройство
+    </a>
+</p>
+</body>
+</html>
