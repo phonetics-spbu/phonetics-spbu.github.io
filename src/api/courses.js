@@ -105,6 +105,8 @@ const coursesData = [
             { id: 6, title: "SpaCy", filename: "python_2_mag_9.html" },
             { id: 7, title: "Инструменты для классических языков", filename: "python_2_mag_10.html" },
             { id: 8, title: "Статистика в Python", filename: "python_2_mag_6.html" },
+            { id: 9, title: "Инструменты для чтения разных текстовых форматов", filename: "python_2_mag_11.html" },
+            { id: 10, title: "Регулярные выражения", filename: "python_2_mag_12.html" },
 //            { id: 7, title: "JSON, csv", filename: "python_2_mag_7.html" },
 //            { id: 8, title: "Задачи к зачёту", filename: "python_2_mag_8.html" },
 
