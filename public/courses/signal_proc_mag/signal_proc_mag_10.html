@@ -24,19 +24,15 @@
 <div class="chapter-content">
 <p class="note">
         <a target="_blank"
-                       href="https://pkholyavin.github.io/signal/SIGPROC_11_forced_alignment.pdf">Презентация</a>
+                       href="courses/signal_proc_mag/files/SIGPROC_11_forced_alignment.pdf">Презентация</a>
     </p>
     <p>
         <b>Задание для выполнения в классе:</b>
     </p>
     <p>
         <ol>
-        <li>Создать для файла cta0003.wav файл csv вида
-        `<орфография>;<транскрипция в X-SAMPA>` на основании .seg_Y1 и .seg_B1</li>
-        <li>Использовать сервис <a target="_blank" href="https://clarin.phonetik.uni-muenchen.de/BASWebServices/interface/WebMAUSGeneral">WebMAUS General</a>, чтобы получить выравнивание.</li>
-        <li>Оценить качество:<br/>
-        * среднеквадратическая ошибка<br/>
-        * процент совпадений с допустимой ошибкой 10 мс
+        <li>Вспомнить, <a href="#/course/python_textbook/chapter/11">как использовать WebMAUS</a>, и получить границы для cta0001-0010.</li>
+        <li>Реализовать вычисление transition measure для интенсивности, проверить, улучшаются ли границы, если сдвигать их на ближайший пик.
         </li>
         </ol>
     </p>
@@ -44,7 +40,9 @@
         <b>Домашнее задание:</b>
     </p>
     <p>
-        Улучшить границы, опираясь на данные звонкости и интенсивности из Praat. Проверить эффективность.
+        Проверить, как улучшаются (и улучшаются ли) границы с использованием transition measure для спектра 
+        (просто спектр, MFCC, отдельно по полосам) или границ звонкости.
+        При желании определить, для границ между какими классами звуков какие признаки работают лучше. 
     </p>
 </div>
 </body>
